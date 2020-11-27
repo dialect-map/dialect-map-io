@@ -33,29 +33,93 @@ def sorted_files(globber: str):# from  https://github.com/quynhneo/arxiv-public-
     allfiles = sorted(allfiles)
     return [f[-1] for f in allfiles] # sorted filenames
 
-if __name__ == "__main__":
-    conf = SparkConf().setMaster("local").setAppName("test")
-    sc = SparkContext(conf=conf)
-
-    ## test if spark is working properly
-    nums= sc.parallelize([1,2,3,4])       
-    nums.take(1)    
-
-    squared = nums.map(lambda x: x*x).collect()
-    f = open("test.txt",'w')
-    f.write(str(sc))
-    for num in squared:
-        print('%i ' % (num))
-        f.write(str(num)+'\n')
-    f.close()
-
-    # getting all the txt files  
-    path = '/scratch/qmn203/txt_arxiv/acc-phys'
-    globber = os.path.join(path, '**/*.txt') # search expression for glob.glob
-    txtfiles = sorted_files(globber)  # a list of path
-    print(len(txtfiles))
+def get_all_paths(all_txt_dir: str, filename = 'all_paths_str.dat') -> str:
+    """ input: 
+            all_txt_dir: directory contains all articles in txt format
+            filename: where the output is stored
+        output:
+            all_paths_str: a string of comma separated paths of all the files
+    """
+    if not os.path.exists(os.path.join(all_txt_dir,filename) ):
+        globber = os.path.join(all_txt_dir, '**/*.txt') # search expression for glob.glob
+        txtfiles = sorted_files(globber)  # a list of path
+        all_paths_str = ",".join(txtfiles) 
+        print('number of text files: ',len(txtfiles))
+        with open(os.path.join(all_txt_dir,filename),'w') as file:
+            file.write(all_paths_str)
+    else:
+        print('comma separated string of paths in row format exist ')
+        with open(os.path.join(all_txt_dir,filename),'r') as f:
+            all_paths_str = f.readline()   
+        print(type(all_paths_str),'number of text files: ', all_paths_str.count(',')+1)
     #log.info('Searching "{}"...'.format(globber))
-    #log.info('Found: {} pdfs'.format(len(pdffiles)))
+    return all_paths_str     
+
+def get_all_paths2(all_txt_dir: str, filename = 'all_paths.csv') -> str:
+    """ input: 
+            all_txt_dir: directory contains all articles in txt format
+            filename: where the output is stored, each row is a path to a text file
+        output:
+            path to filename 
+    """
+    if not os.path.exists(os.path.join(all_txt_dir,filename) ):
+        globber = os.path.join(all_txt_dir, '**/*.txt') # search expression for glob.glob
+        txtfiles = sorted_files(globber)  # a list of path
+        with open(os.path.join(all_txt_dir,filename),'w') as file:
+            writer = csv.writer(file)
+            for path in txtfiles:
+                writer.writerow([path])
+    else:
+        print('csv of all paths in column format exists ')
+        
+    return os.path.join(all_txt_dir,filename)    
     
-    rdd = sc.wholeTextFiles(",".join(txtfiles)) # a string of comma separated paths
-    print('rdd count: ',rdd.count())
+    
+    
+def toCSVLine(data):
+    return ','.join(str(d) for d in data)
+
+
+def dir2rdd(all_txt_dir:str, part_num = 1000):
+
+     #  getting all the txt files, put in a string of comma separated string of paths 
+    all_paths_str = get_all_paths(all_txt_dir) 
+    
+    # load all text files into spark rdd. 1000 partition, about MB each. took 1 hour for 20 cores 
+    rdd = sc.wholeTextFiles(all_paths_str, part_num) # each element [('file: path',  content<str> ), ( ) ,... ]
+    return rdd
+
+if __name__ == "__main__":
+    # setting up spark
+    #conf = SparkConf().setMaster("local[*]").setAppName("scratch")
+    #sc = SparkContext.getOrCreate(conf=conf)
+    #sc =SparkContext(master = os.getenv('SPARK_URL'))
+    sc.setLogLevel("ERROR")
+
+    #test spark
+    nums = range(0,100)
+    print(nums)
+    rddtest = sc.parallelize(nums,10)
+    print("Default parallelism: {}".format(sc.defaultParallelism))
+    print("Number of partitions: {}".format(rddtest.getNumPartitions()))
+    print("Partitioner: {}".format(rddtest.partitioner))
+    print("Partitions structure: {}".format(rddtest.glom().collect())) 
+    
+    all_txt_dir  = '/scratch/qmn203/txt_arxiv/arxiv' #/arxiv/pdf/0704'
+    #all_txt_dir = '/home/qmn203/txtdata_testset' # directory that contain the txt files, could be nested 
+    rdd = dir2rdd(all_txt_dir)
+    
+    #load rdd
+    #rdd_txt = sc.textFile('/scratch/qmn203/file_content_rdd')
+    #rdd_path = sc.textFile('/scratch/qmn203/txt_arxiv/all_paths.csv')    
+    #rdd_filename = rdd_path.map(lambda x: x.split('/')[-1])
+    #rdd_id=rdd_filename.map(lambda x: x[:x.rfind('.txt')])
+
+    print('rdd count: ', rdd.count(), 'partition size: ' )
+    print('first file', rdd.take(1)[0][0])
+    # print('first content', rdd.take(1)[0][1])
+    test_word = 'momentum'
+    #rdd.take(10).foreach(println) 
+    rdd.saveAsTextFile('/scratch/qmn203/file_content_rdd_97') 
+    #lines = rdd.map(toCSVLine)
+    #lines.saveAsTextFile('/scratch/qmn203/file_content_csv.txt')
