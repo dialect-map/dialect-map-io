@@ -108,10 +108,14 @@ if __name__ == "__main__":
     all_txt_dir  = '/scratch/qmn203/txt_arxiv/arxiv' #/arxiv/pdf/0704'
     #all_txt_dir = '/home/qmn203/txtdata_testset' # directory that contain the txt files, could be nested 
     rdd = dir2rdd(all_txt_dir)
+    rdd_path=rdd.map(lambda x: x[0])
+    rdd_content=rdd.map(lambda x: (x[1],)) 
+    rdd_content.saveAsTextFile('/scratch/qmn203/rdd_txt_arxiv_arxiv/rdd_content3')
+    rdd_path.saveAsTextFile('/scratch/qmn203/rdd_txt_arxiv_arxiv/rdd_path3') 
     
     #load rdd
-    #rdd_txt = sc.textFile('/scratch/qmn203/file_content_rdd')
-    #rdd_path = sc.textFile('/scratch/qmn203/txt_arxiv/all_paths.csv')    
+    #rdd_txt = sc.textFile('/scratch/qmn203/rdd_txt_arxiv_arxiv/rdd_content')
+    #rdd_path = sc.textFile('/scratch/qmn203/rdd_txt_arxiv_arxiv/rdd_path')    
     #rdd_filename = rdd_path.map(lambda x: x.split('/')[-1])
     #rdd_id=rdd_filename.map(lambda x: x[:x.rfind('.txt')])
 
@@ -120,6 +124,4 @@ if __name__ == "__main__":
     # print('first content', rdd.take(1)[0][1])
     test_word = 'momentum'
     #rdd.take(10).foreach(println) 
-    rdd.saveAsTextFile('/scratch/qmn203/file_content_rdd_97') 
-    #lines = rdd.map(toCSVLine)
-    #lines.saveAsTextFile('/scratch/qmn203/file_content_csv.txt')
+    
