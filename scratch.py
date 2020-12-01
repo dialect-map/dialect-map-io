@@ -107,17 +107,25 @@ if __name__ == "__main__":
     
     all_txt_dir  = '/scratch/qmn203/txt_arxiv/arxiv' #/arxiv/pdf/0704'
     #all_txt_dir = '/home/qmn203/txtdata_testset' # directory that contain the txt files, could be nested 
-    rdd = dir2rdd(all_txt_dir)
-    rdd_path=rdd.map(lambda x: x[0])
-    rdd_content=rdd.map(lambda x: (x[1],)) 
-    rdd_content.saveAsTextFile('/scratch/qmn203/rdd_txt_arxiv_arxiv/rdd_content3')
-    rdd_path.saveAsTextFile('/scratch/qmn203/rdd_txt_arxiv_arxiv/rdd_path3') 
-    
-    #load rdd
-    #rdd_txt = sc.textFile('/scratch/qmn203/rdd_txt_arxiv_arxiv/rdd_content')
-    #rdd_path = sc.textFile('/scratch/qmn203/rdd_txt_arxiv_arxiv/rdd_path')    
-    #rdd_filename = rdd_path.map(lambda x: x.split('/')[-1])
-    #rdd_id=rdd_filename.map(lambda x: x[:x.rfind('.txt')])
+    rdd_txt_dir = '/scratch/qmn203/rdd_txt_arxiv_arxiv/rdd_content_1pc' # where to store rdd format of all txt
+    rdd_path_dir = '/scratch/qmn203/rdd_txt_arxiv_arxiv/rdd_path_1pc') # where to store rdd format of all file paths 
+    if not os.path.exists(rdd_txt_dir) and not os.path.exists(rdd_path_dir):
+        # both don't exist, read from text
+        rdd = dir2rdd(all_txt_dir)
+        rdd_1pc = rdd.sample(False,0.01,2020)
+        rdd_path_1pc=rdd_1pc.map(lambda x: x[0])
+        #rdd_content=rdd.map(lambda x: (x[1],)) 
+        rdd_1pc.saveAsTextFile(rdd_txt_dir)
+        rdd_path_1pc.saveAsTextFile(rdd_path_dir) 
+    elif not os.path.exists(rdd_txt_dir) or not os.path.exists(rdd_path_dir):
+        print('only 1 rdd folder exists')
+        raise
+    else:
+        # both exist, so load rdd
+        rdd = sc.textFile(rdd_txt_dir)
+        rdd_path = sc.textFile(rdd_path_dir)    
+        rdd_filename = rdd_path.map(lambda x: x.split('/')[-1])
+        rdd_id=rdd_filename.map(lambda x: x[:x.rfind('.txt')])
 
     print('rdd count: ', rdd.count(), 'partition size: ' )
     print('first file', rdd.take(1)[0][0])
