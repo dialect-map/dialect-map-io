@@ -93,7 +93,8 @@ if __name__ == "__main__":
     # setting up spark
     #conf = SparkConf().setMaster("local[*]").setAppName("scratch")
     #sc = SparkContext.getOrCreate(conf=conf)
-    #sc =SparkContext(master = os.getenv('SPARK_URL'))
+    
+    sc =SparkContext(master = os.getenv('SPARK_URL'))
     sc.setLogLevel("ERROR")
 
     #test spark
@@ -107,29 +108,31 @@ if __name__ == "__main__":
     
     all_txt_dir  = '/scratch/qmn203/txt_arxiv/arxiv' #/arxiv/pdf/0704'
     #all_txt_dir = '/home/qmn203/txtdata_testset' # directory that contain the txt files, could be nested 
-    rdd_txt_dir = '/scratch/qmn203/rdd_txt_arxiv_arxiv/rdd_content_1pc' # where to store rdd format of all txt
-    rdd_path_dir = '/scratch/qmn203/rdd_txt_arxiv_arxiv/rdd_path_1pc') # where to store rdd format of all file paths 
-    if not os.path.exists(rdd_txt_dir) and not os.path.exists(rdd_path_dir):
+    sample_size = 0.01 # float, between 0-1 , how much to sample from all he data
+    rdd_content_dir = '/scratch/qmn203/rdd_txt_arxiv_arxiv/rdd_content_sample_'+ str( sample_size) # where to store rdd format of all txt
+    rdd_path_dir = '/scratch/qmn203/rdd_txt_arxiv_arxiv/rdd_path_sample_'+ str(sample_size) # where to store rdd format of all file paths 
+    if not os.path.exists(rdd_content_dir) and not os.path.exists(rdd_path_dir):
         # both don't exist, read from text
-        rdd = dir2rdd(all_txt_dir)
-        rdd_1pc = rdd.sample(False,0.01,2020)
-        rdd_path_1pc=rdd_1pc.map(lambda x: x[0])
-        #rdd_content=rdd.map(lambda x: (x[1],)) 
-        rdd_1pc.saveAsTextFile(rdd_txt_dir)
-        rdd_path_1pc.saveAsTextFile(rdd_path_dir) 
-    elif not os.path.exists(rdd_txt_dir) or not os.path.exists(rdd_path_dir):
+        print('reading data from text files')
+        rdd = dir2rdd(all_txt_dir) # return a list of tuple (path, content)
+        rdd_sample = rdd.sample(False,sample_size,2020)
+        
+        rdd_path=rdd_sample.map(lambda x: x[0])  # save all paths as string
+        rdd_content=rdd_sample
+        
+        rdd_content.saveAsTextFile(rdd_content_dir)  # save all tuples, flatten as string
+        rdd_path.saveAsTextFile(rdd_path_dir) 
+    elif os.path.exists(rdd_content_dir) or not os.path.exists(rdd_path_dir):
         print('only 1 rdd folder exists')
         raise
-    else:
-        # both exist, so load rdd
-        rdd = sc.textFile(rdd_txt_dir)
-        rdd_path = sc.textFile(rdd_path_dir)    
-        rdd_filename = rdd_path.map(lambda x: x.split('/')[-1])
-        rdd_id=rdd_filename.map(lambda x: x[:x.rfind('.txt')])
 
-    print('rdd count: ', rdd.count(), 'partition size: ' )
-    print('first file', rdd.take(1)[0][0])
-    # print('first content', rdd.take(1)[0][1])
+    # both exist, so load rdd
+    print('loading saved rdd')
+    rdd_content = sc.textFile(rdd_content_dir)
+    rdd_path = sc.textFile(rdd_path_dir)    
+    
+    rdd_filename = rdd_path.map(lambda x: x.split('/')[-1])
+    rdd_id=rdd_filename.map(lambda x: x[:x.rfind('.txt')])
+
     test_word = 'momentum'
-    #rdd.take(10).foreach(println) 
     
