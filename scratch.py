@@ -89,12 +89,43 @@ def dir2rdd(all_txt_dir:str, part_num = 1000):
     rdd = sc.wholeTextFiles(all_paths_str, part_num) # each element [('file: path',  content<str> ), ( ) ,... ]
     return rdd
 
+def path2id(s:str)->str:
+    """ input: 
+        s: string, containing the tuple (file path, text)
+        output:
+        id: id of the paper
+    """
+    return re.search('file:(.*).txt',s).group(1).split('/')[-1]
+
+
+def readOrLoadRdd(all_txt_dir:str,sample_size:float,rdd_content_dir:str):
+    """ input:
+        - all_txt_dir: where all text files are
+        - sample_size: float, between 0-1, randomly sample a portion of data
+        - rdd_content_dir: where to load/save rdd 
+        output
+        - rdd_content containing tuple of string (file,file_content)
+    """
+    if not os.path.exists(rdd_content_dir):
+        # rdd format of data doesn't exist, read from text
+        print('reading data from text files')
+        rdd = dir2rdd(all_txt_dir) # return a list of tuple (path, content)
+        rdd_sample = rdd.sample(False,sample_size,2020)
+        rdd_content=rdd_sample
+        print('saving rdd')
+        rdd_content.saveAsTextFile(rdd_content_dir)  # save all tuples, flatten as string
+
+    # load rdd
+    print('loading saved rdd')
+    rdd_content = sc.textFile(rdd_content_dir)
+    return rdd_content
+
 if __name__ == "__main__":
     # setting up spark
     #conf = SparkConf().setMaster("local[*]").setAppName("scratch")
     #sc = SparkContext.getOrCreate(conf=conf)
     
-    sc =SparkContext(master = os.getenv('SPARK_URL'))
+    #sc =SparkContext(master = os.getenv('SPARK_URL'))
     sc.setLogLevel("ERROR")
 
     #test spark
@@ -110,29 +141,8 @@ if __name__ == "__main__":
     #all_txt_dir = '/home/qmn203/txtdata_testset' # directory that contain the txt files, could be nested 
     sample_size = 0.01 # float, between 0-1 , how much to sample from all he data
     rdd_content_dir = '/scratch/qmn203/rdd_txt_arxiv_arxiv/rdd_content_sample_'+ str( sample_size) # where to store rdd format of all txt
-    rdd_path_dir = '/scratch/qmn203/rdd_txt_arxiv_arxiv/rdd_path_sample_'+ str(sample_size) # where to store rdd format of all file paths 
-    if not os.path.exists(rdd_content_dir) and not os.path.exists(rdd_path_dir):
-        # both don't exist, read from text
-        print('reading data from text files')
-        rdd = dir2rdd(all_txt_dir) # return a list of tuple (path, content)
-        rdd_sample = rdd.sample(False,sample_size,2020)
-        
-        rdd_path=rdd_sample.map(lambda x: x[0])  # save all paths as string
-        rdd_content=rdd_sample
-        
-        rdd_content.saveAsTextFile(rdd_content_dir)  # save all tuples, flatten as string
-        rdd_path.saveAsTextFile(rdd_path_dir) 
-    elif os.path.exists(rdd_content_dir) or not os.path.exists(rdd_path_dir):
-        print('only 1 rdd folder exists')
-        raise
-
-    # both exist, so load rdd
-    print('loading saved rdd')
-    rdd_content = sc.textFile(rdd_content_dir)
-    rdd_path = sc.textFile(rdd_path_dir)    
-    
-    rdd_filename = rdd_path.map(lambda x: x.split('/')[-1])
-    rdd_id=rdd_filename.map(lambda x: x[:x.rfind('.txt')])
+    rdd_content = readOrLoadRdd(all_txt_dir,sample_size,rdd_content_dir)
+    rdd_id = rdd_content.map(lambda x: path2id(x))
 
     test_word = 'momentum'
     
