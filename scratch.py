@@ -93,7 +93,8 @@ if __name__ == "__main__":
     # setting up spark
     #conf = SparkConf().setMaster("local[*]").setAppName("scratch")
     #sc = SparkContext.getOrCreate(conf=conf)
-    #sc =SparkContext(master = os.getenv('SPARK_URL'))
+    
+    sc =SparkContext(master = os.getenv('SPARK_URL'))
     sc.setLogLevel("ERROR")
 
     #test spark
@@ -105,16 +106,16 @@ if __name__ == "__main__":
     print("Partitioner: {}".format(rddtest.partitioner))
     print("Partitions structure: {}".format(rddtest.glom().collect())) 
     
-    #all_txt_dir  = '/scratch/qmn203/txt_arxiv/arxiv' #/arxiv/pdf/0704'
-    all_txt_dir = '/home/qmn203/txtdata_testset' # directory that contain the txt files, could be nested 
-    sample_size = 0.1 # float, between 0-1 , how much to sample from all he data
+    all_txt_dir  = '/scratch/qmn203/txt_arxiv/arxiv' #/arxiv/pdf/0704'
+    #all_txt_dir = '/home/qmn203/txtdata_testset' # directory that contain the txt files, could be nested 
+    sample_size = 0.01 # float, between 0-1 , how much to sample from all he data
     rdd_content_dir = '/scratch/qmn203/rdd_txt_arxiv_arxiv/rdd_content_sample_'+ str( sample_size) # where to store rdd format of all txt
     rdd_path_dir = '/scratch/qmn203/rdd_txt_arxiv_arxiv/rdd_path_sample_'+ str(sample_size) # where to store rdd format of all file paths 
     if not os.path.exists(rdd_content_dir) and not os.path.exists(rdd_path_dir):
         # both don't exist, read from text
         print('reading data from text files')
         rdd = dir2rdd(all_txt_dir) # return a list of tuple (path, content)
-        rdd_sample = rdd.sample(False,0.1,2020)
+        rdd_sample = rdd.sample(False,sample_size,2020)
         
         rdd_path=rdd_sample.map(lambda x: x[0])  # save all paths as string
         rdd_content=rdd_sample
