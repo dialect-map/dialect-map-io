@@ -143,7 +143,6 @@ if __name__ == "__main__":
     rdd_content_dir = '/scratch/qmn203/rdd_txt_arxiv_arxiv/rdd_content_sample_'+ str( sample_size) # where to store rdd format of all txt
     rdd_content = readOrLoadRdd(all_txt_dir,sample_size,rdd_content_dir)
     rdd_id = rdd_content.map(lambda x: path2id(x))
-    
 
     test_word = 'momentum'
     
