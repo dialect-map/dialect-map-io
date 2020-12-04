@@ -134,7 +134,8 @@ if __name__ == "__main__":
     sample_size = 0.01 # float, between 0-1 , how much to sample from all he data
     rdd_content_dir = '/scratch/qmn203/rdd_txt_arxiv_arxiv/rdd_content_sample_'+ str( sample_size) # where to store rdd format of all txt
     rdd_content = readOrLoadRdd(all_txt_dir,sample_size,rdd_content_dir)
-    rdd_id = rdd_content.map(lambda x: path2id(x))
 
-    test_word = 'momentum'
-    
+    jargons_list = ['arxiv','physics','conclusion' ]
+    rdd_count = rdd_content.map(lambda x: ( path2id(x),  text_process.terms_freq(jargons_list,x,'norm') ) )
+ 
+
