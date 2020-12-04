@@ -56,4 +56,28 @@ def terms_freq(jargons_list: List[str], text: str, method: str)-> List[int]:
     tokens = [w for w in tokens if not w in stop_words]  # filter out stop words (which is all lower case)
     if method == 'norm':
         return [tokens.count(jargon.lower())/len(tokens) for jargon in jargons_list]
-    raise(Exception) # no method exist   
+    raise(Exception) # no method exist  
+
+def path2id(text:str)->str:
+    """ input: 
+        s: string, containing the tuple (file path, text)
+        output:
+        id: id of the paper, None if f
+    """
+    # math file:path.txt, split by '/', get the last, remove extension
+    match = re.search('file:.*?\.txt',text) #.*? the shortest match
+    if match:
+        return match.group().split('/')[-1].strip('.txt')
+
+    
+def text2cat(text:str)->str:
+    """ input: 
+        s: string, containing the tuple (file path, text)
+        output:
+        category of the paper, None if f
+    """
+    # beginning of second part of tuple + something+ ID + something + [ category ]
+    search_str = ',.*'+ path2id(text)+'.*?\[.*?\]' #.*? the shortest match
+    match = re.search(search_str,text)
+    if match:
+        return match.group().split('[')[-1].strip(']') 

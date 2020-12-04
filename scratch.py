@@ -36,9 +36,9 @@ def sorted_files(globber: str):# from  https://github.com/quynhneo/arxiv-public-
 def get_all_paths(all_txt_dir: str, filename = 'all_paths_str.dat') -> str:
     """ input: 
             all_txt_dir: directory contains all articles in txt format
-            filename: where the output is stored
+            filename: where the output is stored, in a single row, csv
         output:
-            all_paths_str: a string of comma separated paths of all the files
+            path to filename
     """
     if not os.path.exists(os.path.join(all_txt_dir,filename) ):
         globber = os.path.join(all_txt_dir, '**/*.txt') # search expression for glob.glob
@@ -58,7 +58,7 @@ def get_all_paths(all_txt_dir: str, filename = 'all_paths_str.dat') -> str:
 def get_all_paths2(all_txt_dir: str, filename = 'all_paths.csv') -> str:
     """ input: 
             all_txt_dir: directory contains all articles in txt format
-            filename: where the output is stored, each row is a path to a text file
+            filename: where the output is stored, single column, each row is a path to a text file
         output:
             path to filename 
     """
@@ -88,14 +88,6 @@ def dir2rdd(all_txt_dir:str, part_num = 1000):
     # load all text files into spark rdd. 1000 partition, about MB each. took 1 hour for 20 cores 
     rdd = sc.wholeTextFiles(all_paths_str, part_num) # each element [('file: path',  content<str> ), ( ) ,... ]
     return rdd
-
-def path2id(s:str)->str:
-    """ input: 
-        s: string, containing the tuple (file path, text)
-        output:
-        id: id of the paper
-    """
-    return re.search('file:(.*).txt',s).group(1).split('/')[-1]
 
 
 def readOrLoadRdd(all_txt_dir:str,sample_size:float,rdd_content_dir:str):
