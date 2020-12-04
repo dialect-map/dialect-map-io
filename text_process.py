@@ -4,9 +4,13 @@ nltk.download('stopwords')
 from collections import Counter
 from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
+import codecs
 
 def raw_count(jargon: str, text: str)-> int:
     """ return number of occurent of a jargon in str content of an article"""
+    # convert \\n to \n in text so tokenizer knows to split
+    text=codecs.decode(text, 'unicode_escape') #
+
     # split text into words
     tokens = word_tokenize(text)
 
