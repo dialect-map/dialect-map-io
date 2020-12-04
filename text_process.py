@@ -7,7 +7,9 @@ from nltk.corpus import stopwords
 import codecs
 
 def raw_count(jargon: str, text: str)-> int:
-    """ return number of occurent of a jargon in str content of an article"""
+    """ return number of occurent of a jargon in str content of an article
+        subscripts, number, non-alphabetic, stopwords are ignored
+    """
     # convert \\n to \n in text so tokenizer knows to split
     text=codecs.decode(text, 'unicode_escape') #
 
@@ -15,7 +17,7 @@ def raw_count(jargon: str, text: str)-> int:
     tokens = word_tokenize(text)
 
     # remove words that are less than 2 characters
-    tokens = [tok for tok in tokens if len(tok)>2]
+    #tokens = [tok for tok in tokens if len(tok)>2] # remove this, some jargons may be short abbreviation
 
     # remove tokens that are not alphabetic
     tokens = [word for word in tokens if word.isalpha()]
