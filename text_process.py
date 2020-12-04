@@ -6,6 +6,7 @@ from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
 import codecs
 from typing import List
+import re
 
 def term_freq(jargon: str, text: str)-> int:
     """ return number of occurent of a jargon in str content of an article
