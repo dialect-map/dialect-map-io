@@ -1,7 +1,13 @@
 # ds-dialect-map-computing
 
 Source code for mining arxiv text files.  
-After having a directories contain arxiv articles in text format, and spark environment setup, run:  
+# rerequisite
+- a folder containing text files of arxiv articles
+- spark environtment setup
+
+In `scratch.py`, set the folder to `all_txt_dir`, choose a `sample_size` to sub sample the data, and a path for holding intermediate data at `rdd_content_dir`
+
+To run the test:
 `spark-submit scratch.py`
 
 To download all arxiv pdfs: https://arxiv.org/help/bulk_data.  
