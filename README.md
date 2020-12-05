@@ -1,7 +1,7 @@
 # ds-dialect-map-computing
 
 Source code for mining arxiv text files.  
-# rerequisite
+# prerequisite
 - a folder containing text files of arxiv articles
 - spark environtment setup
 
