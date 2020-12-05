@@ -99,7 +99,7 @@ def cat_parser(text:str)->str:
 
 def get_cat(text:str,path_to_meta:str):
     """parse the category from text, if fail, lookup in meta data file (slow) and return the primary category"""
-    cat = cat_parse(text)
+    cat = cat_parser(text)
     if cat is not None:
         return cat
     else:  # if category can not be parsed from the text, look up in metadata
