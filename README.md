@@ -18,8 +18,12 @@ clone https://github.com/quynhneo/arxiv-public-datasets_for_kaggle
 
 In `scratch.py`, set the folder to `all_txt_dir`, choose a `sample_size` to sub sample the data, and a path for holding intermediate data at `rdd_content_dir`
 
-To run the test:
-`spark-submit scratch.py`
+To run the test from shell:
+$`spark-submit scratch.py`
+
+or to run interactively:
+$`pyspark` 
+>> `exec(open('scratch.py').read())`
 
 Currently, given a hard-coded list of `[ term1, term2, ...]`, this will return rdd objects `rdd_count` which is a dictionary `{paper1,[ tf11, tf12 ,...], paper2,[tf21,tf22..}...}`.
 
