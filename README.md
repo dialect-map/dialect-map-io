@@ -1,7 +1,12 @@
 # ds-dialect-map-computing
 
-Source code for mining arxiv text files.  
-# prerequisite
+Source code for mining arxiv text files.  Curernt functionalities:
+- convert pdfs to texts
+- parse article ID from text
+- get term frequency in each article
+
+
+# prerequisites
 - a folder containing text files of arxiv articles
 - spark environtment setup
 
