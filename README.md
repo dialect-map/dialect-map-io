@@ -9,6 +9,7 @@ Source code for nlp mining of arxiv text files.  Current functionalities:
 To download all arxiv pdfs: https://arxiv.org/help/bulk_data.  
 To convert all pdfs in a directory to text:
 clone https://github.com/quynhneo/arxiv-public-datasets_for_kaggle
+
 `python pdfs_to_dir_txt_dir.py`
 
 # Prerequisites for running nlp analysis
@@ -20,3 +21,5 @@ In `scratch.py`, set the folder to `all_txt_dir`, choose a `sample_size` to sub 
 To run the test:
 `spark-submit scratch.py`
 
+Currently, given a list `[ term1, term2, ...]` this will return rdd objects `rdd_count` which is a dictionary `{paper1,[ tf11, tf12 ,...], paper2,[tf21,tf22..}...}`
+Eventually, the dictionary will be transformed into a different schema and saved into a databased that faccilitate server access. 
