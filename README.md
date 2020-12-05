@@ -1,6 +1,6 @@
 # ds-dialect-map-computing
 
-Source code for mining arxiv text files.  Curernt functionalities:
+Source code for nlp mining of arxiv text files.  Current functionalities:
 - convert pdfs to texts
 - parse article ID from text
 - get term frequency in each article
