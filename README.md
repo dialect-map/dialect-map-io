@@ -1,4 +1,4 @@
-# ds-dialect-map-computing
+# ds-dialect-map-computing (in development)
 
 Source code for nlp mining of arxiv text files.  Current functionalities:
 - convert pdfs to texts
