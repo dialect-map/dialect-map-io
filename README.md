@@ -23,6 +23,7 @@ $`spark-submit scratch.py`
 
 or to run interactively:
 $`pyspark` 
+
 `>> exec(open('scratch.py').read())`
 
 Currently, given a hard-coded list of `[ term1, term2, ...]`, this will return rdd objects `rdd_count` which is a dictionary `{paper1,[ tf11, tf12 ,...], paper2,[tf21,tf22..}...}`.
