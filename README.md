@@ -1,6 +1,7 @@
 # ds-dialect-map-computing (in development)
 
-Source code for nlp mining of arxiv text files. This is a part of the larger project [ds-dialect-map](https://github.com/ds3-nyu-archive/ds-dialect-map)
+Source code for nlp mining of arxiv text files. This is a part of the larger project [ds-dialect-map](https://github.com/ds3-nyu-archive/ds-dialect-map).
+
 Current functionalities:
 - convert pdfs to texts
 - parse article ID from text
@@ -9,6 +10,7 @@ Current functionalities:
 # How to get arxiv articles and convert them to text for processing
 To download all arxiv pdfs: https://arxiv.org/help/bulk_data.  
 To convert all pdfs in a directory to text:
+
 First clone this
 
 ```
