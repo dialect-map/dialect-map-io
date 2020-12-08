@@ -40,6 +40,6 @@ then
 >> exec(open('scratch.py').read())
 ```
 
-Currently, given a hard-coded list of `[ term1, term2, ...]`, this will return rdd objects `rdd_count` which is a dictionary `{paper1,[ tf11, tf12 ,...], paper2,[tf21,tf22..}...}`.
+Currently, given a hard-coded list of `[ term1, term2, ...]`, this will return rdd objects `rdd_count` which is a dictionary `{paper1,[ tf11, tf12 ,...], paper2,[tf21,tf22..}...}` where tfij is term frequency of term j in paper i.
 
 Eventually, the dictionary will be transformed into a different schema and saved into a databased that faccilitate server access. 
