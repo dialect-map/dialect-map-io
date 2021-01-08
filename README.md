@@ -16,11 +16,7 @@ First clone this
 ```
 git clone https://github.com/quynhneo/arxiv-public-datasets_for_kaggle
 ```
-then run
-
-```
-python pdfs_to_dir_txt_dir.py
-```
+Follow instruction there to convert pdfs to text files. 
 
 # Prerequisites for running nlp analysis test
 - a folder containing text files of arxiv articles
