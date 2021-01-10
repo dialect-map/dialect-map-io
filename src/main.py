@@ -81,7 +81,7 @@ def get_all_paths2(all_txt_dir: str, filename = 'all_paths.csv') -> str:
     return os.path.join(all_txt_dir, filename)
 
 
-def toCSVLine(data):
+def to_csv_line(data):
     return ','.join(str(d) for d in data)
 
 
@@ -95,7 +95,7 @@ def dir2rdd(all_txt_dir:str, part_num = 1000):
     return rdd
 
 
-def readOrLoadRdd(all_txt_dir: str, sample_size:float, rdd_content_dir:str):
+def read_or_load_rdd(all_txt_dir: str, sample_size:float, rdd_content_dir:str):
     """ input:
         - all_txt_dir: where all text files are
         - sample_size: float, between 0-1, randomly sample a portion of data
@@ -106,8 +106,8 @@ def readOrLoadRdd(all_txt_dir: str, sample_size:float, rdd_content_dir:str):
     if not os.path.exists(rdd_content_dir):
         # rdd format of data doesn't exist, read from text
         print('reading data from text files')
-        rdd = dir2rdd(all_txt_dir) # return a list of tuple (path, content)
-        rdd_sample = rdd.sample(False,sample_size,2020)
+        rdd = dir2rdd(all_txt_dir)  # return a list of tuple (path, content)
+        rdd_sample = rdd.sample(False, sample_size, 2020)
         rdd_content = rdd_sample
         print('saving rdd')
         rdd_content.saveAsTextFile(rdd_content_dir)  # save all tuples, flatten as string
@@ -122,7 +122,7 @@ if __name__ == "__main__":
     #  ---- setting up spark, turn off if run interactively ---- #
     conf = SparkConf().setMaster("local[*]").setAppName("scratch")
     sc = SparkContext.getOrCreate(conf=conf)
-    #sc =SparkContext(master = os.getenv('SPARK_URL'))
+    # sc =SparkContext(master = os.getenv('SPARK_URL'))
     sc.setLogLevel("ERROR")
 
     # ----  test spark  ---- #
@@ -139,7 +139,7 @@ if __name__ == "__main__":
     sample_size = 0.01  # float, between 0-1 , how much to sample from all he data
     rdd_content_dir = '/Users/qmn203/temp/rdd_txt_arxiv_arxiv/rdd_content_sample_' + str(sample_size)
     # where to store rdd format of all txt
-    rdd_content = readOrLoadRdd(all_txt_dir, sample_size, rdd_content_dir)
+    rdd_content = read_or_load_rdd(all_txt_dir, sample_size, rdd_content_dir)
 
     jargons_list = ['arxiv', 'physics', 'conclusion']
     rdd_count = rdd_content.map(lambda x: (text_process.path2id(x),  text_process.terms_freq(jargons_list, x, 'norm')))
