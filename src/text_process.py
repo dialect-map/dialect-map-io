@@ -1,6 +1,4 @@
-import nltk
-nltk.download('punkt')
-nltk.download('stopwords')
+
 from collections import Counter
 from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
@@ -8,6 +6,11 @@ import codecs
 from typing import List
 import re
 import json
+
+import nltk
+nltk.download('punkt')
+nltk.download('stopwords')
+
 
 def term_freq(jargon: str, text: str)-> int:
     """ return number of occurent of a jargon in str content of an article
@@ -33,20 +36,21 @@ def term_freq(jargon: str, text: str)-> int:
     tokens = [w for w in tokens if not w in stop_words]
     # bag of words for this document: a dictionary of word: number of counts
     #bow = Counter(tokens) # then return bow[jargon.lower()]
-    
+
     return tokens.count(jargon.lower()) # only count the word of interest
+
 
 def terms_freq(jargons_list: List[str], text: str, method: str)-> List[int]:
     """ for each jargon in jargon lists, return a number of its occurence in str content of text.
         both jargons and text are converted to lower case before counting
-        methods: 
+        methods:
             raw: raw count
             bool: False for raw count = 0, True for >= 1
-            norm: raw count/ processed text length  
-        subscripts, number, non-alphabetic, stopwords can't be used in norm method 
+            norm: raw count/ processed text length
+        subscripts, number, non-alphabetic, stopwords can't be used in norm method
     """
     # apply minimal processing for raw count
-    text = codecs.decode(text, 'unicode_escape') # convert \\n to \n in text so tokenizer knows to split 
+    text = codecs.decode(text, 'unicode_escape') # convert \\n to \n in text so tokenizer knows to split
     tokens = word_tokenize(text) # split text into words
     tokens = [w.lower() for w in tokens]  # convert to lower case
     if method == 'raw': # raw count
@@ -58,15 +62,15 @@ def terms_freq(jargons_list: List[str], text: str, method: str)-> List[int]:
     tokens = [w for w in tokens if not w in stop_words]  # filter out stop words (which is all lower case)
     if method == 'norm':
         return [tokens.count(jargon.lower())/len(tokens) for jargon in jargons_list]
-    raise(Exception) # no method exist  
+    raise(Exception) # no method exist
 
 
 def get_metadata(path_to_meta:str):
     with open(path_to_meta, 'r') as f:
         for line in f:
             yield line
-            
-            
+
+
 def cat_look_up(id:str, path_to_meta:str):
     """(slow) look up category of paper id (no version included) from metadata"""
     metadata = get_metadata(path_to_meta)
@@ -86,7 +90,7 @@ def path2id(text:str)->str:
     if match:
         return match.group().split('/')[-1].strip('.txt')
 
-    
+
 def cat_parser(text:str)->str:
     """ parse category from text
         input: text (str), containing SPECIFIC str '(file:path, text)'
@@ -98,6 +102,7 @@ def cat_parser(text:str)->str:
     if match:
         return match.group().split('[')[-1].strip(']')
 
+
 def get_cat(text:str,path_to_meta:str):
     """parse the category from text, if fail, lookup in meta data file (slow) and return the primary category"""
     cat = cat_parser(text)
@@ -107,4 +112,4 @@ def get_cat(text:str,path_to_meta:str):
         cat_list = cat_look_up(path2id(text),path_to_meta)
         cat = cat_list.split(' ')[0] #g et the main category if there are more than one
         return cat
-    
+
