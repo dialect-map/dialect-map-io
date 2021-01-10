@@ -5,7 +5,7 @@ import csv
 
 from pyspark import SparkConf, SparkContext
 
-import text_process
+import src.text_process
 
 
 def sorted_files(globber: str):
@@ -35,7 +35,7 @@ def sorted_files(globber: str):
         allfiles.append(data) # list of list
 
     allfiles = sorted(allfiles)
-    return [f[-1] for f in allfiles] # sorted filenames
+    return [f[-1] for f in allfiles]  # sorted filenames
 
 
 def get_all_paths(all_txt_dir: str, filename='all_paths_str.dat') -> str:
@@ -85,7 +85,7 @@ def to_csv_line(data):
     return ','.join(str(d) for d in data)
 
 
-def dir2rdd(all_txt_dir:str, part_num = 1000):
+def dir2rdd(all_txt_dir: str, part_num=1000):
 
     #  getting all the txt files, put in a string of comma separated string of paths
     all_paths_str = get_all_paths(all_txt_dir)
@@ -95,7 +95,7 @@ def dir2rdd(all_txt_dir:str, part_num = 1000):
     return rdd
 
 
-def read_or_load_rdd(all_txt_dir: str, sample_size:float, rdd_content_dir:str):
+def read_or_load_rdd(all_txt_dir: str, sample_size: float, rdd_content_dir: str):
     """ input:
         - all_txt_dir: where all text files are
         - sample_size: float, between 0-1, randomly sample a portion of data
@@ -134,12 +134,14 @@ if __name__ == "__main__":
     print("Partitioner: {}".format(rddtest.partitioner))
     print("Partitions structure: {}".format(rddtest.glom().collect()))
 
+    # ---- set up directories ---- #
     all_txt_dir = '/Users/qmn203/temp/txtdata_testset' #/arxiv/pdf/0704'
     # all_txt_dir = '/home/qmn203/txtdata_testset' # directory that contain the txt files, could be nested
-    sample_size = 0.01  # float, between 0-1 , how much to sample from all he data
+    sample_size = 1  # float, between 0-1 , how much to sample from all he data
     rdd_content_dir = '/Users/qmn203/temp/rdd_txt_arxiv_arxiv/rdd_content_sample_' + str(sample_size)
     # where to store rdd format of all txt
+
     rdd_content = read_or_load_rdd(all_txt_dir, sample_size, rdd_content_dir)
 
     jargons_list = ['arxiv', 'physics', 'conclusion']
-    rdd_count = rdd_content.map(lambda x: (text_process.path2id(x),  text_process.terms_freq(jargons_list, x, 'norm')))
+    rdd_count = rdd_content.map(lambda x: (src.text_process.path2id(x),  src.text_process.terms_freq(jargons_list, x, 'norm')))
