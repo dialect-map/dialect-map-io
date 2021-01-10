@@ -1,5 +1,3 @@
-
-from collections import Counter
 from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
 import codecs
