@@ -1,8 +1,9 @@
-
+import requests
+import datetime
 
 from pyspark import SparkConf, SparkContext
 
-import src.textprocess
+from src.textprocess import path2id, terms_freq
 from src.utilities import read_or_load_rdd
 
 
@@ -23,16 +24,29 @@ if __name__ == "__main__":
     print("Partitions structure: {}".format(rddtest.glom().collect()))
 
     # ---- set up directories ---- #
-    all_txt_dir = '/Users/qmn203/temp/txtdata_testset' #/arxiv/pdf/0704'
+
+    all_txt_dir = '/Users/qmn203/temp/emptydir' #/arxiv/pdf/0704'
     # all_txt_dir = '/home/qmn203/txtdata_testset' # directory that contain the txt files, could be nested
     sample_size = 1  # float, between 0-1 , how much to sample from all he data
-    rdd_content_dir = '/Users/qmn203/temp/rdd_txt_arxiv_arxiv/rdd_content_sample_' + str(sample_size)
-    # where to store rdd format of all txt
+
+    # where to store rdd format of all txt:
+    #rdd_content_dir = '/Users/qmn203/temp/rdd_txt_arxiv_arxiv/rdd_content_sample_' + str(sample_size)
+    rdd_content_dir = '/Users/qmn203/temp/emptydir_rdd' + str(sample_size)
 
     rdd_content = read_or_load_rdd(all_txt_dir, sample_size, rdd_content_dir, sc=sc)
 
     jargons_list = ['arxiv', 'physics', 'conclusion']
-    rdd_count = rdd_content.map(lambda x: (src.textprocess.path2id(x),  src.textprocess.terms_freq(jargons_list, x, 'norm')))
-
+    rdd_count = rdd_content.map(lambda x: (path2id(x),  terms_freq(jargons_list, x, 'norm')))
+    print(rdd_count.take(1))
     #  run SQL test code here
+
+    r = requests.post(
+        url="http://0.0.0.0:8080/jargon",
+        json={
+            "jargon_id": "111",
+            "jargon_str": "weather",
+            "created_at": datetime.datetime.now().isoformat(),
+            "num_words": 10
+        }
+    )
 
