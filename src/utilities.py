@@ -42,6 +42,7 @@ def get_all_paths(all_txt_dir: str, filename='all_paths_str.dat') -> str:
             path to filename
     """
     if not os.path.exists(os.path.join(all_txt_dir, filename)):
+        #  if the file containing paths does not exist
         globber = os.path.join(all_txt_dir, '**/*.txt')  # search expression for glob.glob
         txtfiles = sorted_files(globber)  # a list of path
         all_paths_str = ",".join(txtfiles)
@@ -53,19 +54,26 @@ def get_all_paths(all_txt_dir: str, filename='all_paths_str.dat') -> str:
             with open(os.path.join(all_txt_dir, filename), 'w') as file:
                 file.write(all_paths_str)
     else:
-        print('comma separated string of paths in row format exist ')
+        print('file with list of paths exists: ', filename)
         with open(os.path.join(all_txt_dir, filename), 'r') as f:
             all_paths_str = f.readline()
-            if all_paths_str.strip() == "":  # empty
-                raise Exception('no paths saved')
-        num_files = all_paths_str.count(',')+1
+
+        if all_paths_str.strip() == "":  # empty
+            raise Exception('no paths found')
+
+        num_commas = all_paths_str.count(',')
+        if num_commas == 0:  # there are no comma
+            num_files = 1
+        else:
+            num_files = num_commas + 1
+
         print(type(all_paths_str), 'number of text file paths saved: ', num_files)
 
     # log.info('Searching "{}"...'.format(globber))
     return all_paths_str
 
 
-def get_all_paths2(all_txt_dir: str, filename = 'all_paths.csv') -> str:
+def get_all_paths2(all_txt_dir: str, filename='all_paths.csv') -> str:
     """ input:
             all_txt_dir: directory contains all articles in txt format
             filename: where the output is stored, single column, each row is a path to a text file
@@ -121,5 +129,7 @@ def read_or_load_rdd(all_txt_dir: str, sample_size: float, rdd_content_dir: str,
     # load rdd
     print('loading saved rdd')
     rdd_content = sc.textFile(rdd_content_dir)
+    if not rdd_content.take(1):
+        raise Exception("empty rdd folder")
     return rdd_content
 
