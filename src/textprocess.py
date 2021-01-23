@@ -4,10 +4,37 @@ import codecs
 from typing import List
 import re
 import json
-
+from fuzzywuzzy import fuzz
 import nltk
 nltk.download('punkt')
 nltk.download('stopwords')
+
+
+# copy from https://github.com/quynhneo/detm-arxiv/blob/master/arxivtools/preprocessing.py
+def preprocess(document: str, stopwords: List[str]) -> List[str]:
+    """
+    INPUT: a string
+    OUTPUT: a list of token
+        tokenize, lower case,
+        remove punctuation: '!"#$%&\'()*+,./:;<=>?@[\\]^_`{|}~', and new line character
+        remove stop words from provided list and words with less than 1 characters from document
+    note:
+        latex expressions are not processed
+        hyphens (e.g. kaluza-klein), and alpha-numerics (e.g. 3D, not 125), and accents are allowed
+    """
+    result = []
+
+    punctuation = '!"#$%&\'()*+,./:;<=>?@[\\]^_`{|}~'  # modified from python string.punctuation, deleted hyphen
+
+    # replace punctuation with white space
+    document = document.lower().replace("’", " ").replace("'", " ").replace("\n", " ").translate(
+        str.maketrans(punctuation, " "*len(punctuation)))
+
+    for token in document.split():
+        if len(token) > 1 and token not in stopwords and token.islower():   # and token.islower() removes pure numeric
+            result.append(token)
+
+    return result
 
 
 def term_freq(jargon: str, text: str) -> int:
@@ -15,7 +42,7 @@ def term_freq(jargon: str, text: str) -> int:
         subscripts, number, non-alphabetic, stopwords are ignored
     """
     # convert \\n to \n in text so tokenizer knows to split
-    text=codecs.decode(text, 'unicode_escape') #
+    text = codecs.decode(text, 'unicode_escape') #
 
     # split text into words
     tokens = word_tokenize(text)
@@ -38,8 +65,8 @@ def term_freq(jargon: str, text: str) -> int:
     return tokens.count(jargon.lower()) # only count the word of interest
 
 
-def terms_freq(jargons_list: List[str], text: str, method: str)-> List[int]:
-    """ for each jargon in jargon lists, return a number of its occurence in str content of text.
+def terms_freq(jargons_list: List[str], text: str, method: str) -> List[int]:
+    """ for each jargon in jargon lists, return a number of its occurrence in str content of text.
         both jargons and text are converted to lower case before counting
         methods:
             raw: raw count
@@ -49,18 +76,19 @@ def terms_freq(jargons_list: List[str], text: str, method: str)-> List[int]:
     """
     # apply minimal processing for raw count
     text = codecs.decode(text, 'unicode_escape')  # convert \\n to \n in text so tokenizer knows to split
-    tokens = word_tokenize(text) # split text into words
+    stop_words = set(stopwords.words('english'))
+    tokens = preprocess(text, stop_words)  # split text into words
     tokens = [w.lower() for w in tokens]  # convert to lower case
+
     if method == 'raw':  # raw count
         return [tokens.count(jargon.lower()) for jargon in jargons_list]
+
     if method == 'bool':
         return [tokens.count(jargon.lower()) >= 1 for jargon in jargons_list]
-    tokens = [word for word in tokens if word.isalpha()] # remove tokens that are not alphabetic
-    stop_words = set(stopwords.words('english'))
-    tokens = [w for w in tokens if not w in stop_words]  # filter out stop words (which is all lower case)
+
     if method == 'norm':
         return [tokens.count(jargon.lower())/len(tokens) for jargon in jargons_list]
-    raise(Exception)  # no method exist
+    raise Exception  # if no method exist
 
 
 def get_metadata(path_to_meta: str):
