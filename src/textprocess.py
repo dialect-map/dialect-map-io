@@ -11,13 +11,14 @@ nltk.download('stopwords')
 
 
 # copy from https://github.com/quynhneo/detm-arxiv/blob/master/arxivtools/preprocessing.py
-def preprocess(document: str, stopwords: List[str]) -> List[str]:
+def preprocess(document: str, stopwords: List[str] = []) -> List[str]:
     """
     INPUT: a string
     OUTPUT: a list of token
         tokenize, lower case,
         remove punctuation: '!"#$%&\'()*+,./:;<=>?@[\\]^_`{|}~', and new line character
-        remove stop words from provided list and words with less than 1 characters from document
+        remove words with less than 1 characters from document
+        remove stopwords
     note:
         latex expressions are not processed
         hyphens (e.g. kaluza-klein), and alpha-numerics (e.g. 3D, not 125), and accents are allowed
@@ -77,8 +78,7 @@ def terms_freq(jargons_list: List[str], text: str, method: str) -> List[int]:
     # apply minimal processing for raw count
     text = codecs.decode(text, 'unicode_escape')  # convert \\n to \n in text so tokenizer knows to split
     stop_words = set(stopwords.words('english'))
-    tokens = preprocess(text, stop_words)  # split text into words
-    tokens = [w.lower() for w in tokens]  # convert to lower case
+    tokens = preprocess(text)  # tokenize, don't remove stopwords
 
     if method == 'raw':  # raw count
         return [tokens.count(jargon.lower()) for jargon in jargons_list]
@@ -88,6 +88,7 @@ def terms_freq(jargons_list: List[str], text: str, method: str) -> List[int]:
 
     if method == 'norm':
         return [tokens.count(jargon.lower())/len(tokens) for jargon in jargons_list]
+
     raise Exception  # if no method exist
 
 
