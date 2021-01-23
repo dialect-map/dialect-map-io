@@ -119,7 +119,7 @@ def read_or_load_rdd(all_txt_dir: str, sample_size: float, rdd_content_dir: str,
     """
     if not os.path.exists(rdd_content_dir):
         # rdd format of data doesn't exist, read from text
-        print('reading data from text files')
+        print('reading data from text folder')
         rdd = dir2rdd(all_txt_dir, sc)  # return a list of tuple (path, content)
         rdd_sample = rdd.sample(False, sample_size, 2020)
         rdd_content = rdd_sample

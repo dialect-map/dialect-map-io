@@ -25,28 +25,32 @@ if __name__ == "__main__":
 
     # ---- set up directories ---- #
 
-    all_txt_dir = '/Users/qmn203/temp/emptydir' #/arxiv/pdf/0704'
-    # all_txt_dir = '/home/qmn203/txtdata_testset' # directory that contain the txt files, could be nested
+    #all_txt_dir = '/Users/qmn203/temp/emptydir' #/arxiv/pdf/0704'
+    all_txt_dir = '/Users/qmn203/temp/txtdata_testset'  # directory that contain the txt files, could be nested
     sample_size = 1  # float, between 0-1 , how much to sample from all he data
 
     # where to store rdd format of all txt:
     #rdd_content_dir = '/Users/qmn203/temp/rdd_txt_arxiv_arxiv/rdd_content_sample_' + str(sample_size)
-    rdd_content_dir = '/Users/qmn203/temp/emptydir_rdd' + str(sample_size)
+    rdd_content_dir = '/Users/qmn203/temp/rdd' + str(sample_size)  #
 
     rdd_content = read_or_load_rdd(all_txt_dir, sample_size, rdd_content_dir, sc=sc)
 
     jargons_list = ['arxiv', 'physics', 'conclusion']
     rdd_count = rdd_content.map(lambda x: (path2id(x),  terms_freq(jargons_list, x, 'norm')))
-    print(rdd_count.take(1))
-    #  run SQL test code here
+    print(rdd_count.take(10))
 
-    r = requests.post(
-        url="http://0.0.0.0:8080/jargon",
-        json={
-            "jargon_id": "111",
-            "jargon_str": "weather",
-            "created_at": datetime.datetime.now().isoformat(),
-            "num_words": 10
-        }
-    )
+    # #  --- SQL test code --- #
+    # import random
+    #
+    # for j in jargons_list:
+    #     r = requests.post(
+    #         url="http://0.0.0.0:8080/jargon",
+    #         json={
+    #             "jargon_id": str(int(random.random()*1000)),
+    #             "jargon_str": j,
+    #             "created_at": datetime.datetime.now().isoformat(),
+    #             "num_words": 10
+    #         }
+    #     )
 
+    # insert all jargon to database one by one jargon, paper, metrics
