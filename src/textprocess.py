@@ -4,12 +4,7 @@ import re
 import json
 from typing import List
 
-from nltk.tokenize import word_tokenize
-from nltk.corpus import stopwords
 from fuzzywuzzy import fuzz
-import nltk
-nltk.download('punkt')
-nltk.download('stopwords')
 
 
 # copy from https://github.com/quynhneo/detm-arxiv/blob/master/arxivtools/preprocessing.py
@@ -37,37 +32,9 @@ def preprocess(document: str) -> List[str]:
     return result
 
 
-def term_freq(jargon: str, text: str) -> int:
-    """ return number of occurrence of a jargon in str content of an article
-        subscripts, number, non-alphabetic, stopwords are ignored
-    """
-    # convert \\n to \n in text so tokenizer knows to split
-    text = codecs.decode(text, 'unicode_escape') #
-
-    # split text into words
-    tokens = word_tokenize(text)
-
-    # remove words that are less than 2 characters
-    # tokens = [tok for tok in tokens if len(tok)>2] # remove this, some jargons may be short abbreviation
-
-    # remove tokens that are not alphabetic
-    tokens = [word for word in tokens if word.isalpha()]
-
-    # convert to lower case
-    tokens = [w.lower() for w in tokens]
-
-    # filter out stop words (which is all lower case)
-    stop_words = set(stopwords.words('english'))
-    tokens = [w for w in tokens if not w in stop_words]
-    # bag of words for this document: a dictionary of word: number of counts
-    # bow = Counter(tokens) # then return bow[jargon.lower()]
-
-    return tokens.count(jargon.lower()) # only count the word of interest
-
-
 def phrase_count(phrase: List[str], tokens: List[str], similarity: int = 80) -> int:
     """count the number of occurrence of phrases a tokenized document
-    both phrase and tokens must be list of words and have been cleaned by preprocess
+    both phrase and tokens must be list of str and have been cleaned by preprocess
     similarity: min levenshtein similarity ratio to accept a match
      """
 
