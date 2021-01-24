@@ -15,15 +15,14 @@ nltk.download('stopwords')
 # copy from https://github.com/quynhneo/detm-arxiv/blob/master/arxivtools/preprocessing.py
 def preprocess(document: str) -> List[str]:
     """
+    simple tokenization
     INPUT: a string
     OUTPUT: a list of token
         tokenize, lower case,
         remove punctuations: '!"#$%&\'()*+,-./:;<=>?@[\\]^_`{|}~', and new line character
-        remove words with less than 1 characters from document
-        remove stopwords
     note:
         pure numerics are allowed, in case searching for 3D in "3 D"
-        single characters are allowed
+        single characters, stopwords are allowed
 
     """
     result = []
@@ -33,8 +32,6 @@ def preprocess(document: str) -> List[str]:
         str.maketrans(string.punctuation, " "*len(string.punctuation)))
 
     for token in document.split():
-        #if len(token) > 1 and token not in stopwords and token.islower():
-            # token.islower() return False for pure numeric
         result.append(token)
 
     return result
