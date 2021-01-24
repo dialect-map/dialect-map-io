@@ -1,9 +1,11 @@
-from nltk.tokenize import word_tokenize
-from nltk.corpus import stopwords
+import string
 import codecs
-from typing import List
 import re
 import json
+from typing import List
+
+from nltk.tokenize import word_tokenize
+from nltk.corpus import stopwords
 from fuzzywuzzy import fuzz
 import nltk
 nltk.download('punkt')
@@ -11,36 +13,35 @@ nltk.download('stopwords')
 
 
 # copy from https://github.com/quynhneo/detm-arxiv/blob/master/arxivtools/preprocessing.py
-def preprocess(document: str, stopwords: List[str] = []) -> List[str]:
+def preprocess(document: str) -> List[str]:
     """
     INPUT: a string
     OUTPUT: a list of token
         tokenize, lower case,
-        remove punctuation: '!"#$%&\'()*+,./:;<=>?@[\\]^_`{|}~', and new line character
+        remove punctuations: '!"#$%&\'()*+,-./:;<=>?@[\\]^_`{|}~', and new line character
         remove words with less than 1 characters from document
         remove stopwords
     note:
-        latex expressions are not processed
-        hyphens (e.g. kaluza-klein), and alpha-numerics (e.g. 3D, not 125), and accents are allowed
+        pure numerics are allowed, in case searching for 3D in "3 D"
+        single characters are allowed
+
     """
     result = []
 
-    punctuation = '!"#$%&\'()*+,./:;<=>?@[\\]^_`{|}~'  # modified from python string.punctuation, deleted hyphen
-
     # replace punctuation with white space
     document = document.lower().replace("’", " ").replace("'", " ").replace("\n", " ").translate(
-        str.maketrans(punctuation, " "*len(punctuation)))
+        str.maketrans(string.punctuation, " "*len(string.punctuation)))
 
     for token in document.split():
-        if len(token) > 1 and token not in stopwords and token.islower():
+        #if len(token) > 1 and token not in stopwords and token.islower():
             # token.islower() return False for pure numeric
-            result.append(token)
+        result.append(token)
 
     return result
 
 
 def term_freq(jargon: str, text: str) -> int:
-    """ return number of occurent of a jargon in str content of an article
+    """ return number of occurrence of a jargon in str content of an article
         subscripts, number, non-alphabetic, stopwords are ignored
     """
     # convert \\n to \n in text so tokenizer knows to split
@@ -67,45 +68,49 @@ def term_freq(jargon: str, text: str) -> int:
     return tokens.count(jargon.lower()) # only count the word of interest
 
 
-def phrase_count(phrase: str, word_tokens: List[str], match=80) -> List:
-    count = 0
-    len_phrase = len(phrase.split(" "))
-    print(len_phrase)
+def phrase_count(phrase: List[str], tokens: List[str], similarity=80) -> int:
+    """count the number of occurrence of phrases a tokenized document
+    both phrase and tokens must be list of words and have been cleaned by preprocess
+    similarity: min levenshtein similarity ratio to accept a match
+     """
 
-    for i in range(len(word_tokens)-len_phrase+1):
+    count = 0
+    len_phrase = len(phrase)
+
+    for i in range(len(tokens)-len_phrase+1):
         ngram = ""
         j = 0
         for j in range(i, i+len_phrase):
-            ngram = ngram+" "+word_tokens[j]
+            ngram = ngram+" "+tokens[j]
         ngram.strip()
         if not ngram == "":
-            print(ngram)
-            if fuzz.ratio(ngram, phrase.lower()) > match:
-                print([ngram, phrase, i, j, fuzz.ratio(ngram, phrase.lower())])
+            if fuzz.ratio(ngram, " ".join(phrase)) > similarity:
+                print([ngram, phrase, i, j, fuzz.ratio(ngram, " ".join(phrase)) ])
                 count = count + 1
     return count
 
-def terms_freq(jargons_list: List[str], text: str, method: str) -> List[int]:
+
+def terms_freq(jargons_list: List[str], text: str, similarity=80, method: str = 'norm') -> List[int]:
     """ for each jargon in jargon lists, return a number of its occurrence in str content of text.
-        both jargons and text are converted to lower case before counting
+        both jargons and text are preprocess before counting
+        similarity: min levenshtein similarity ratio to accept a match
         methods:
             raw: raw count
-            bool: False for raw count = 0, True for >= 1
+            bool: False for raw count = 0, True for count >= 1
             norm: raw count/ processed text length
-        subscripts, number, non-alphabetic, stopwords can't be used in norm method
     """
 
     text = codecs.decode(text, 'unicode_escape')  # convert \\n to \n in text so tokenizer knows to split
-    tokens = preprocess(text)  # tokenize, don't remove stopwords
+    tokens = preprocess(text)  # tokenize
 
     if method == 'raw':  # raw count
-        return [tokens.count(jargon.lower()) for jargon in jargons_list]
+        return [phrase_count(preprocess(jargon), tokens, similarity=similarity) for jargon in jargons_list]
 
     if method == 'bool':
-        return [tokens.count(jargon.lower()) >= 1 for jargon in jargons_list]
+        return [phrase_count(preprocess(jargon), tokens, similarity=similarity) >= 1 for jargon in jargons_list]
 
     if method == 'norm':
-        return [tokens.count(jargon.lower())/len(tokens) for jargon in jargons_list]
+        return [phrase_count(preprocess(jargon), tokens, similarity=similarity)/len(tokens) for jargon in jargons_list]
 
     raise Exception  # if no method exist
 
