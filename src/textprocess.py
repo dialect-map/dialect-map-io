@@ -32,7 +32,8 @@ def preprocess(document: str, stopwords: List[str] = []) -> List[str]:
         str.maketrans(punctuation, " "*len(punctuation)))
 
     for token in document.split():
-        if len(token) > 1 and token not in stopwords and token.islower():   # and token.islower() removes pure numeric
+        if len(token) > 1 and token not in stopwords and token.islower():
+            # token.islower() return False for pure numeric
             result.append(token)
 
     return result
@@ -66,6 +67,24 @@ def term_freq(jargon: str, text: str) -> int:
     return tokens.count(jargon.lower()) # only count the word of interest
 
 
+def phrase_count(phrase: str, word_tokens: List[str], match=80) -> List:
+    count = 0
+    len_phrase = len(phrase.split(" "))
+    print(len_phrase)
+
+    for i in range(len(word_tokens)-len_phrase+1):
+        ngram = ""
+        j = 0
+        for j in range(i, i+len_phrase):
+            ngram = ngram+" "+word_tokens[j]
+        ngram.strip()
+        if not ngram == "":
+            print(ngram)
+            if fuzz.ratio(ngram, phrase.lower()) > match:
+                print([ngram, phrase, i, j, fuzz.ratio(ngram, phrase.lower())])
+                count = count + 1
+    return count
+
 def terms_freq(jargons_list: List[str], text: str, method: str) -> List[int]:
     """ for each jargon in jargon lists, return a number of its occurrence in str content of text.
         both jargons and text are converted to lower case before counting
@@ -75,9 +94,8 @@ def terms_freq(jargons_list: List[str], text: str, method: str) -> List[int]:
             norm: raw count/ processed text length
         subscripts, number, non-alphabetic, stopwords can't be used in norm method
     """
-    # apply minimal processing for raw count
+
     text = codecs.decode(text, 'unicode_escape')  # convert \\n to \n in text so tokenizer knows to split
-    stop_words = set(stopwords.words('english'))
     tokens = preprocess(text)  # tokenize, don't remove stopwords
 
     if method == 'raw':  # raw count
