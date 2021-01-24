@@ -56,3 +56,22 @@ def test_terms_freq_6():
         "say hello-world","document","arxiv"],
         "good morning SAY Hello  worlD I am a pre-Process document 1234 document",
         method="norm") == [pytest.approx(float(2/13),0.1),pytest.approx(float(2/13),0.1),0])
+
+
+def test_terms_freq_7():  # when jargon missing space or hyphen: false
+    assert(terms_freq([
+        "finetune","Contrastive-gradient Learnings"],
+        "This is measured by ranking questions based on the cosine similarity of their Grad-CAM\
+vectors with that of the reasoning question. We find\
+that even top-performing VQA models often rank\
+irrelevant questions higher than relevant questions.\
+Motivated by this, we introduce a new approach\
+called contrastive gradient learning to fine-tune a\
+VQA model by adding a loss term that enforces\
+relevant sub-questions to be ranked higher than irrelevant questions while answering a reasoning\
+question. This is achieved by forcing the cosine\
+similarity of the reasoning question's Grad-CAM\
+vector with that of a sub-question to be higher than\
+with that of an irrelevant question. We find that\
+our approach improves the model's consistency, learning Contrastive-gradient",
+        method="bool") == [False, True])
