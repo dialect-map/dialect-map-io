@@ -1,5 +1,5 @@
 import pytest
-from src.textprocess import phrase_count,terms_freq
+from src.textprocess import phrase_count, terms_freq
 
 
 def test_phrase_count_1():
@@ -49,6 +49,7 @@ def test_terms_freq_5():
 def test_terms_freq_6():
     assert(terms_freq(["say hello-world","document","arxiv"], "good morning SAY Hello"
                                                   " worlD I am a pre-Process document 1234 document", method="bool") == [1,1,0])
+
 
 def test_terms_freq_6():
     assert(terms_freq([

@@ -35,8 +35,8 @@ if __name__ == "__main__":
 
     rdd_content = read_or_load_rdd(all_txt_dir, sample_size, rdd_content_dir, sc=sc)
 
-    jargons_list = ['arxiv', 'physics', 'conclusion']
-    rdd_count = rdd_content.map(lambda x: (path2id(x),  terms_freq(jargons_list, x, 'norm')))
+    jargons_list = ['perceptual capability', 'physics', 'conclusion']
+    rdd_count = rdd_content.map(lambda x: (path2id(x),  terms_freq(jargons_list, x, similarity=80, method='norm')))
     print(rdd_count.take(10))
 
     # #  --- SQL test code --- #

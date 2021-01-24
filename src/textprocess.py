@@ -68,7 +68,7 @@ def term_freq(jargon: str, text: str) -> int:
     return tokens.count(jargon.lower()) # only count the word of interest
 
 
-def phrase_count(phrase: List[str], tokens: List[str], similarity=80) -> int:
+def phrase_count(phrase: List[str], tokens: List[str], similarity: int = 80) -> int:
     """count the number of occurrence of phrases a tokenized document
     both phrase and tokens must be list of words and have been cleaned by preprocess
     similarity: min levenshtein similarity ratio to accept a match
@@ -111,8 +111,6 @@ def terms_freq(jargons_list: List[str], text: str, similarity=80, method: str = 
 
     if method == 'norm':
         return [phrase_count(preprocess(jargon), tokens, similarity=similarity)/len(tokens) for jargon in jargons_list]
-
-    raise Exception  # if no method exist
 
 
 def get_metadata(path_to_meta: str):
