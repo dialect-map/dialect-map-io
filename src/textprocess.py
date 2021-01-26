@@ -46,7 +46,7 @@ def phrase_count(phrase: List[str], tokens: List[str], similarity: int = 85) -> 
         j = 0
         for j in range(i, i+len_phrase):
             ngram = ngram+" "+tokens[j]
-        ngram.strip()
+        ngram = ngram.strip()
         if not ngram == "":
             if fuzz.ratio(ngram, " ".join(phrase)) > similarity:
                 print([ngram, phrase, i, j, fuzz.ratio(ngram, " ".join(phrase)) ])
