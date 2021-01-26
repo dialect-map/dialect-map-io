@@ -42,17 +42,27 @@ if __name__ == "__main__":
     # keep only paper which has at least 1 term frequency non zero
     rdd_drop = rdd_tf.filter(lambda x: any([y['tf_norm'] for y in x['jargon_tf']]))
 
-    # explode the jargon list of each paper into multiple elements, each is a tuple (jargon,['paperID':'','tf':''])
+    # explode the jargon list of each paper into multiple elements, each is a tuple (jargon,[{'paperID':'','tf':''}])
     rdd_flat = rdd_drop.flatMap(
-        lambda x: [(y['jargon'], {'paperID': x['paperID'],'tf':y['tf_norm']}) for y in x['jargon_tf']])
+        lambda x: [(y['jargon'], {'paperID': x['paperID'], 'tf':y['tf_norm']}) for y in x['jargon_tf']])
 
     # drop element where term frequency = 0
     rdd_jargon_paper_tf = rdd_flat.filter(lambda x: x[1]['tf'] != 0)
 
-    #group by jargons to create {"jargon": jargon, "paper_tf":[{paper1: tf},{paper2:tf},]}
+    # group by jargons to create {"jargon": jargon, "paper_tf":[{paper1: tf},{paper2:tf},]}
     rdd_jargonGroup = rdd_jargon_paper_tf.combineByKey(lambda value: [value],  # create combiner
-                                                       lambda x, value: x+value, # join in the same partion
-                                                       lambda x, y: x+y) # join accros partitions
+                                                       lambda x, value: x+value,  # combine in the same partition
+                                                       lambda x, y: x+y).map(  # combine across partitions
+        lambda x: {'jargon': x[0], 'paper_tf': x[1]}  # format to json object
+    )
+    rdd_jargonGroup.write.json("/Users/qmn203/temp/jargonGroup")
+
+    # TODO:
+    #  modularize & write tests?
+    #  run larger data set?
+    #  write out json
+    #  take CLI arguments
+    #  options: parallelization level,
 
 
     # #  --- SQL test code --- #
