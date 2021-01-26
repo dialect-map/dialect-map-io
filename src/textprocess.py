@@ -32,7 +32,7 @@ def preprocess(document: str) -> List[str]:
     return result
 
 
-def phrase_count(phrase: List[str], tokens: List[str], similarity: int = 80) -> int:
+def phrase_count(phrase: List[str], tokens: List[str], similarity: int = 85) -> int:
     """count the number of occurrence of phrases a tokenized document
     both phrase and tokens must be list of str and have been cleaned by preprocess
     similarity: min levenshtein similarity ratio to accept a match
@@ -54,7 +54,7 @@ def phrase_count(phrase: List[str], tokens: List[str], similarity: int = 80) -> 
     return count
 
 
-def terms_freq(jargons_list: List[str], text: str, similarity=80, method: str = 'norm') -> List[int]:
+def terms_freq(jargons_list: List[str], text: str, similarity=85, method: str = 'norm') -> List[dict]:
     """ for each jargon in jargon lists, return a number of its occurrence in str content of text.
         both jargons and text are preprocess before counting
         similarity: min levenshtein similarity ratio to accept a match
@@ -68,13 +68,20 @@ def terms_freq(jargons_list: List[str], text: str, similarity=80, method: str = 
     tokens = preprocess(text)  # tokenize
 
     if method == 'raw':  # raw count
-        return [phrase_count(preprocess(jargon), tokens, similarity=similarity) for jargon in jargons_list]
+        return [{'jargon': " ".join(preprocess(jargon)),
+                 'tf_raw': phrase_count(preprocess(jargon), tokens, similarity=similarity)}
+                for jargon in jargons_list]
 
     if method == 'bool':
-        return [phrase_count(preprocess(jargon), tokens, similarity=similarity) >= 1 for jargon in jargons_list]
+        return [{'jargon': " ".join(preprocess(jargon)),
+                 'tf_bool': phrase_count(preprocess(jargon), tokens, similarity=similarity) >= 1}
+                for jargon in jargons_list]
 
     if method == 'norm':
-        return [phrase_count(preprocess(jargon), tokens, similarity=similarity)/len(tokens) for jargon in jargons_list]
+        return [{'jargon': " ".join(preprocess(jargon)),
+                 'tf_norm': phrase_count(preprocess(jargon), tokens, similarity=similarity)/len(tokens)}
+                for jargon in jargons_list]
+
 
 
 def get_metadata(path_to_meta: str):
