@@ -35,19 +35,25 @@ if __name__ == "__main__":
     rdd_content = read_or_load_rdd(all_txt_dir, sample_size, rdd_content_dir, sc=sc)
 
     jargons_list = ['perceptual capability', 'physics', 'conclusion']
+    # group by paperID [{'paperID': str, 'jargon_tf': [{'jargon': str, 'tf_norm': float}, {...}, ...]},{...},...]
     rdd_tf = rdd_content.map(lambda x: {'paperID': path2id(x),
                                         'jargon_tf': terms_freq(jargons_list, x, similarity=85, method='norm')})
 
     # keep only paper which has at least 1 term frequency non zero
-    rdd_tf_drop = rdd_tf.filter(lambda x: any([y['tf_norm'] for y in x['jargon_tf']]))
+    rdd_drop = rdd_tf.filter(lambda x: any([y['tf_norm'] for y in x['jargon_tf']]))
 
-    # explode the jargon list of each paper into multiple elements, each is a tuple (jargon,[paperID,tf])
-    rdd_tf_flat = rdd_tf_drop.flatMap(lambda x: [(y['jargon'], [x['paperID'], y['tf_norm']]) for y in x['jargon_tf']])
+    # explode the jargon list of each paper into multiple elements, each is a tuple (jargon,['paperID':'','tf':''])
+    rdd_flat = rdd_drop.flatMap(
+        lambda x: [(y['jargon'], {'paperID': x['paperID'],'tf':y['tf_norm']}) for y in x['jargon_tf']])
 
     # drop element where term frequency = 0
-    rdd_paper_jargon_tf = rdd_tf_flat.filter(lambda x: x[1][1] != 0)
+    rdd_jargon_paper_tf = rdd_flat.filter(lambda x: x[1]['tf'] != 0)
 
     #group by jargons to create {"jargon": jargon, "paper_tf":[{paper1: tf},{paper2:tf},]}
+    rdd_jargonGroup = rdd_jargon_paper_tf.combineByKey(lambda value: [value],  # create combiner
+                                                       lambda x, value: x+value, # join in the same partion
+                                                       lambda x, y: x+y) # join accros partitions
+
 
     # #  --- SQL test code --- #
     # import random
