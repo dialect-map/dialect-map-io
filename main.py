@@ -34,23 +34,20 @@ if __name__ == "__main__":
 
     rdd_content = read_or_load_rdd(all_txt_dir, sample_size, rdd_content_dir, sc=sc)
 
-    jargons_list = ['perceptual capability quynh', 'physics quynh', 'conclusion quynh']
+    jargons_list = ['perceptual capability', 'physics', 'conclusion']
     rdd_tf = rdd_content.map(lambda x: {'paperID': path2id(x),
                                         'jargon_tf': terms_freq(jargons_list, x, similarity=85, method='norm')})
 
-    # keep only relevant paper
+    # keep only paper which has at least 1 term frequency non zero
     rdd_tf_drop = rdd_tf.filter(lambda x: any([y['tf_norm'] for y in x['jargon_tf']]))
 
-    rdd_tf_flat = rdd_tf_drop.filter
-    # transform into having jargons the key, and list of paper the value (reduce sparsity)
+    # explode the jargon list of each paper into multiple elements, each is a tuple (jargon,[paperID,tf])
+    rdd_tf_flat = rdd_tf_drop.flatMap(lambda x: [(y['jargon'], [x['paperID'], y['tf_norm']]) for y in x['jargon_tf']])
 
-    list_rdd = []
-    for i in range(len(jargons_list)):  # dangerous, when collect, i=2. use json object?
-        list_rdd.append(rdd_count_drop.
-                        filter(lambda line: line[1][i] != 0).
-                        map(lambda x: (x[0], x[1][i])))
+    # drop element where term frequency = 0
+    rdd_paper_jargon_tf = rdd_tf_flat.filter(lambda x: x[1][1] != 0)
 
-    print(rdd_count_drop.take(10))
+    #group by jargons to create {"jargon": jargon, "paper_tf":[{paper1: tf},{paper2:tf},]}
 
     # #  --- SQL test code --- #
     # import random
