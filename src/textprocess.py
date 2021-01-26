@@ -36,6 +36,7 @@ def phrase_count(phrase: List[str], tokens: List[str], similarity: int = 85) -> 
     """count the number of occurrence of phrases a tokenized document
     both phrase and tokens must be list of str and have been cleaned by preprocess
     similarity: min levenshtein similarity ratio to accept a match
+    https://medium.com/@shivendra15/nlp-approximate-phrase-matching-5a7f79bef9b8
      """
 
     count = 0
