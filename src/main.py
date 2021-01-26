@@ -3,8 +3,8 @@ import datetime
 
 from pyspark import SparkConf, SparkContext
 
-from src.textprocess import path2id, terms_freq
-from src.utilities import read_or_load_rdd
+from textprocess import path2id, terms_freq
+from utilities import read_or_load_rdd
 
 if __name__ == "__main__":
     #  ---- setting up spark, turn off if run interactively ---- #
