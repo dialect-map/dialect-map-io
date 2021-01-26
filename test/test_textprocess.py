@@ -22,7 +22,7 @@ def test_phrase_count_4():
 
 def test_phrase_count_5():
     assert(phrase_count(["shello"], ["hello", "world", "physics", "shellos", "world"]) == 1)
-    # shellos will match, but not hello
+    # shellos will match, but not hello. ie. for word longer than 5 characters, 1 typo is allowed
 
 
 def test_phrase_count_6():
@@ -76,7 +76,7 @@ def test_terms_freq_7():
                            {'jargon': 'arxiv', 'tf_norm': 0}])
 
 
-def test_terms_freq_8():  # when jargon missing space "finetune" or hyphen "kaluzakein: false
+def test_terms_freq_8():  # when jargon missing space "finetune" or hyphen "kaluzakein, it is not counted
     assert(terms_freq([
         "finetune","Contrastive-gradient Learnings"],
         "This is measured by ranking questions based on the cosine similarity of their Grad-CAM\
