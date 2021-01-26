@@ -6,7 +6,6 @@ from pyspark import SparkConf, SparkContext
 from src.textprocess import path2id, terms_freq
 from src.utilities import read_or_load_rdd
 
-
 if __name__ == "__main__":
     #  ---- setting up spark, turn off if run interactively ---- #
     conf = SparkConf().setMaster("local[*]").setAppName("scratch")
@@ -25,19 +24,33 @@ if __name__ == "__main__":
 
     # ---- set up directories ---- #
 
-    #all_txt_dir = '/Users/qmn203/temp/emptydir' #/arxiv/pdf/0704'
+    # all_txt_dir = '/Users/qmn203/temp/emptydir' #/arxiv/pdf/0704'
     all_txt_dir = '/Users/qmn203/temp/txtdata_testset'  # directory that contain the txt files, could be nested
-    sample_size = 1  # float, between 0-1 , how much to sample from all he data
+    sample_size = 1  # float, between 0-1 , how much to sample from all the data
 
     # where to store rdd format of all txt:
-    #rdd_content_dir = '/Users/qmn203/temp/rdd_txt_arxiv_arxiv/rdd_content_sample_' + str(sample_size)
+    # rdd_content_dir = '/Users/qmn203/temp/rdd_txt_arxiv_arxiv/rdd_content_sample_' + str(sample_size)
     rdd_content_dir = '/Users/qmn203/temp/rdd' + str(sample_size)  #
 
     rdd_content = read_or_load_rdd(all_txt_dir, sample_size, rdd_content_dir, sc=sc)
 
-    jargons_list = ['perceptual capability', 'physics', 'conclusion']
-    rdd_count = rdd_content.map(lambda x: (path2id(x),  terms_freq(jargons_list, x, similarity=80, method='norm')))
-    print(rdd_count.take(10))
+    jargons_list = ['perceptual capability quynh', 'physics quynh', 'conclusion quynh']
+    rdd_tf = rdd_content.map(lambda x: {'paperID': path2id(x),
+                                        'jargon_tf': terms_freq(jargons_list, x, similarity=85, method='norm')})
+
+    # keep only relevant paper
+    rdd_tf_drop = rdd_tf.filter(lambda x: any([y['tf_norm'] for y in x['jargon_tf']]))
+
+    rdd_tf_flat = rdd_tf_drop.filter
+    # transform into having jargons the key, and list of paper the value (reduce sparsity)
+
+    list_rdd = []
+    for i in range(len(jargons_list)):  # dangerous, when collect, i=2. use json object?
+        list_rdd.append(rdd_count_drop.
+                        filter(lambda line: line[1][i] != 0).
+                        map(lambda x: (x[0], x[1][i])))
+
+    print(rdd_count_drop.take(10))
 
     # #  --- SQL test code --- #
     # import random
