@@ -33,8 +33,13 @@ def rdd2json(RDD, filename):
 
 
 @click.command()
-@click.option('--terms_file',default='terms_file.txt' , help='file where jargon terms are store, one per line')
-def main(terms_file):
+@click.option('--terms_file', default='/Users/qmn203/clones/ds-dialect-map-computing/terms_file.txt',
+              help='path to file where jargon terms are store, one per line')
+@click.option('--text_dir', default='/Users/qmn203/temp/txtdata_testset',
+              help='directory that contain the txt files, including nested subdirectories')
+@click.option('--rdd_dir', default='/Users/qmn203/temp/', help='path to store rdd format of all txt')
+@click.option('--sample_size', default=1, help='float, between 0-1 , how much to sample from all the data')
+def main(text_dir, rdd_dir, sample_size, terms_file):
     #  ---- setting up spark, turn off if run interactively ---- #
     conf = SparkConf().setMaster("local[*]").setAppName("scratch")
     sc = SparkContext.getOrCreate(conf=conf)
@@ -51,22 +56,17 @@ def main(terms_file):
     print("Partitions structure: {}".format(rddtest.glom().collect()))
 
     # ---- set up directories ---- #
-
-    # all_txt_dir = '/Users/qmn203/temp/emptydir' #/arxiv/pdf/0704'
-    all_txt_dir = '/Users/qmn203/temp/txtdata_testset'  # directory that contain the txt files, could be nested
-    sample_size = 1  # float, between 0-1 , how much to sample from all the data
-
+    # text_dir = '/Users/qmn203/temp/emptydir' #/arxiv/pdf/0704'
     # where to store rdd format of all txt:
     # rdd_content_dir = '/Users/qmn203/temp/rdd_txt_arxiv_arxiv/rdd_content_sample_' + str(sample_size)
-    rdd_content_dir = '/Users/qmn203/temp/rdd' + str(sample_size)  #
+    rdd_content_dir = rdd_dir + str(sample_size)  #
 
-    rdd_content = read_or_load_rdd(all_txt_dir, sample_size, rdd_content_dir, sc=sc)
+    rdd_content = read_or_load_rdd(text_dir, sample_size, rdd_content_dir, sc=sc)
 
     jargons_list = []
     with open(terms_file) as file:
         for line in file.read().splitlines():
             jargons_list.append(line)
-
 
     # group by paperID [{'paperID': str, 'jargon_tf': [{'jargon': str, 'tf_norm': float}, {...}, ...]},{...},...]
     rdd_tf = rdd_content.map(lambda x: {"paperID": path2id(x),
