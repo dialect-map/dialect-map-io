@@ -36,10 +36,13 @@ def rdd2json(RDD, filename):
 @click.option('--terms_file', default='/Users/qmn203/clones/ds-dialect-map-computing/terms_file.txt',
               help='path to file where jargon terms are store, one per line')
 @click.option('--text_dir', default='/Users/qmn203/temp/txtdata_testset',
-              help='directory that contain the txt files, including nested subdirectories')
-@click.option('--rdd_dir', default='/Users/qmn203/temp/', help='path to store rdd format of all txt')
-@click.option('--sample_size', default=1, help='float, between 0-1 , how much to sample from all the data')
-def main(text_dir, rdd_dir, sample_size, terms_file):
+              help='directory that contains the txt files, including nested subdirectories')
+@click.option('--rdd_dir', default='/Users/qmn203/temp/', help='directory to store rdd format of all txt')
+@click.option('--sample_size', default=1.0,
+              help='between 0.0-1.0, how much to randomly sample from all the data')
+@click.option('--json_dir', default='/Users/qmn203/temp/',
+              help='directory to store json file of computed term frequency')
+def main(text_dir, rdd_dir, sample_size, terms_file, json_dir):
     #  ---- setting up spark, turn off if run interactively ---- #
     conf = SparkConf().setMaster("local[*]").setAppName("scratch")
     sc = SparkContext.getOrCreate(conf=conf)
@@ -63,44 +66,47 @@ def main(text_dir, rdd_dir, sample_size, terms_file):
 
     rdd_content = read_or_load_rdd(text_dir, sample_size, rdd_content_dir, sc=sc)
 
+    # ---- get the list of jargon terms from file ---- #
     jargons_list = []
     with open(terms_file) as file:
         for line in file.read().splitlines():
             jargons_list.append(line)
 
-    # group by paperID [{'paperID': str, 'jargon_tf': [{'jargon': str, 'tf_norm': float}, {...}, ...]},{...},...]
+    # get term frequency, group by paperID
+    # [{'paperID': str, 'jargon_tf': [{'jargon': str, 'tf_norm': float}, {...}, ...]},{...},...]
     rdd_tf = rdd_content.map(lambda x: {"paperID": path2id(x),
                                         "jargon_tf": terms_freq(jargons_list, x, similarity=85, method='norm')})
 
-    # keep only paper which has at least 1 term frequency non zero
+    # keep only paper which has at least 1 non zero term frequency
     rdd_drop = rdd_tf.filter(lambda x: any([y["tf_norm"] for y in x["jargon_tf"]]))
 
-    # explode the jargon list of each paper into multiple elements, each is a tuple (jargon,[{'paperID':'','tf':''}])
+    # explode the jargon list of each paper into multiple elements, each is a 2-tuple (jargon,[{'paperID':'','tf':''}])
     rdd_flat = rdd_drop.flatMap(
         lambda x: [(y['jargon'], {"paperID": x['paperID'], "tf":y['tf_norm']}) for y in x['jargon_tf']])
 
-    # drop element where term frequency = 0
+    # drop tuple element where term frequency = 0
     rdd_jargon_paper_tf = rdd_flat.filter(lambda x: x[1]['tf'] != 0)
 
     # group by jargons to create {"jargon": jargon, "paper_tf":[{paper1: tf},{paper2:tf},]}
-    rdd_jargonGroup = rdd_jargon_paper_tf.combineByKey(lambda value: [value],  # create combiner
-                                                       lambda x, value: x+value,  # combine in the same partition
-                                                       lambda x, y: x+y).map(  # combine across partitions
+    rdd_jargon_group = rdd_jargon_paper_tf.combineByKey(lambda value: [value],  # create combiner
+                                                       lambda x, value: x+value,  # combine into list (same partition)
+                                                       lambda x, y: x+y).map(  # combine into list (across partitions)
         lambda x: {"jargon": x[0], "paper_tf": x[1]}  # format to dict
     )
 
-    rdd2json(rdd_jargonGroup, "/Users/qmn203/temp/jargonGroup.json")
+    # save to json
+    json_file = json_dir+"jargonGroup.json"
+    rdd2json(rdd_jargon_group, json_file)
 
-    # lazy read
-    gen = json_reader('/Users/qmn203/temp/jargonGroup.json')
+    # lazy read test
+    gen = json_reader(json_file)
     for row in gen:
         print(row['jargon'], row['paper_tf'][0]['paperID'], row['paper_tf'][0]['tf'])
 
     # TODO:
-    #  modularize & write tests?
+    #  write tests?
     #  run larger data set?
-    #  write out json?
-    #  take CLI arguments: read list of jargon from textfile
+
     #  options: parallelization level,
 
 
