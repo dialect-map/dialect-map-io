@@ -1,6 +1,8 @@
 import requests
 import datetime
 import json
+
+import click
 from pyspark import SparkConf, SparkContext
 
 from textprocess import path2id, terms_freq
@@ -30,7 +32,9 @@ def rdd2json(RDD, filename):
         f.write(json_longStr)
 
 
-if __name__ == "__main__":
+@click.command()
+@click.option('--terms_file',default='terms_file.txt' , help='file where jargon terms are store, one per line')
+def main(terms_file):
     #  ---- setting up spark, turn off if run interactively ---- #
     conf = SparkConf().setMaster("local[*]").setAppName("scratch")
     sc = SparkContext.getOrCreate(conf=conf)
@@ -58,7 +62,12 @@ if __name__ == "__main__":
 
     rdd_content = read_or_load_rdd(all_txt_dir, sample_size, rdd_content_dir, sc=sc)
 
-    jargons_list = ["perceptual capability", "physics", "conclusion"]
+    jargons_list = []
+    with open(terms_file) as file:
+        for line in file.read().splitlines():
+            jargons_list.append(line)
+
+
     # group by paperID [{'paperID': str, 'jargon_tf': [{'jargon': str, 'tf_norm': float}, {...}, ...]},{...},...]
     rdd_tf = rdd_content.map(lambda x: {"paperID": path2id(x),
                                         "jargon_tf": terms_freq(jargons_list, x, similarity=85, method='norm')})
@@ -85,13 +94,13 @@ if __name__ == "__main__":
     # lazy read
     gen = json_reader('/Users/qmn203/temp/jargonGroup.json')
     for row in gen:
-        print(row['jargon'], row['paper_tf'][0]['paperID'],row['paper_tf'][0]['tf'])
+        print(row['jargon'], row['paper_tf'][0]['paperID'], row['paper_tf'][0]['tf'])
 
     # TODO:
     #  modularize & write tests?
     #  run larger data set?
     #  write out json?
-    #  take CLI arguments
+    #  take CLI arguments: read list of jargon from textfile
     #  options: parallelization level,
 
 
@@ -110,3 +119,8 @@ if __name__ == "__main__":
     #     )
 
     # insert all jargon to database one by one jargon, paper, metrics
+
+
+if __name__ == "__main__":
+    main()
+
