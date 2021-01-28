@@ -1,10 +1,34 @@
 import requests
 import datetime
-
+import json
 from pyspark import SparkConf, SparkContext
 
 from textprocess import path2id, terms_freq
 from utilities import read_or_load_rdd
+
+
+def json_reader(filename):
+    """lazy json reader, return a generator"""
+    with open(filename) as f:
+        for line in f:
+            yield json.loads(line)
+
+
+def rdd2json(RDD, filename):
+    """save rdd to new line delimited json (NDJSON)"""
+    # load to json
+    jsonRDD = RDD.map(lambda x: str(x).replace("'", '"')).map(json.loads).coalesce(1, shuffle=True)
+
+    # map jsons back to string
+    json_str = jsonRDD.map(json.dumps)
+
+    # reduce to one big string with one json on each line
+    json_longStr = json_str.reduce(lambda x, y: x + "\n" + y)
+
+    # write your string to a file
+    with open(filename, "w") as f:
+        f.write(json_longStr)
+
 
 if __name__ == "__main__":
     #  ---- setting up spark, turn off if run interactively ---- #
@@ -34,17 +58,17 @@ if __name__ == "__main__":
 
     rdd_content = read_or_load_rdd(all_txt_dir, sample_size, rdd_content_dir, sc=sc)
 
-    jargons_list = ['perceptual capability', 'physics', 'conclusion']
+    jargons_list = ["perceptual capability", "physics", "conclusion"]
     # group by paperID [{'paperID': str, 'jargon_tf': [{'jargon': str, 'tf_norm': float}, {...}, ...]},{...},...]
-    rdd_tf = rdd_content.map(lambda x: {'paperID': path2id(x),
-                                        'jargon_tf': terms_freq(jargons_list, x, similarity=85, method='norm')})
+    rdd_tf = rdd_content.map(lambda x: {"paperID": path2id(x),
+                                        "jargon_tf": terms_freq(jargons_list, x, similarity=85, method='norm')})
 
     # keep only paper which has at least 1 term frequency non zero
-    rdd_drop = rdd_tf.filter(lambda x: any([y['tf_norm'] for y in x['jargon_tf']]))
+    rdd_drop = rdd_tf.filter(lambda x: any([y["tf_norm"] for y in x["jargon_tf"]]))
 
     # explode the jargon list of each paper into multiple elements, each is a tuple (jargon,[{'paperID':'','tf':''}])
     rdd_flat = rdd_drop.flatMap(
-        lambda x: [(y['jargon'], {'paperID': x['paperID'], 'tf':y['tf_norm']}) for y in x['jargon_tf']])
+        lambda x: [(y['jargon'], {"paperID": x['paperID'], "tf":y['tf_norm']}) for y in x['jargon_tf']])
 
     # drop element where term frequency = 0
     rdd_jargon_paper_tf = rdd_flat.filter(lambda x: x[1]['tf'] != 0)
@@ -53,14 +77,20 @@ if __name__ == "__main__":
     rdd_jargonGroup = rdd_jargon_paper_tf.combineByKey(lambda value: [value],  # create combiner
                                                        lambda x, value: x+value,  # combine in the same partition
                                                        lambda x, y: x+y).map(  # combine across partitions
-        lambda x: {'jargon': x[0], 'paper_tf': x[1]}  # format to json object
+        lambda x: {"jargon": x[0], "paper_tf": x[1]}  # format to dict
     )
-    rdd_jargonGroup.write.json("/Users/qmn203/temp/jargonGroup")
+
+    rdd2json(rdd_jargonGroup, "/Users/qmn203/temp/jargonGroup.json")
+
+    # lazy read
+    gen = json_reader('/Users/qmn203/temp/jargonGroup.json')
+    for row in gen:
+        print(row['jargon'], row['paper_tf'][0]['paperID'],row['paper_tf'][0]['tf'])
 
     # TODO:
     #  modularize & write tests?
     #  run larger data set?
-    #  write out json
+    #  write out json?
     #  take CLI arguments
     #  options: parallelization level,
 
