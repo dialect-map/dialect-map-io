@@ -35,7 +35,7 @@ def rdd2json(RDD, filename):
 
 
 @click.command()
-@click.option('--terms_file', default='/Users/qmn203/clones/ds-dialect-map-computing/terms_file.txt',
+@click.option('--terms_file', default='/Users/qmn203/clones/ds-dialect-map-computing/terms_file2.csv',
               help='path to file where jargon terms are store, one per line')
 @click.option('--text_dir', default='/Users/qmn203/temp/txtdata_testset',
               help='directory that contains the txt files, including nested subdirectories')
@@ -115,6 +115,7 @@ def main(text_dir, rdd_dir, sample_size, terms_file, json_dir):
     print(f'run time is {runtime} hour')
 
     # TODO:
+    # fuzziness must be based on the length of the term
     # collect jargon list
     #  options: parallelization level?
     # run 1% on greene
