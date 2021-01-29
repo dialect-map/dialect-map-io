@@ -5,8 +5,8 @@ import json
 import click
 from pyspark import SparkConf, SparkContext
 
-from textprocess import path2id, terms_freq
-from utilities import read_or_load_rdd
+from src.textprocess import path2id, terms_freq
+from src.utilities import read_or_load_rdd
 
 
 def json_reader(filename):
@@ -80,19 +80,25 @@ def main(text_dir, rdd_dir, sample_size, terms_file, json_dir):
     # keep only paper which has at least 1 non zero term frequency
     rdd_drop = rdd_tf.filter(lambda x: any([y["tf_norm"] for y in x["jargon_tf"]]))
 
-    # explode the jargon list of each paper into multiple elements, each is a 2-tuple (jargon,[{'paperID':'','tf':''}])
+    # explode the jargon list of each paper into multiple elements,
+    # reorder each is a 2-tuple (jargon,{'paperID':'','tf':''})
     rdd_flat = rdd_drop.flatMap(
         lambda x: [(y['jargon'], {"paperID": x['paperID'], "tf":y['tf_norm']}) for y in x['jargon_tf']])
 
     # drop tuple element where term frequency = 0
     rdd_jargon_paper_tf = rdd_flat.filter(lambda x: x[1]['tf'] != 0)
 
+    print(rdd_jargon_paper_tf)
+
     # group by jargons to create {"jargon": jargon, "paper_tf":[{paper1: tf},{paper2:tf},]}
-    rdd_jargon_group = rdd_jargon_paper_tf.combineByKey(lambda value: [value],  # create combiner
-                                                       lambda x, value: x+value,  # combine into list (same partition)
-                                                       lambda x, y: x+y).map(  # combine into list (across partitions)
-        lambda x: {"jargon": x[0], "paper_tf": x[1]}  # format to dict
-    )
+    rdd_jargon_group = \
+        rdd_jargon_paper_tf.combineByKey(
+            lambda value: [value],  # create combiner: first value (a dict) -> list[dict]
+            lambda list0, other_value: list0+[other_value],
+            # combine the combiner with other values of the same key: concat 2 list[dict] (same partition)
+            lambda list_i, list_j: list_i+list_j).map(  # combine combiners (across partitions)
+            lambda x: {"jargon": x[0], "paper_tf": x[1]}  # format to dict
+            )
 
     # save to json
     json_file = json_dir+"jargonGroup.json"
@@ -104,6 +110,7 @@ def main(text_dir, rdd_dir, sample_size, terms_file, json_dir):
         print(row['jargon'], row['paper_tf'][0]['paperID'], row['paper_tf'][0]['tf'])
 
     # TODO:
+    #  run on greene
     #  write tests?
     #  run larger data set?
 
@@ -129,4 +136,5 @@ def main(text_dir, rdd_dir, sample_size, terms_file, json_dir):
 
 if __name__ == "__main__":
     main()
+    print('1')
 
