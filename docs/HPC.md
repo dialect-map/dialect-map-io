@@ -126,7 +126,7 @@ Make a script such as `slurm.s` below, wrap the two methods above inside `-c "in
 #SBATCH --mem=50GB
 #SBATCH --job-name=spark
 #SBATCH --mail-type=END
-#SBATCH --mail-user=yourNetID@nyu.edu
+#SBATCH --mail-user=youremail@address.com
 #SBATCH --output=slurm_%j.out
 
 cd ~/dialect-map-computing
