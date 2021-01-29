@@ -89,7 +89,7 @@ create a script to start spark cluster, something like [`spark-greene-prepare.sh
 
 To run `src/main.py`, there are now two options: interactive running (good for testing, debugging, short jobs), and batch job good for real and longer jobs. 
 ## Interactive mode
-From a log in node, request a computing node:
+From a log in node, request a computing node, for example:
 ```
 $srun --cpus-per-task=40 --nodes 1 --mem=50GB --time=1-00:00:00 --pty /bin/bash
 ```
@@ -99,10 +99,24 @@ $cd dialect-map-computing
 $singularity exec --overlay overlay-5GB-200K.ext3 /scratch/work/public/singularity/ubuntu-20.04.1.sif /bin/bash
 Singularity> source /ext3/env.sh
 Singularity> conda activate dialect_map
+Singularity> cd src
+```
+To run with default setting of Sparks
+```
 Singularity> python main.py [options]
 ```
+To run with customized setting in `spark-greene-prepare.sh`:
+```
+Singularity> cd /scratch/$USER/spark_py
+Singularity> source spark-greene-prepare.sh
+Singularity> start_all
+Singularity> cd ~/dialect-map-computing/src
+Singularity> /scratch/$USER/spark_py/sbin/bin/spark-submit --name "spark" --master local[*] --executor-memory 1G --driver-memory 1G main.py; \
+Singularity> stop_all
+```
+
 ## Batch mode
-Make a script such as `slurm.s` below and modify directory as needed 
+Make a script such as `slurm.s` below, wrap the two methods above inside `-c "interactive commands"` and modify directory as needed 
 ```
 #!/bin/bash
 #SBATCH --nodes=1
