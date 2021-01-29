@@ -101,7 +101,7 @@ Singularity> source /ext3/env.sh
 Singularity> conda activate dialect_map
 Singularity> cd src
 ```
-To run with default setting of Sparks
+To run with default setting of Spark
 ```
 Singularity> python main.py [options]
 ```
