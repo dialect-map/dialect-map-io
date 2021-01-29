@@ -1,3 +1,4 @@
+import os
 import requests
 import datetime
 import json
@@ -40,7 +41,7 @@ def rdd2json(RDD, filename):
 @click.option('--rdd_dir', default='/Users/qmn203/temp/', help='directory to store rdd format of all txt')
 @click.option('--sample_size', default=1.0,
               help='between 0.0-1.0, how much to randomly sample from all the data')
-@click.option('--json_dir', default='/Users/qmn203/temp/',
+@click.option('--json_dir', default='/Users/qmn203/temp',
               help='directory to store json file of computed term frequency')
 def main(text_dir, rdd_dir, sample_size, terms_file, json_dir):
     #  ---- setting up spark, turn off if run interactively ---- #
@@ -62,7 +63,7 @@ def main(text_dir, rdd_dir, sample_size, terms_file, json_dir):
     # text_dir = '/Users/qmn203/temp/emptydir' #/arxiv/pdf/0704'
     # where to store rdd format of all txt:
     # rdd_content_dir = '/Users/qmn203/temp/rdd_txt_arxiv_arxiv/rdd_content_sample_' + str(sample_size)
-    rdd_content_dir = rdd_dir + str(sample_size)  #
+    rdd_content_dir = os.path.join(rdd_dir, "rdd_content_sample_" + str(sample_size))  #
 
     rdd_content = read_or_load_rdd(text_dir, sample_size, rdd_content_dir, sc=sc)
 
@@ -88,8 +89,6 @@ def main(text_dir, rdd_dir, sample_size, terms_file, json_dir):
     # drop tuple element where term frequency = 0
     rdd_jargon_paper_tf = rdd_flat.filter(lambda x: x[1]['tf'] != 0)
 
-    print(rdd_jargon_paper_tf)
-
     # group by jargons to create {"jargon": jargon, "paper_tf":[{paper1: tf},{paper2:tf},]}
     rdd_jargon_group = \
         rdd_jargon_paper_tf.combineByKey(
@@ -101,7 +100,7 @@ def main(text_dir, rdd_dir, sample_size, terms_file, json_dir):
             )
 
     # save to json
-    json_file = json_dir+"jargonGroup.json"
+    json_file = os.path.join(json_dir,"jargonGroup.json")
     rdd2json(rdd_jargon_group, json_file)
 
     # lazy read test
