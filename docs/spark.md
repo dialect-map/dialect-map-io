@@ -1,4 +1,5 @@
-Set up and run on NYU HPC Greene cluster
+### Set up and run on NYU HPC Greene cluster
+
 log in to Greene and clone the project
 ```
 git clone https://github.com/dialect-map/dialect-map-computing
