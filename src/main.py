@@ -2,12 +2,13 @@ import os
 import requests
 import datetime
 import json
+import timeit
 
 import click
 from pyspark import SparkConf, SparkContext
 
-from src.textprocess import path2id, terms_freq
-from src.utilities import read_or_load_rdd
+from textprocess import path2id, terms_freq
+from utilities import read_or_load_rdd
 
 
 def json_reader(filename):
@@ -44,6 +45,7 @@ def rdd2json(RDD, filename):
 @click.option('--json_dir', default='/Users/qmn203/temp',
               help='directory to store json file of computed term frequency')
 def main(text_dir, rdd_dir, sample_size, terms_file, json_dir):
+    start = timeit.default_timer()
     #  ---- setting up spark, turn off if run interactively ---- #
     conf = SparkConf().setMaster("local[*]").setAppName("scratch")
     sc = SparkContext.getOrCreate(conf=conf)
@@ -108,12 +110,19 @@ def main(text_dir, rdd_dir, sample_size, terms_file, json_dir):
     for row in gen:
         print(row['jargon'], row['paper_tf'][0]['paperID'], row['paper_tf'][0]['tf'])
 
+    stop = timeit.default_timer()
+    runtime = (stop - start)/3600
+    print(f'run time is {runtime} hour')
+
     # TODO:
-    #  run on greene
+    # collect jargon list
+    #  options: parallelization level?
+    # run 1% on greene
+    # discuss output
     #  write tests?
     #  run larger data set?
+    # configure greene : scale up the nodes?
 
-    #  options: parallelization level,
 
 
     # #  --- SQL test code --- #
@@ -135,5 +144,5 @@ def main(text_dir, rdd_dir, sample_size, terms_file, json_dir):
 
 if __name__ == "__main__":
     main()
-    print('1')
+
 
