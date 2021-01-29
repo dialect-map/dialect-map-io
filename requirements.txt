@@ -2,3 +2,4 @@ requests
 pyspark
 click
 fuzzywuzzy
+python-Levenshtein
