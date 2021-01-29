@@ -1,6 +1,7 @@
 # Set up and run on NYU HPC Greene cluster
 
-log in to Greene and clone the project
+
+Log in to Greene and clone the project
 ```
 git clone https://github.com/dialect-map/dialect-map-computing
 ```
@@ -15,7 +16,7 @@ Copy the proper gzipped overlay images from `/scratch/work/public/overlay-fs-ext
 $cp -rp /scratch/work/public/overlay-fs-ext3/overlay-5GB-200K.ext3.gz .
 $gunzip overlay-5GB-200K.ext3.gz
 ```
-Choose a proper singularity image. For example:
+Choose a proper singularity image. To run spark, we need an OS with Java, for example:
 
 `/scratch/work/public/singularity/ubuntu-20.04.1.sif`
 
@@ -63,6 +64,7 @@ Now install python required packages using pip or conda. For some reason, Spark 
 Conda environment named `dialect_map` has been installed **inside** the singularity container. This ensure that your inode quota is not consumed, and the environment is exact.
 
 ## Install Spark
+
 Prepare directory
 ```
 mkdir /scratch/$USER/spark_py
