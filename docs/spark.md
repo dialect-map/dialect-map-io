@@ -83,7 +83,7 @@ unzip
 mkdir sbin
 tar -xvf spark-*.tgz -C sbin --strip 1
 ```
-
+create a script to start spark cluster, something like `spark-greene-prepare.sh`
 
 To run `src/main.py`, there are now two options: interactive running (good for testing, debugging, short jobs), and batch job good for real and longer jobs. 
 ## Interactive mode
