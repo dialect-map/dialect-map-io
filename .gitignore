@@ -24,5 +24,9 @@ wheels/
 *.egg
 MANIFEST
 
+# Test caches
+**/.coverage
+**/.pytest_cache
+
 # MacOS files
 **/.DS_Store
