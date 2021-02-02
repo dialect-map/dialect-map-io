@@ -1,0 +1,1233 @@
+UCLA/91/TEP/32 August, 1991
+On the Liouville Approach to Correlation Functions for 2-D Quantum Gravity ⋆
+Kenichiro Aoki and Eric D’Hoker †
+Department of Physics
+University of California Los Angeles
+Los Angeles, California 90024–1547
+ABSTRACT
+We evaluate the three point function for arbitrary states in bosonic minimal
+models on the sphere coupled to quantum gravity in two dimensions. The validity
+of the formal continuation in the number of Liouville screening charge insertions is
+shown directly from the Liouville functional integral using semi-classical methods.
+1 9 9 1   p e S   5 2     2 v 4 2 0 9 0 1 9 / h t - p e h : v i X r a
+⋆ Work supported in part by the National Science Foundation grant PHY–89–15286.
+email: aoki@uclahep.bitnet, dhoker@uclahep.bitnet
+†
+1. Introduction
+The Liouville ﬁeld theory approach to 2-D quantum gravity and non-critical string theory arises naturally from the geometry of the 2-D worldsheet [1]. Yet, despite the classical inte- grability of the theory, its quantization is still incompletely understood. Progress was made by assuming free ﬁeld operator product expansions to compute the scaling dimensions of exponential operators [2,3]. The results agree with the worldsheet lightcone gauge approach [4], with matrix models [5,6] and topological ﬁeld theory [7]. Still, Liouville dynamics is not completely equivalent to that of free ﬁeld theory in general [2,8,9]. More recently, it was proposed to push the free ﬁeld approach yet one step further, and to compute correlation functions as in free ﬁeld theory but with the Liouville exponential interaction interpreted as a screening charge [10,11,12,13]. The three point function obtained in this way agrees with matrix model predictions.
+In the present paper, we generalize calculations of [10,11] to the case of arbitrary external states in the Kac table of bosonic minimal models [14]. The integration over the constant Liouville mode, which yields the screening charge interpretation to the Liouville interaction, gives rise to a single screening insertion in the Liouville sector. This is to be contrasted with the approach of [12] where the presence of the two Liouville screening charges is postulated. Still, our ﬁnal results agree with those of [12] and also with matrix model calculations.
+The number of screening charges (s) brought down by integrating out the constant Liouville mode is not in general an integer in this approach. In [10] it was proposed to rearrange the explicit answer for integer s in a form that formally makes sense for all complex s. The justiﬁcation for this procedure is incomplete. Two meromorphic functions in s that agree on all positive integers need not be the same throughout the complex plane, unless further information on their behavior at inﬁnity provided. We shall justify the continuation of the Liouville functional procedure here by showing that the asymptotics for integral and of the explicit answer in terms of Γ functions in fact agree as well. To do so, we use a semi-classical approximation to the Liouville functional integral precisely valid for s
+. This proof completes the justiﬁcation of the formal continuation procedure in s.
+| → ∞
+s
+|
+|
+| → ∞
+The great advantage of the Liouville approach to 2-D quantum gravity is that whatever techniques were used successfully in the bosonic theory can be readily extended to the super- Liouville case. This is particularly important since no matrix or topological ﬁeld theory formulations for 2-D quantum supergravity are presently available. The calculation of the three point function for super-minimal models is carried out in a companion paper [15].
+2
+(2.1)
+(2.2)
+2. General Three Point Functions in Minimal Models
+We apply the Liouville ﬁeld theory approach to minimal conformal ﬁeld theory models coupled to two dimensional quantum gravity [3]. A general N-point correlation function, evaluated on a genus p worldsheet is given by
+N
+ψj
+=
+dm
+Dˆgφ e−SL
+eβ(hj )φ(zj)
+N
+Yj=1
+N
+*
+Yj=1
+ψmatter r′ jrj
+(zj)
++
+ˆg,p
+*
+Yj=1
++
+ZMp
+Z
+Here, the Liouville action is given by
+⋆
+SL =
+1 4π
+1 2
+ˆg
+φ∆ˆgφ
+κRˆgφ +
+−
+µ α2 eαφ
+(cid:21)
+Z p
+(cid:20)
+The measure Dˆgφ is the translation invariant Lebesgue measure on φ, which yields a quan- tization of 2-D gravity provided κ and α are related to the matter central charge. [2,3,16,17]
+3κ2 = 25
+c
+−
+and
+α2 + κα + 2 = 0
+(2.3)
+The gravity-matter vertex operators ψj are constructed by
+ψj = ψmatter j
+eβ(hj )φ
+β(hj) = −
+√25
+c +
+−
+c + 24hj
+1 2√3 p
+−
+(2.4)
+The requirement that these operators be physical (i.e. dimension (1,1)) determines β(hj) in the above formula [4,3]. The matter operators ψmatter are spin zero primary ﬁelds of conformal dimension hj. The matter correlation function is evaluated for metric ˆg and genus p within the matter conformal ﬁeld theory [18].
+r′ j rj
+We shall henceforth specialize to minimal models, not necessarily unitary. In section 3, we shall provide a proof of the validity of the formal continuation method, which is complete only for minimal models.
+c = 1
+6 q(q + 1)
+−
+hr′r =
+(qr′
+(q + 1)r)2 4q(q + 1)
+−
+1
+−
+(2.5)
+Here q is a rational number for general minimal models [14] and q = 2, 3, 4, . . . for unitary
+⋆ We have included a factor of 1/α2 in µ which will turn out to be convenient in section 3.
+3
+(2.6)
+(2.7)
+(2.8)
+(2.9)
+(2.10)
+models [19]. We also have
+α = β(h11) =
+2q (q + 1)
+−s
+κ = (2q + 1)
+2 q(q + 1)
+s
+and
+β(hr′r) = −
+(2q + 1) +
+qr′ − 2q(q + 1)
+|
+(q + 1)r
+|
+Following [10], we split the integration over φ into a constant mode and a piece orthogonal
+p
+to constants on the worldsheet
+Dˆgφ e−SL
+eβ(hj )φ(zj) =
+N
+Yj=1
+µ 4πα2
+(cid:16)
+(cid:17)
+s Γ(
+s)
+− α
+Z
+ˆgφ e−S′ D′
+L
+s N
+ˆg eαφ
+eβ(hj )φ(zj)
+(cid:18)Z p
+(cid:19)
+Yj=1
+ˆgφ denotes the integration over the modes orthogonal to the constant mode and
+Z
+Here D′
+ˆg Z p The variable s is the total scaling dimension
+S′ L =
+1 4π
+1 2
+(cid:20)
+φ∆ˆgφ
+κRˆgφ
+−
+(cid:21)
+s =
+κ α
+−
+(1
+p)
+−
+−
+β(hj) α
+N
+Xj=1
+where p is again the genus of the worldsheet. In general, s is not an integer; for minimal models it is a rational number.
+We shall now restrict our attention to the three point function on the sphere (p = 0). To facilitate the computation, we shall concentrate the curvature of the sphere at z = . ∞ In this case, the computation reduces to evaluating correlation functions of free ﬁelds on the plane with the ﬂat metric. We may put the three ﬁelds at (z1, z2, z3) = (0, 1, ). Then the correlation function of the scalar ﬁeld φ reduces to
+∞
+Dˆgφ e−SL
+eβ(hj )φ(zj)
+Z
+3
+Yj=1
+=
+µ 4πα2
+(cid:16)
+(cid:17)
+s Γ(
+s)
+− α
+Z
+Yi=1
+s
+d2wi|
+wi|
+−2αβ(h1)
+−2αβ(h2)
+1
+|
+wi|
+−
+wi −
+|
+wj|
+−2α2
+.
+s
+i<j Y i,j=1
+(2.11) As such, the above formula can only make sense when s is integer. We will need to continue in s. The general integral of this type has been calculated in [18]. Henceforth we shall be
+4
+using the notation
+In terms of ∆, we obtain
+∆(x)
+Γ(x)/Γ(1
+x)
+≡
+−
+S(x)
+sin πx π
+≡
+(2.12)
+Jn′n(a′
+1, a′
+2; a1, a2; ρ′, ρ)
+1 n′!n!
+≡
+d2w′ i|
+w′ i|
+2a′ 1
+2a′ 2
+1
+|
+−
+w′ i|
+d2wi|
+wi|
+2a1
+1
+|
+−
+wi|
+2a2
+n′
+n′
+Z
+Yi=1 w′
+i −
+|
+×
+i<j Y i,j=1
+4ρ′
+w′ j|
+4ρ
+wi −
+|
+wj|
+n
+i<j Y i,j=1
+n
+Z
+Yi=1 n′ n
+Yi=1
+Yj=1
+(cid:12) (cid:12)
+n′
+−4
+w′
+i −
+wj
+(cid:12) (cid:12)
+n
+Yi=1
+∆(1 + aj + iρ)
+= πn+n′
+ρ−4nn′
+∆−n′
+(ρ′)∆−n(ρ)
+∆(
+n + iρ′)
+∆(iρ)
+n′−1
+3
+×
+Yi=0
+Yj=1
+∆(1
+n + a′
+−
+−
+n−1
+3
+Yi=1 j + iρ′)
+Yi=0
+Yj=1
+(2.13)
+(2.14)
+(2.15)
+Here
+Z
+{
+µ 4α2
+(cid:16)
+(cid:17)
+≡
+a′ i = 2n
+2
+−
+−
+(2n′
+2)ρ′
+−
+ai = 2n′
+2
+(2n
+2)ρ
+−
+−
+−
+Using this integral formula for (n′, n) = (0, s), we ﬁnd X
+X
+Dˆgφ e−SL
+eβ(hj )φ(zj) =
+3
+Yj=1
+s Γ(
+s)Γ(s + 1)
+−
+α
+∆−s(
+ρ′)
+−
+s
+∆(
+x′ρ′
+|
+x
+−
+| −
+iρ′)
+Y(x′,x)=(0,0)
+,rj )
+(r′ j
+Yi=1
+Here, we used the notation ρ′
+α2/2.
+The three point function on the sphere,
+, may be computed us-
+3 j=1 ψmatter r′ jrj
+(zj)
+ˆg
+ing the method of Dotsenko and Fateev [18]. An arbitrary primary ﬁeld in the Kac table ψmatter r′r
+may be expressed using a free ﬁeld ϕ as
+q + 1, 1
+, 1
+r′
+r
+q
+⋆
+DQ
+E
+≤ ≤ = eiαr′rϕ,
+ψmatter r′r
+with the action
+≤ ≤ αr′r ≡
+1 2
+}
+(cid:2)
+Sϕ =
+1 4π
+1 2
+ˆg Z p
+(cid:20)
+r′)α− + (1
+(1
+−
+−
+r)α+
+,
+α− =
+= α
+(2.16)
+2 α+
+−
+ϕ∆ϕ + iα0Rˆgϕ + eiα−ϕ + eiα+ϕ
+(2.17)
+(cid:3)
+(cid:21)
+α+ + α− at inﬁnity. We note in passing that We shall put the background charge 2α0 ≡ this representation of the primary ﬁeld is two–fold degenerate, a fact we shall utilize later.
+⋆ We normalized the scalar ﬁelds φ, ϕ according to the standard convention, φ(z)φ(z′) =
+(1). This is diﬀerent from the normalization of [18] by a factor of √2.
+ln
+z
+−
+|
+−
+|
+z′
+2 +
+O
+5
+To satisfy charge conservation including the charge at inﬁnity, we need to put in “screening d2z exp(iα±ϕ), which have conformal dimension (0, 0). Then the three point charges”, function is R
+ψmatter r′ j rj
+(zj)
+Dˆgϕe−Sϕ
+3
+ϕ(zj) 1
+iαr′ e j
+rj
+n′!n!
+d2w′eiα−ϕ(w′)
+d2weiα+ϕ(w)
+n′
+(cid:19)
+(cid:18)Z
+Z Jn′n(α−αr′
+Yj=1 1r1, α−αr′
+(cid:18)Z 1r1, α+αr′
+2r2; ρ′, ρ)
+2r2; α+αr′
++ ˆg
+=
+=
+3
+*
+Yj=1
+Here,
+3
+3
+2n′
+≡
+r′ j −
+1,
+2n
+≡
+1,
+rj −
+ρ′ = α2
+−/2,
+ρ = α2
++/2
+n
+(cid:19)
+(2.18)
+(2.19)
+Xj=1 Xj=1 Using the integral formula (2.13) we obtain
+3
+*
+Yj=1
+ψmatter r′ j rj
+(zj)
++
+ˆg
+= πn+n′
+ρ−4nn′
+∆−n′
+(ρ′)∆−n(ρ)
+n′
+×
+Y(x′,x)=(0,0)
+,rj )
+(r′ j
+Yi=1
+∆(x
+n + (
+x′ + i)ρ′)
+∆(x′ + (
+x + i)ρ)
+−
+−
+−
+n
+Yi=1
+(2.20)
+This form has the advantage that it is manifestly symmetric under the interchange of three ﬁelds, unlike the formula obtained in [18]. It diﬀers from their formula by a normal- ization factor associated with the three ﬁelds. However, it suﬀers from the ambiguity of the type 0/0 when r′, r are integers. These ambiguities only exist in factors which may be absorbed in the normalization of the external ﬁelds. Furthermore, when we combine the matter part with the gravitational part, these ambiguities cancel out. We may take r′, r to be integer when we have combined these factors.
+Combining the gravitational part of the correlation function, (2.15), and the conformal ﬁeld theory part, (2.20), the three point function of the minimal models coupled to two dimensional gravity is
+s
+πn+n′
+ρ−4nn′−2sα−1∆−n′+s(ρ′)∆−n(ρ)Γ(
+s)Γ(s + 1)
+−
+3
+*
+Yj=1
+ψj
+=
++
+µ 4α2
+(cid:0)
+(cid:1)
+s
+×
+Y(x′,x)=(0,0)
+,rj )
+(r′ j
+Yi=1
+∆(
+x
+|
+−
+x′ρ′
+iρ′)
+| −
+∆(x
+x′ρ′
+n + iρ′)
+∆(x′
+xρ + iρ)
+−
+−
+−
+n
+Yi=1
+(2.21) We shall now reduce the product over s factors, using the following basic rearrangement
+n′
+Yi=1
+6
+formula
+n−1
+Yk=0
+∆(
++ k
+) = (
+)2x−m−n+mn
+x n
+m n
+m n
+∆(
++ l
+x m
+n m
+)
+(2.22)
+m−1
+Yl=0
+and ψmatter
+In a minimal model, two operators in the Kac table represent the same ﬁeld. Namely, ψmatter q+1−r′,q−r represent the same ﬁeld. The three point functions as computed r′,r above obey fusion rules which are not invariant under the reﬂection (r′, r) r) when applied to one of the three ﬁelds. However, the three point function is invariant when the above reﬂection is applied to two ﬁelds simultaneously (up to the normalization of the ﬁelds). Since (r′ρ′ jρ′ may be assumed to r′ be all of the same sign for the three point function without any loss in generality. We shall treat the two cases when they are all positive and all negative separately.
+r) under this operation, rj −
+(q +1
+(r′ρ′
+↔ −
+r′, q
+↔
+r)
+−
+−
+−
+−
+When rj −
+jρ′ r′
+≥
+0 for j = 1, 2, 3, from (2.7) and (2.10), we obtain
+ρ′ =
+n n′ + s + 1
+(2.23)
+Using the basic rearrangement formula (2.22) the following formula holds in this case:
+s
+∆(y
+−
+iρ′) = ρ(n+1−2y)(n′+s+1)−n∆−1(y)
+∆−1((
+y + i)ρ)
+∆−1(y
+n + iρ′) (2.24)
+−
+−
+jρ′ and from (2.21), we obtain the formula for the three r′
+Yi=1 Using this formula for y = 0, rj − point function as
+3
+*
+Yj=1
+ψj
+=
++
+µ 4α2
+(cid:0)
+(cid:1)
+s
+πn+n′
+ρ2n′−2n+2α−1∆−n′+s(ρ′)∆−n(ρ)
+∆−1(rj −
+jρ′) r′
+(2.25)
+s)Γ(s + 1)S(s) which is of the form 0/0 when s is integer to be We have set a factor of Γ( one. This formal procedure is justiﬁed by establishing the identity for asymptotic values of s in the semi–classical analysis of the next section. We rescale the external ﬁelds as
+−
+π(rj+r′
+j)/2(4α2)(r′
+j−rjρ)/2ρ(r′
+j−rj)/2∆rjρ/2−r′
+ψj 7→
+j(ρ′)∆−rj /2(ρ)∆−1(rj −
+jρ′)ψj r′
+(2.26)
+This rescaling is not singular. To see this, note that neither ρ nor ρ′ are integer valued so jρ′ is never integer r′ that the ﬁrst two factors of ∆ are neither zero nor inﬁnity. Next, rj − j belong to the Kac table of a minimal (p, p′) model with ρ = p/p′ where p, p′ when rj and r′ 1. are relatively prime. This follows from the fact that 1
+1 and 1
+p′
+p
+rj ≤
+≤
+−
+r′ j ≤
+≤
+−
+n′
+Yi=1
+3
+Yj=1
+n
+Yi=1
+7
+Similarly, r′ j − of the external indices (r′
+rjρ is never integer. We furthermore rescale by factors that are independent
+j, rj), the three point function reduces just to
+3
+*
+Yj=1
+= µs
+ψj
++
+ρ′ =
+n + 1 n′ s
+−
+yρ)
+−
+n
+Yi=1
+(2.27)
+(2.28)
+(2.31)
+(2.32)
+Similarly, when rj −
+jρ′ r′
+≥
+0, we obtain
+The following formula can be shown to hold in this case using (2.22) again
+iρ′) = ρ(n−2y)(n′−s)−n−1∆−1(
+∆−1((
+y + i)ρ)
+∆−1(y
+n + iρ′) (2.29)
+−
+−
+jρ′, the three point function reduces to r′
+n′
+Yi=1
+3
+s
+∆(
+y −
+−
+Yi=1 Using this formula for y = 0, rj −
+3
+*
+Yj=1
+ψj
+=
++
+µ 4α2
+(cid:0)
+(cid:1)
+s
+πn+n′
+ρ2n′−2n−2α−1∆−n′+s(ρ′)∆−n(ρ)
+∆−1(r′
+rjρ)
+j −
+(2.30)
+The same rescaling as before with ∆(rj − correlation function to µs of (2.27).
+rjρ) again reduces the
+j −
+Diﬀerentiating with respect to µ is equivalent to bringing down the area operator:
+Yj=1 jρ′) replaced by ∆(r′ r′
+∂ ∂µ *
+N
+Yj=1
+1
+ψj
+=
++
+*
+N
+Yj=1
+ψj
++
+The three point function which is independent of the normalization of the ﬁelds may be computed using this relation as
+2 Z ψ1ψ2ψ3i ψ3ψ3i ψ2ψ2i h
+h ψ1ψ1i h
+h
+=
+Q
+3 j=1
+(q + 1)rj
+j − (q + 1)(2q + 1)
+qr′ (cid:12) (cid:12) (cid:12)
+(cid:12) (cid:12) (cid:12)
+where Z is the partition function of the model on the sphere. This agrees with the three point function computed in the hermitian matrix model [6].
+8
+3. Formal Continuation in the Number of Liouville Screening Charges
+Does the formal continuation procedure in the number of Liouville screening operators s make sense? In the derivation of [10], and again in the preceding section, an expression deﬁned only for integer s like formula (2.15), was manipulated in such a way as to obtain an expression that would make sense for all complex values of s, such as in formula (2.24). This type of manipulation may not in general be permitted, as it is inherently ambiguous up to periodic functions.
+In this section, we shall compare the ﬁnal formula gotten by formal continuation directly with the Liouville functional integral. We know already that these two expressions agree on all positive integer values of s. Furthermore, we clearly have a meromorphic function of s. Thus, in order to show that the formal continued formula indeed yields the answer for the functional integral for all s, it is necessary to verify that the asymptotic behavior as matches.
+| → ∞
+s
+|
+A meromorphic function that vanishes on all positive integers, and also at
+must be identically zero. Using an analogous result, the agreement on the integers and the asymp- totics, we will have shown the validity of the ﬁnal answer, and thus of the analytic continu- ation procedure.
+∞
+The signiﬁcance of the large
+limit is that of a weak coupling expansion. To see this,
+consider (2.10) expressing β through (2.7)
+s =
+1 α2
+2 + α2 +
+α2 2
+r′ j
+α2 2 −
+−
+1
+, (cid:19)(cid:27)
+s =
+2n α2 −
+n′
+1
+−
+(3.1)
+(cid:26)
+(cid:12) (cid:12) (cid:12) where the last identity holds when rj and r′ (cid:12) s j are ﬁxed and | the limit we shall consider corresponds to holding rj and r′ j ﬁxed, but letting α c ∼ The functional integral may now be recast in a form that exhibits the full α2-dependence
+→ . From a ﬁeld theoretic point of view, this is the semiclassical limit with α2
+is suﬃciently large. Thus, 0 or ¯h.
+→ −∞
+|
+s
+|
+|
+3
+rj − Xj=1(cid:18)(cid:12) (cid:12) (cid:12) (cid:12)
+I =
+Dˆgφ e− 1
+α2 So(φ)−S1(φ)
+Z
+(3.2)
+where the α2-independent actions are given by
+So(φ) =
+1 4π
+1 2
+Z p
+(cid:20)
+ˆg
+φ∆ˆgφ + 2Rˆgφ + µeφ + 4π
+3
+Xj=1
+φ(z)(rj −
+1)δˆg(z, zi)
+(cid:21)
+(3.3)
+and
+S1(φ) =
+ˆg Rˆgφ
+φ(zj)(r′
+j + 1).
+(3.4)
+1 4π
+Z p
+1 2
+−
+3
+Xj=1
+The small α2-expansion proceeds by identifying the saddle point φo of So, evaluating its
+9
+(3.5)
+(3.6)
+(3.7)
+(3.8)
+(3.9)
+classical action, and then expanding in a perturbative series. The ﬁnal form of the answer is
+I = e−ao/α2
+α2 )ν (a1 + a2α2 + a3α4 + . . .) ( 1
+Here ao is essentially So(φo), a real number dependent only on the rj’s, 2ν is the number of normalizable zero modes of the operator
+δ2So δφ(x)δφ(y)
+φ=φo (cid:12) (cid:12) (cid:12) (cid:12)
+⋆
+−
+3
+Xj=1
+and the coeﬃcients ai result from the contribution with i-loops.
+We begin by constructing the instanton solution
+φo. It is prudent to work with the
+round metric on the sphere, where
+ˆgmn = eσδmn
+σ =
+ℓn
+(1 +
+z
+2)2
+|
+|
+1 2
+The saddle point equation
+admits regular real solutions for µ =
+µ
+< 0, which is the case we shall study:
+∆ˆgφo + 2Rˆg + µ eφo =
+4π
+−
+(rj −
+1)δˆg(z, zj)
+−|
+|
+µ 2
+|
+φo(z) =
+ℓn |
+−
+(1 +
+2)2 A(z) 2 + ǫ2)(1 +
+|
+|
+(
+A′(z)
+|
+|
+z
+2)2
+|
+|
+Here A(z) is a meromorphic function such that A′(z) has a zero of order (ri − ǫ is an inﬁnitesimal positive constant. For φo(z) to be regular at z = singularities occur at zi’s), we should have
+∞
+1) at zi and (recall the only
+A(z)
+az
+as
+∼
+z
+|
+| → ∞
+a
+= 0
+(3.10)
+Hence A is the ratio of two polynomials P, Q
+A(z) =
+Q(z) P (z)
+deg Q = deg P + 1
+(3.11)
+To determine the total number of zeros in A′ requires some extra care. There are r1 + r2 + 2 zeros from the zi’s, which produce the δ-functions on the right hand side of r3 −
+3 = 2n
+−
+⋆ Expansions around classical solutions were studied in [20,17]
+10
+6 (3.8). However, recall that there is also a charge at z = , due to the curvature term. This is perhaps most easily seen when considering the ﬂat metric on the plane plus a curvature δ-function with charge 2 as z = to make the plane into a sphere. The total number of ∞ zeros of A′ is then 2n, hence deg Q = n + 1. We normalize P such that
+∞
+n
+P (z) =
+(z
+wk)
+−
+(3.12)
+Yk=1 and of course, none of the wk’s should equal zi.
+get an equation determining wk
+†
+From the requirement that only double poles should occur in the expansion of A′(z), we
+3
+Xi=1
+ri − wk −
+1 zi
+= 2
+n
+ℓ=1 X ℓ6=k
+1 wk −
+wℓ
+1
+k
+≤
+≤
+n.
+(3.13)
+and n charges of unit This equation governs 3 ﬁxed charges at zi with strength strength that settle into an equilibrium conﬁguration under the forces of 2-D electrostatics. The equation (3.13) is invariant under complex M¨obius transformations.
+−
+ri−1 2
+Next, we evaluate the classical action on this saddle point φo, and we ﬁnd
+So(φo) =
+4n
+2n ℓn |
+µ
+|
+−
+−
++ 2n ℓn 2
+2
+ℓn |
+−
+(ri −
+1)(rj −
+1) ℓn (
+zi −
+|
+2 + ǫ2) + 2
+(ri −
+1) ℓn (1 +
+2)
+zi|
+|
+(3.14)
+3
++
+1 2
+Xi,j=1
+n
+Xk=1 zj|
+2
+Q(wk) 2 a |
+|
+|
+3
+Xi=1
+. As it stands, this Notice that this expression is independent of the normalization factor answer is inﬁnite as ǫ 0, but of course, we should keep in mind that the self-energies of the charges zi must be subtracted. Furthermore, e− 1 α2 So(φo) is a three point function in a conformal ﬁeld theory, so its dependence on the points zi is ﬁxed by conformal invariance. We have
+a |
+→
+|
+e− 1
+α2 So(φo) = e− ao
+α2
+2hi+2hj −2hk−2
+(gz ¯z)hi
+(3.15)
+zi −
+|
+zj|
+Yi<j
+Yi
+we obtain the following ﬁnal expression for ao:
+ao =
+4n
+−
+−
+2n ℓn
+µ
++ 2n ℓn 2
+2
+F
+ℓn |
+|
+−
+(3.16)
+The point at
+disappears in this equation!
+†
+∞
+|
+|
+11
+zj)−(ri−1)(rj −1)− 1
+2 (r2
+i −1)− 1
+2 (r2
+j −1)+ 1
+2 (r2
+k−1)
+(3.17)
+with the conformal invariant F given by
+F =
+Q(wk)2 a2
+n
+Yk=1
+(zi −
+Yi<j
+The quantity Q(wk) is also easily calculated from the fact that
+(Q′P
+QP ′)(z) = a
+−
+zi)ri−1
+(z
+−
+3
+Yi=1
+3
+so we ﬁnd
+Q(wk)2 = a2(P ′(wk))−2
+(wk −
+zi)2ri−2
+Yi=1 Using conformal invariance of F , we let z1 = 1, z2 =
+1, z3 =
+−
+−
+.
+∞ n
+Yk=1
+F = 22n2+2n−2n(r1+r2)P (1)2r1−2P (
+1)2r2−2
+P ′(wk)−2
+(3.20)
+Next, we have to evaluate the solutions wk of (3.13) or equivalently the polynomial P . To do so, we slightly generalize a clever trick due to Szego [21]. The Jacobi polynomials y = P (α,β) n
+(x) satisfy the following diﬀerential equation
+x2)y′′ + (β
+(α + β + 2)x)y′ + n(n + α + β + 1)y = 0.
+(3.21)
+(1
+−
+α
+−
+−
+Hence, at a zero wk of P (α,β)
+n
+k
+n and with wk 6
+=
+±
+≤
+1 we have
+for 1
+≤ ′′(α,β) n ′(α,β) n
+P
+P
+(wk) (wk)
+=
+−
+1 + α wk −
+1 −
+1 + β wk + 1
+On the other hand, using the product formula for P (α,β)
+n
+in terms of its zeros
+(3.18)
+(3.19)
+(3.22)
+(3.23)
+r1 and β =
+For α = − conformal invariance, we have moved z1, z2, z3 to 1, the zeros of Jacobi polynomials wk, and P (w) is proportional to P (−r1,−r2)
+r2, (3.22)-(3.23) precisely coincides with (3.13) in which, using . Thus, the solutions to (3.13) are
+(w).
+∞
+−
+−
+1,
+n
+′′(α,β) n ′(α,β) n
+P
+P
+(wk) (wk)
+= 2
+n
+ℓ=1 X ℓ6=k
+1 wk −
+.
+wℓ
+12
+There is a point that requires clariﬁcation here : the Jacobi polynomials P (−r1,−r2)
+(w) 1, when r1 and r2 are positive integers. In this case, the above can in general have zeros at reasoning would not be valid. Thus we may always take n integer, but assume that ri’s are slightly away from their integer values. The ﬁnal answer for ao will in fact admit a limit as ri tends to integer.
+±
+n
+It remains to evaluate (3.20). Fortunately, this problem was also already solved by Szego
+[21], and the ﬁnal answer is
+n
+ℓn F =
+(x
+k)ℓn |
+x
+−
+−
+2
+k
+|
+Xk=1 Xx=0,r1,r2,r3
+(3.24)
+(3.26)
+(3.27)
+so that
+ao =
+4n
+2n ℓn |
+µ
+|
+−
+−
++ 2n ℓn 2
+2
+−
+(x
+k)ℓn |
+x
+−
+−
+2
+k
+|
+(3.25)
+n
+Xk=1 Xx=0,ri
+Next, we need to determine the number of zero modes of the operator (3.6), which
+governs the small ﬂuctuation problem
+1 α2 So(φo + αϕ) =
+1 α2 So(φo) +
+1 4π
+1 2
+ˆg Z p
+(cid:20)
+ϕ∆ˆgϕ
+1 2 |
+−
+|
+µ
+eφ0ϕ2
++
+(α)
+O
+(cid:21)
+The small ﬂuctuation problem has zero modes determined by the equation
+∆γϕo −
+2ϕo = 0
+γmn =
+2 | (1 +
+2
+A′ | A |
+|
+2)2 δmn
+The metric γ is a round metric on the n-covered sphere with curvature 1. Thus (3.27) is an eigenvalue equation for the Laplacian on the sphere (i.e. ~L2) with eigenvalue j(j + 1) = 2. Hence j = 1, and there are 3 normalizable zero modes. Thus 2ν = 3 in (3.5). The 1- loop contribution is easy to compute as well; the small ﬂuctuation problem just yields the determinant of ~L2 on the sphere, which is a number independent of ri’s. So the only relevant term comes from evaluating S1(φo). It is easy to see that this corresponds to letting
+2n α2 →
+s =
+2n α2 + 2n′,
+1
+ri − α →
+βi =
+1
+ri
+− α
++
+α 2
+(1 + r′
+i).
+(3.28)
+We shall not need the explicit expression for a1 here.
+It remains to evaluate the asymptotics of the right hand side of (2.15), (2.24) and (2.29). Actually, here it is convenient to recast the formal continuation formula in a form closer to
+13
+Dφe−SL
+eβ(hj )φ(zj) = (
+1)n′+1
+α−1∆s(1 + ρ′)ρ2(2n′n+n′−n+s−1)
+that obtained originally in [10]
+s
+µ − 4α2
+(cid:18)
+(cid:19)
+Z
+3
+Yj=1
+−
+iρ′) − n i=1 Γ2(iρ) n′ S i6=r′ j 1
+n′ i=1 S(iρ′)Γ2(1 + n n−1 i=1 S(iρ)
+×
+Q
+Q 3 ∆−1(rj −
+Q jρ′) r′
+Q
+×
+Yj=1
+(3.29)
+(r′
+i)ρ′
+j − S ((rj −
+(cid:16) n i6=rj 1
+n′ i=1 Γ2(1 + n n i=1 Γ2(r′
+−
+(cid:17) Q i)ρ)
+j −
+(rj −
+j − i)ρ)
+rj + (r′
+i)ρ′)
+Q
+Q
+There are various potential contributions in this formula that are not of the form (3.5). In each Γ and S-function there are factors of the type ss and eirs with r real. It is straightforward to check that all factors form ss cancel, as well as those of the form eirs, keeping in mind that µ < 0. With a little patience, we can evaluate the leading exponential and power asymptotics of the right hand side of (3.29).
+I = s3/2 µs exp
+2s +
+2s n
+(cid:26)
+Xk=1 Xx=0,r1,r2,r3
+(x
+k)ℓn |
+x
+−
+−
+k
+× O
+|
+(cid:27)
+(s0)
+(3.30)
+(s0) term agrees for This formula precisely agrees with our semiclassical result. Since the integer s, it agrees for all s. We conclude that the asymptotics of both sides of equation (3.29) match.
+O
+≤
+p′
+1 and 1
+Any zeros and poles on the right hand side of (3.29) can only occur for ρ rational, and when Re (s) > 0, only for ρ > 0. This means that we are dealing with a minimal model with ρ = p/p′, p, p′ relatively prime. If 1 rj ≤ j, rj) is in the Kac table of the minimal model, then the right hand side of (3.29) has neither zeros nor poles. To see this, notice in the last line of (3.29) the ﬁrst factor was already shown to be neither equal to zero nor inﬁnity in a discussion after formula (2.26); whereas the second and third factors are regular by an argument similar to the one after (2.26). The factors on the ﬁrst and second lines in (3.29) have zeros and poles, but these only occur for Re (s) < 0. Operators corresponding to (r′ j, rj) outside the Kac table, may be related by OPE with known singularities to operators within the Kac table plus screening operators. For (r′ j, rj) outside the Kac table, this accounts for the zeros and poles on the right hand side of (3.29).
+1, i.e. (r′
+r′ j ≤
+−
+≤
+−
+p
+On the left hand side of (3.29), we have a well–deﬁned Euclidean functional integral for all values Re (s) > 0 provided (r′ j, rj) belongs to the Kac table and no singularities occur as a function of coupling constant. Outside the Kac table, new ultraviolet divergences occur governed by the OPE discussed above.
+14
+To conclude the argument, we divide both sides by the asymptotic
+behavior | . Since both sides agree on s integer,
+| → ∞
+s
+of (3.30), so that both tend to a constant as these constants are the same.
+s
+|
+| → ∞
+|
+| → ∞
+and vanishes for integer s. In addition, we have shown above that for (r′
+The diﬀerence of both sides is now a meromorphic function for Re (s) > 0, tends to zero j, rj) s as inside the Kac table, both sides have no poles in Re (s) > 0 and hence are holomorphic in Re (s) > 0. For (r′ j, rj) outside the Kac table, we argued that the singularities on both sides are identical, so that the diﬀerence is again holomorphic when Re (s) > 0. By a standard theorem of complex analysis [22], such a function vanishes identically and hence we have shown the validity of (3.29).
+4. Summary
+We have shown that the formal continuation procedure proposed in [10] in the case of the 3–point function holds in the case of minimal models, directly from semiclassical methods on the Liouville functional integral. This increases our conﬁdence in the procedure considerably, and puts the free ﬁeld, screening operator approach to Liouville theory on a footing close to equal with the Dotsenko-Fateev approach to calculating correlation functions in minimal models.
+We generalized the calculation of [10,11] to the case of arbitrary external physical states in minimal models using just Liouville theory. We obtain the same answer as in [12] who uses two screening operator instead of the Liouville theory. It would be very interesting to generalize this approach to compute N-point correlation functions on the sphere and on the torus. The generalization to supergravity is in a companion paper [15].
+Acknowledgments One of us (E.D) acknowledges useful discussions with Jean-Loup Gervais, Mark Goulian and David Gross and the hospitality of the Aspen Center for Physics where part of this work was carried out.
+15
+REFERENCES
+1. A.M. Polyakov, Phys. Lett. B103 (1981) 207
+2. T. Curtright and C. Thorn, Phys. Rev. Lett. 48 (1982) 1309 E. D’Hoker and R. Jackiw, Phys. Rev. D26 (1982) 3517 J.-L. Gervais and A. Neveu, Nucl. Phys. B209 (1982) 125; B224 (1983) 329
+3. F. David and E. Guitter, Euro. Phys. Lett. 3 (1987) 1169
+F. David, Mod. Phys. Lett. A3 (1988) 1651 J. Distler and H. Kawai, Nucl. Phys. B321 (1988) 509
+4. A. M. Polyakov, Mod. Phys. Lett. A2 (1987) 893
+5. E. Br´ezin and V. Kazakov, Phys. Lett. B236 (1990) 144
+M. Douglas and S. Shenker, Nucl. Phys. B335 (1990) 635 D. J. Gross, A. A. Migdal, Phys. Rev. Lett. 64 (1990) 127
+6. P. Di Francesco, D. Kutasov, Nucl. Phys. B342 (1990) 475
+V. Knizhnik, A. M. Polyakov and A. Zamolodchikov, Mod. Phys. Lett. A3 (1988) 819
+7. E. Witten, Nucl. Phys. B340 (1990) 280 J. Distler, Nucl. Phys. B342 (1990) 523 R. Dijkgraaf and E. Witten, Nucl. Phys. B342 (1990) 486 E. Verlinde and H. Verlinde, IASSNS-HEP-90/40 (1990) preprint M. Fukuma, H. Kawai, R. Nakayama, Int. J. of Mod. Phys. A6 (1991) 1385 R. Dijkgraaf, E. Verlinde and H. Verlinde, PUPT-1184 (1990) preprint J. Distler and P. Nelson, UPR-0438T, PUPT-1201 (1990) preprint
+8. E. Braaten, T. Curtright, G. Ghandour and C. Thorn, Ann. Phys. (NY) 147 (1983)
+365; 153 (1984) J.-L. Gervais and A. Neveu, Nucl. Phys. B257 (1985) 59; B264 (1986) 557
+9. J. Polchinski, Texas preprint UTTG-1990 (1990)
+N. Seiberg, Rutgers preprint RU-90-29
+10. M. Goulian, M. Li, Phys. Rev. Lett. 66 (1991) 2051
+11. Y. Kitazawa, HUTP-91/A013 (1991) preprint
+12. Vl. S. Dotsenko, PAR-LPTHE 91-18 (1991) preprint
+13. P. Di Francesco and D. Kutasov, Phys. Lett. B261 (1991) 385
+J.G. Russo, SU-ITP-895 (1991) preprint
+14. A. Belavin, A. M. Polyakov and A. Zamolodchikov, Nucl. Phys. B241 (1984) 333
+15. K. Aoki and E. D’Hoker, UCLA/91/TEP/33 (1991) preprint
+16. N. Mavromatos and J. Miramontes, Mod. Phys. Lett. A4 (1989) 1849 E. D’Hoker and P. S. Kurzepa, Mod. Phys. Lett. A5 (1990) 1411
+17. E. D’Hoker, Mod. Phys. Lett. A6 (1991) 745
+16
+18. Vl. S. Dotsenko and V. A. Fateev, Nucl. Phys. B240 (1984) 312; B251 (1985) 691
+19. D. Friedan, Z, Qiu and S. Shenker, Phys. Rev. Lett. 52 (1984) 1575
+20. E. D’Hoker, D. Z. Freedman and R. Jackiw, Phys. Rev. D28 (1983) 2583
+21. G. Szeg¨o, “Orthogonal Polynomials” Am. Math. Soc. XXIII, 1959
+22. R. Boas, “Entire Functions”, Academic Press, 1954
+17
+
