@@ -1,6 +1,18 @@
 # -*- coding: utf-8 -*-
 
-"""
-This module will contain the interface/s referring a common set of
-data input sources (from files, from APIs...)
-"""
+from abc import ABCMeta
+from abc import abstractmethod
+
+
+class BaseDataInput(metaclass=ABCMeta):
+    """ Interface for the data input classes """
+
+    @abstractmethod
+    def request_paper(self, paper_id: str) -> dict:
+        """
+        Requests information about a certain Paper
+        :param paper_id: paper ID
+        :return: paper information
+        """
+
+        raise NotImplementedError()
