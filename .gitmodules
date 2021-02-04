@@ -1,0 +1,4 @@
+[submodule "modules/dialect-map-jargon-data"]
+	path = modules/dialect-map-jargon-data
+	url = https://github.com/dialect-map/dialect-map-jargon-data
+	branch = main
