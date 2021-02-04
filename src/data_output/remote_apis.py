@@ -22,8 +22,7 @@ class RemoteAPIOutput(BaseDataOutput):
 
         self.auth_ctl = auth_ctl
         self.base_url = base_url.rstrip("/")
-
-        self.api_token = self.auth_ctl.refresh_token()
+        self.api_token = auth_ctl.refresh_token()
         self.api_headers = {
             "Authorization": f"Bearer {self.api_token}",
             "Content-Type": f"application/json; charset=utf-8",
