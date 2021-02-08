@@ -49,7 +49,7 @@ Eventually, the dictionary will be transformed into a different schema and saved
 To install all the source code that is necessary to operate with this project:
 
 ```shell script
-git clone --recurse-submodules https://github.com/dialect-map/dialect-map-jargon-data
+git clone --recurse-submodules https://github.com/dialect-map/dialect-map-computing
 ```
 
 For cases where the project has already been cloned:
