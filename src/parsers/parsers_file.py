@@ -23,16 +23,6 @@ class BaseFileParser(metaclass=ABCMeta):
         raise NotImplementedError()
 
     @abstractmethod
-    def check_extension(self, file_path: str) -> bool:
-        """
-        Checks for the file extension of the provided file.
-        :param file_path: path to the target file
-        :return: whether it has a valid extension
-        """
-
-        raise NotImplementedError()
-
-    @abstractmethod
     def extract_text(self, file_path: str) -> str:
         """
         Extracts plain text from a more extensible file type.
@@ -41,6 +31,44 @@ class BaseFileParser(metaclass=ABCMeta):
         """
 
         raise NotImplementedError()
+
+    def check_extension(self, file_path: str) -> bool:
+        """
+        Checks for the file extension of the provided file.
+        :param file_path: path to the target file
+        :return: whether it has a valid extension
+        """
+
+        return Path(file_path).suffix == self.extension
+
+
+class JSONFileParser(BaseFileParser):
+    """ Class for parsing and extracting text out of JSON files """
+
+    extension = ".json"
+
+    def __init__(self, encoding: str = "UTF-8"):
+        """
+        Initializes the JSON file parser internal attributes
+        :param encoding: JSON files encoding
+        """
+
+        self.file_encoding = encoding
+
+    def extract_text(self, file_path: str) -> str:
+        """
+        Extracts the plain text from a data-containing file type.
+        :param file_path: path to the target file
+        :return: plain text
+        """
+
+        if self.check_extension(file_path) is False:
+            raise ValueError(f"Invalid extension: {file_path}")
+
+        with open(file_path, mode="r", encoding=self.file_encoding) as file:
+            text = file.read()
+
+        return text
 
 
 class PDFFileParser(BaseFileParser):
@@ -57,12 +85,13 @@ class PDFFileParser(BaseFileParser):
         self._resource_manager = PDFResourceManager()
         self._layout_params = LAParams()
 
+        self.file_encoding = encoding
         self.string_buffer = StringIO()
         self.text_converter = TextConverter(
             rsrcmgr=self._resource_manager,
             laparams=self._layout_params,
             outfp=self.string_buffer,
-            codec=encoding,
+            codec=self.file_encoding,
         )
 
     def _reset_buffer(self) -> int:
@@ -84,15 +113,6 @@ class PDFFileParser(BaseFileParser):
         text = self.string_buffer.getvalue()
         text = (line.replace("\n", " ") for line in text.split("\n\n"))
         return "\n".join(text)
-
-    def check_extension(self, file_path: str) -> bool:
-        """
-        Checks for the .pdf file extension of the provided file.
-        :param file_path: path to the target file
-        :return: whether it has a valid extension
-        """
-
-        return Path(file_path).suffix == self.extension
 
     def extract_text(self, file_path: str) -> str:
         """

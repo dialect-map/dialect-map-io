@@ -4,10 +4,10 @@ import requests
 import time
 import urllib.parse as urlparse
 
-from .base import BaseDataInput
+from .base import BaseRemoteInput
 
 
-class ArxivAPI(BaseDataInput):
+class ArxivAPI(BaseRemoteInput):
     """ Class for the ArXiv API input data retrieval """
 
     def __init__(self, base_url: str, wait_secs: int = 3):
