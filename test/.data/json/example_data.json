@@ -1,0 +1,12 @@
+[
+  {
+    "field_1": "name 1",
+    "field_2": "description 1",
+    "field_3": 1
+  },
+  {
+    "field_1": "name 2",
+    "field_2": "description 2",
+    "field_3": 2
+  }
+]

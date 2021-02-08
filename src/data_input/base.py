@@ -4,7 +4,7 @@ from abc import ABCMeta
 from abc import abstractmethod
 
 
-class BaseDataInput(metaclass=ABCMeta):
+class BaseRemoteInput(metaclass=ABCMeta):
     """ Interface for the data input classes """
 
     @abstractmethod
