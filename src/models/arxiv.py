@@ -1,0 +1,73 @@
+# -*- coding: utf-8 -*-
+
+from dataclasses import dataclass
+from datetime import datetime
+from typing import List
+
+
+@dataclass
+class ArxivFeedHeader:
+    """
+    Object containing the header fields of an Arxiv feed response
+
+    :attr query_id: unique identifier assigned to the feed query
+    :attr query_url: request URL assigned to the feed query
+    :attr results_ts: timestamp of the last query results update
+    """
+
+    query_id: str
+    query_url: str
+    results_ts: datetime
+
+
+@dataclass
+class ArxivFeedEntryAuthor:
+    """
+    Object containing the author field of an Arxiv feed entry
+
+    :attr name: name of the author
+    """
+
+    name: str
+
+
+@dataclass
+class ArxivFeedEntryLink:
+    """
+    Object containing the link fields of an Arxiv feed entry
+
+    :attr resource_url: resource URL assigned to the provided link
+    :attr resource_type: resource type assigned to the provided link
+    """
+
+    resource_url: str
+    resource_type: str
+
+
+@dataclass
+class ArxivFeedEntry:
+    """
+    Object containing the fields of an Arxiv feed entry
+
+    :attr paper_id: unique identifier
+    :attr paper_rev: unique revision
+    :attr paper_title: paper title
+    :attr paper_summary: paper summary description
+    :attr paper_category: paper main category
+    :attr paper_doi: DOI identifier
+    :attr paper_authors: authors list
+    :attr paper_links: resources links list
+    :attr paper_created_at: paper submission date
+    :attr paper_updated_at: paper updated date (same as created in revision #1)
+    """
+
+    paper_id: str
+    paper_rev: str
+    paper_title: str
+    paper_description: str
+    paper_category: str
+    paper_doi: str
+    paper_authors: List[ArxivFeedEntryAuthor]
+    paper_links: List[ArxivFeedEntryLink]
+    paper_created_at: datetime
+    paper_updated_at: datetime
