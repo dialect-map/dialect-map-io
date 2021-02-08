@@ -42,35 +42,6 @@ class BaseFileParser(metaclass=ABCMeta):
         return Path(file_path).suffix == self.extension
 
 
-class JSONFileParser(BaseFileParser):
-    """ Class for parsing and extracting text out of JSON files """
-
-    extension = ".json"
-
-    def __init__(self, encoding: str = "UTF-8"):
-        """
-        Initializes the JSON file parser internal attributes
-        :param encoding: JSON files encoding
-        """
-
-        self.file_encoding = encoding
-
-    def extract_text(self, file_path: str) -> str:
-        """
-        Extracts the plain text from a data-containing file type.
-        :param file_path: path to the target file
-        :return: plain text
-        """
-
-        if self.check_extension(file_path) is False:
-            raise ValueError(f"Invalid extension: {file_path}")
-
-        with open(file_path, mode="r", encoding=self.file_encoding) as file:
-            text = file.read()
-
-        return text
-
-
 class PDFFileParser(BaseFileParser):
     """ Class for parsing and extracting text out of PDF files """
 
@@ -136,3 +107,44 @@ class PDFFileParser(BaseFileParser):
         t = self._trim_string()
         _ = self._reset_buffer()
         return t
+
+
+class PlainFileParser(BaseFileParser):
+    """ Class for parsing and extracting text out of plain format files """
+
+    extension = None
+
+    def __init__(self, encoding: str = "UTF-8"):
+        """
+        Initializes the plain file parser internal attributes
+        :param encoding: plan file encoding
+        """
+
+        self.file_encoding = encoding
+
+    def extract_text(self, file_path: str) -> str:
+        """
+        Extracts the file text from a readable file type.
+        :param file_path: path to the target file
+        :return: file text
+        """
+
+        if self.check_extension(file_path) is False:
+            raise ValueError(f"Invalid extension: {file_path}")
+
+        with open(file_path, mode="r", encoding=self.file_encoding) as file:
+            text = file.read()
+
+        return text
+
+
+class JSONFileParser(PlainFileParser):
+    """ Class for parsing and extracting text out of JSON files """
+
+    extension = ".json"
+
+
+class TextFileParser(PlainFileParser):
+    """ Class for parsing and extracting text out of TXT files """
+
+    extension = ".txt"
