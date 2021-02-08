@@ -9,6 +9,10 @@ FEED_FOLDER = Path(__file__).parent \
     .joinpath(DATA_FOLDER) \
     .joinpath("feed")
 
+JSON_FOLDER = Path(__file__).parent \
+    .joinpath(DATA_FOLDER) \
+    .joinpath("json")
+
 PDF_FOLDER = Path(__file__).parent \
     .joinpath(DATA_FOLDER) \
     .joinpath("pdf")
