@@ -1,4 +1,4 @@
 # -*- coding: utf-8 -*-
 
-from .base import BaseDataInput
+from .base import BaseRemoteInput
 from .remote_apis import ArxivAPI
