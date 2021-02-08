@@ -5,6 +5,7 @@ from typing import Generator
 
 from ..parsers import JSONFileParser
 from ..parsers import PDFFileParser
+from ..parsers import TextFileParser
 
 
 class LocalJSONFile:
@@ -50,6 +51,29 @@ class LocalPDFFile:
     def all_lines(self) -> str:
         """
         Iterates over the PDF content text lines
+        :return: text line
+        """
+
+        for line in self.content.splitlines():
+            yield line
+
+
+class LocalTextFile:
+    """ Class containing the contents of a TXT file """
+
+    def __init__(self, file_path: str, file_parser: TextFileParser):
+        """
+        Initializes the object and parses the TXT contents
+        :param file_path: path to the TXT file
+        :param file_parser: parser for the TXT file
+        """
+
+        self.parser = file_parser
+        self.content = file_parser.extract_text(file_path)
+
+    def all_lines(self) -> str:
+        """
+        Iterates over the TXT content text lines
         :return: text line
         """
 
