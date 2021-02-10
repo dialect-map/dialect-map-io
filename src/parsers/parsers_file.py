@@ -117,7 +117,7 @@ class PlainFileParser(BaseFileParser):
     def __init__(self, encoding: str = "UTF-8"):
         """
         Initializes the plain file parser internal attributes
-        :param encoding: plan file encoding
+        :param encoding: plain file encoding
         """
 
         self.file_encoding = encoding
