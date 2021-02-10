@@ -4,10 +4,25 @@ import requests
 import time
 import urllib.parse as urlparse
 
-from .base import BaseRemoteInput
+from abc import ABCMeta
+from abc import abstractmethod
 
 
-class ArxivAPI(BaseRemoteInput):
+class BaseAPIInput(metaclass=ABCMeta):
+    """ Interface for the API data input classes """
+
+    @abstractmethod
+    def request_paper(self, paper_id: str) -> dict:
+        """
+        Requests information about a certain Paper
+        :param paper_id: paper ID
+        :return: paper information
+        """
+
+        raise NotImplementedError()
+
+
+class ArxivAPI(BaseAPIInput):
     """ Class for the ArXiv API input data retrieval """
 
     def __init__(self, base_url: str, wait_secs: int = 3):
