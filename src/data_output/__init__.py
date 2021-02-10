@@ -1,4 +1,8 @@
 # -*- coding: utf-8 -*-
 
-from .base import BaseDataOutput
-from .remote_apis import RemoteAPIOutput
+from .local_files import BaseFileWriter
+from .local_files import JSONFileWriter
+from .local_files import TextFileWriter
+
+from .remote_apis import BaseAPIOutput
+from .remote_apis import PrivateAPIOutput
