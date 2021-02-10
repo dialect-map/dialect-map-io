@@ -48,7 +48,7 @@ class LocalPDFFile:
         self.parser = file_parser
         self.content = file_parser.extract_text(file_path)
 
-    def all_lines(self) -> str:
+    def all_lines(self) -> Generator:
         """
         Iterates over the PDF content text lines
         :return: text line
@@ -71,7 +71,7 @@ class LocalTextFile:
         self.parser = file_parser
         self.content = file_parser.extract_text(file_path)
 
-    def all_lines(self) -> str:
+    def all_lines(self) -> Generator:
         """
         Iterates over the TXT content text lines
         :return: text line
