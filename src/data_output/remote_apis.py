@@ -1,120 +1,45 @@
 # -*- coding: utf-8 -*-
 
+import logging
 import requests
 
 from abc import ABCMeta
 from abc import abstractmethod
-
+from requests import Response
 from ..auth import BaseAuthenticator
 from ..auth import DummyAuthenticator
+
+logger = logging.getLogger()
 
 
 class BaseAPIOutput(metaclass=ABCMeta):
     """ Interface for the API data output classes """
 
     @abstractmethod
-    def send_category(self, category_data: dict) -> str:
+    def send_record(self, api_path: str, record: dict) -> dict:
         """
-        Sends information about a certain Category to a data persistent layer
-        :param category_data: specific Category fields
-        :return: ID of the saved record
-        """
-
-        raise NotImplementedError()
-
-    @abstractmethod
-    def send_jargon(self, jargon_data: dict) -> str:
-        """
-        Sends information about a certain Jargon to a data persistent layer
-        :param jargon_data: specific Jargon fields
-        :return: ID of the saved record
-        """
-
-        raise NotImplementedError()
-
-    @abstractmethod
-    def send_jargon_group(self, group_data: dict) -> str:
-        """
-        Sends information about a certain Jargon group to a data persistent layer
-        :param group_data: specific Jargon group fields
-        :return: ID of the saved record
-        """
-
-        raise NotImplementedError()
-
-    @abstractmethod
-    def send_paper(self, paper_data: dict) -> str:
-        """
-        Sends information about a certain Paper to a data persistent layer
-        :param paper_data: specific Paper fields
-        :return: ID of the saved record
-        """
-
-        raise NotImplementedError()
-
-    @abstractmethod
-    def send_paper_author(self, author_data: dict) -> str:
-        """
-        Sends information about a certain Author to a data persistent layer
-        :param author_data: specific Author fields
-        :return: ID of the saved record
-        """
-
-        raise NotImplementedError()
-
-    @abstractmethod
-    def send_paper_counters(self, counters_data: dict) -> str:
-        """
-        Sends information about certain Paper ref. counters to a data persistent layer
-        :param counters_data: specific Paper ref. counters fields
-        :return: ID of the saved record
-        """
-
-        raise NotImplementedError()
-
-    @abstractmethod
-    def send_paper_membership(self, membership_data: dict) -> str:
-        """
-        Sends information about certain Paper membership to a data persistent layer
-        :param membership_data: specific Paper membership fields
-        :return: ID of the saved record
-        """
-
-        raise NotImplementedError()
-
-    @abstractmethod
-    def send_metrics_category(self, metrics_data: dict) -> str:
-        """
-        Sends information about certain Category metrics to a data persistent layer
-        :param metrics_data: specific Category metrics fields
-        :return: ID of the saved record
-        """
-
-        raise NotImplementedError()
-
-    @abstractmethod
-    def send_metrics_paper(self, metrics_data: dict) -> str:
-        """
-        Sends information about certain Paper metrics to a data persistent layer
-        :param metrics_data: specific Paper metrics fields
-        :return: ID of the saved record
-        """
-
-        raise NotImplementedError()
-
-    @abstractmethod
-    def send_reference(self, reference_data: dict) -> str:
-        """
-        Sends information about certain Paper reference to a data persistent layer
-        :param reference_data: specific Paper reference fields
-        :return: ID of the saved record
+        Sends a record information to a data persistent layer URL
+        :param api_path: remote host API endpoint
+        :param record: the record itself
+        :return: JSON-encoded response
         """
 
         raise NotImplementedError()
 
 
-class PrivateAPIOutput(BaseAPIOutput):
-    """ Class for the remote API data output persistence """
+class DialectMapAPI(BaseAPIOutput):
+    """ Class for the data persistence Dialect Map API """
+
+    path_category = "/category"
+    path_category_metric = "/category/metrics"
+    path_jargon = "/jargon"
+    path_jargon_group = "/jargon-group"
+    path_paper = "/paper"
+    path_paper_author = "/paper/author"
+    path_paper_metric = "/paper/metrics"
+    path_paper_mem = "/membership"
+    path_paper_ref = "/reference"
+    path_paper_ref_counter = "/paper/reference/counters"
 
     def __init__(self, base_url: str, auth_ctl: BaseAuthenticator = None):
         """
@@ -129,126 +54,61 @@ class PrivateAPIOutput(BaseAPIOutput):
         self.auth_ctl = auth_ctl
         self.base_url = base_url.rstrip("/")
         self.api_token = auth_ctl.refresh_token()
-        self.api_headers = {
+
+    @staticmethod
+    def _decode_response(response: Response) -> dict:
+        """
+        Decodes the response assuming a serialized JSON
+        :param response: raw API response
+        :return: dictionary API response
+        """
+
+        try:
+            json = response.json()
+        except ValueError:
+            logger.warning("The API did not respond with a valid JSON")
+            json = {"response": response}
+
+        return json
+
+    def _perform_request(self, api_path: str, api_data: dict) -> Response:
+        """
+        Performs a HTTP POST request to the given API path
+        :param api_path: API path to send the request
+        :param api_data: JSON data to send in the request
+        :return: API response
+        """
+
+        headers = {
             "Authorization": f"Bearer {self.api_token}",
             "Content-Type": f"application/json; charset=utf-8",
         }
 
-    def _refresh_token(self) -> None:
-        """ Updates the API token and request headers """
-
-        if self.auth_ctl.check_expiration() is False:
-            return
-
-        self.api_token = self.auth_ctl.refresh_token()
-        self.api_headers["Authorization"] = f"Bearer {self.api_token}"
-
-    def _perform_request(self, api_path: str, api_data: dict) -> str:
-        """
-        Performs a HTTP POST request to the given API path
-        :param api_path: API endpoint to send the request
-        :param api_data: JSON data to send in the request
-        :return: record ID
-        """
-
-        self._refresh_token()
-
-        resp = requests.post(
+        response = requests.post(
             url=f"{self.base_url}{api_path}",
-            headers=self.api_headers,
+            headers=headers,
             json=api_data,
         )
 
-        resp.raise_for_status()
-        json = resp.json()
-        return json["id"]
+        response.raise_for_status()
+        return response
 
-    def send_category(self, category_data: dict) -> str:
-        """
-        Sends information about a certain Category to a data persistent layer
-        :param category_data: specific Category fields
-        :return: ID of the saved record
-        """
+    def _refresh_token(self) -> None:
+        """ Updates the API token and request headers """
 
-        return self._perform_request(api_path="/category", api_data=category_data)
+        if self.auth_ctl.check_expired():
+            self.api_token = self.auth_ctl.refresh_token()
 
-    def send_jargon(self, jargon_data: dict) -> str:
+    def send_record(self, api_path: str, record: dict) -> dict:
         """
-        Sends information about a certain Jargon to a data persistent layer
-        :param jargon_data: specific Jargon fields
-        :return: ID of the saved record
+        Sends a record information to a data persistent layer URL
+        :param api_path: remote host API endpoint
+        :param record: the record itself
+        :return: JSON-encoded response
         """
 
-        return self._perform_request("/jargon", jargon_data)
+        self._refresh_token()
+        resp = self._perform_request(api_path, record)
+        resp = self._decode_response(resp)
 
-    def send_jargon_group(self, group_data: dict) -> str:
-        """
-        Sends information about a certain Jargon group to a data persistent layer
-        :param group_data: specific Jargon group fields
-        :return: ID of the saved record
-        """
-
-        return self._perform_request("/jargon-group", group_data)
-
-    def send_paper(self, paper_data: dict) -> str:
-        """
-        Sends information about a certain Paper to a data persistent layer
-        :param paper_data: specific Paper fields
-        :return: ID of the saved record
-        """
-
-        return self._perform_request("/paper", paper_data)
-
-    def send_paper_author(self, author_data: dict) -> str:
-        """
-        Sends information about a certain Author to a data persistent layer
-        :param author_data: specific Author fields
-        :return: ID of the saved record
-        """
-
-        return self._perform_request("/paper/author", author_data)
-
-    def send_paper_counters(self, counters_data: dict) -> str:
-        """
-        Sends information about certain Paper ref. counters to a data persistent layer
-        :param counters_data: specific Paper ref. counters fields
-        :return: ID of the saved record
-        """
-
-        return self._perform_request("/paper/reference/counters", counters_data)
-
-    def send_paper_membership(self, membership_data: dict) -> str:
-        """
-        Sends information about certain Paper membership to a data persistent layer
-        :param membership_data: specific Paper membership fields
-        :return: ID of the saved record
-        """
-
-        return self._perform_request("/membership", membership_data)
-
-    def send_metrics_category(self, metrics_data: dict) -> str:
-        """
-        Sends information about certain Category metrics to a data persistent layer
-        :param metrics_data: specific Category metrics fields
-        :return: ID of the saved record
-        """
-
-        return self._perform_request("/category/metrics", metrics_data)
-
-    def send_metrics_paper(self, metrics_data: dict) -> str:
-        """
-        Sends information about certain Paper metrics to a data persistent layer
-        :param metrics_data: specific Paper metrics fields
-        :return: ID of the saved record
-        """
-
-        return self._perform_request("/paper/metrics", metrics_data)
-
-    def send_reference(self, reference_data: dict) -> str:
-        """
-        Sends information about certain Paper reference to a data persistent layer
-        :param reference_data: specific Paper reference fields
-        :return: ID of the saved record
-        """
-
-        return self._perform_request("/reference", reference_data)
+        return resp
