@@ -26,7 +26,7 @@ class OpenIDAuthenticator(BaseAuthenticator):
             target_audience=target_url,
         )
 
-    def check_expiration(self) -> bool:
+    def check_expired(self) -> bool:
         """
         Checks if the current credentials have expired
         :return: whether the credentials have expired
