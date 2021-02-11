@@ -8,7 +8,7 @@ class BaseAuthenticator(metaclass=ABCMeta):
     """ Interface for the API authenticator classes """
 
     @abstractmethod
-    def check_expiration(self) -> bool:
+    def check_expired(self) -> bool:
         """
         Checks if the current credentials have expired
         :return: whether the credentials have expired
