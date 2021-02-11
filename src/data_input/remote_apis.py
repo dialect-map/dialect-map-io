@@ -2,10 +2,10 @@
 
 import requests
 import time
-import urllib.parse as urlparse
 
 from abc import ABCMeta
 from abc import abstractmethod
+from requests import Response
 
 
 class BaseAPIInput(metaclass=ABCMeta):
@@ -38,23 +38,35 @@ class ArxivAPI(BaseAPIInput):
         self.base_url = base_url.rstrip("/")
         self.wait_secs = wait_secs
 
-    def _perform_request(self, api_path: str, api_args: dict) -> str:
+    @staticmethod
+    def _decode_response(response: Response) -> str:
         """
-        Performs a HTTP GET request to the given API path
-        :param api_path: API endpoint to send the request
-        :param api_args: API arguments to tune the request
-        :return: response
+        Decodes the response assuming a non-JSON response
+        :param response: raw API response
+        :return: text API response
         """
 
-        args = urlparse.urlencode(api_args)
-        resp = requests.get(f"{self.base_url}/{api_path}?{args}")
-        resp.raise_for_status()
+        return response.text
+
+    def _perform_request(self, api_path: str, api_args: dict) -> Response:
+        """
+        Performs a HTTP GET request to the given API path
+        :param api_path: API path to send the request
+        :param api_args: API args to tune the request
+        :return: API response
+        """
+
+        response = requests.get(
+            url=f"{self.base_url}{api_path}",
+            params=api_args,
+        )
 
         # Wait time before the potentially next API call
         # Ref: https://arxiv.org/help/api/user-manual
         time.sleep(self.wait_secs)
 
-        return resp.text
+        response.raise_for_status()
+        return response
 
     def request_paper(self, paper_id: str) -> str:
         """
@@ -63,7 +75,7 @@ class ArxivAPI(BaseAPIInput):
         :return: paper information
         """
 
-        return self._perform_request(
-            api_path="query",
-            api_args={"id_list": paper_id},
-        )
+        resp = self._perform_request("/query", {"id_list": paper_id})
+        resp = self._decode_response(resp)
+
+        return resp
