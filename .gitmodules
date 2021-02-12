@@ -1,4 +1,0 @@
-[submodule "modules/dialect-map-data"]
-	path = modules/dialect-map-data
-	url = https://github.com/dialect-map/dialect-map-data
-	branch = main
