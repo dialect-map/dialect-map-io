@@ -7,7 +7,7 @@ import timeit
 import click
 from pyspark import SparkConf, SparkContext
 
-from textprocess import path2id, terms_freq
+from nlp.textprocess import path2id, terms_freq
 from utilities import read_or_load_rdd
 
 
@@ -35,7 +35,7 @@ def rdd2json(RDD, filename):
 
 
 @click.command()
-@click.option('--terms_file', default='/Users/qmn203/clones/ds-dialect-map-computing/terms_file2.csv',
+@click.option('--terms_file', default="/Users/qmn203/clones/dialect-map-data/data/jargons.json",
               help='path to file where jargon terms are store, one per line')
 @click.option('--text_dir', default='/Users/qmn203/temp/txtdata_testset',
               help='directory that contains the txt files, including nested subdirectories')
@@ -72,8 +72,10 @@ def main(text_dir, rdd_dir, sample_size, terms_file, json_dir):
     # ---- get the list of jargon terms from file ---- #
     jargons_list = []
     with open(terms_file) as file:
-        for line in file.read().splitlines():
-            jargons_list.append(line)
+        jsonlist = json.load(file)
+        for group in jsonlist:
+            for term in group['terms']:
+                jargons_list.append(term['name'])
 
     # get term frequency, group by paperID
     # [{'paperID': str, 'jargon_tf': [{'jargon': str, 'tf_norm': float}, {...}, ...]},{...},...]
@@ -115,16 +117,20 @@ def main(text_dir, rdd_dir, sample_size, terms_file, json_dir):
     print(f'run time is {runtime} hour')
 
     # TODO:
+
+    # supply options with spark submit
+    # in parallel: get as much text files as possible?
     # fuzziness must be based on the length of the term
-    # collect jargon list
-    #  options: parallelization level?
-    # run 1% on greene
-    # discuss output
-    #  write tests?
-    #  run larger data set?
-    # configure greene : scale up the nodes?
+    # missing terms (97->88)?
+    # options: parallelization level?
+    # discuss output format
+    # what tests to run?
+    # run larger data set?
+    # configure spark on greene : scale up the nodes?
 
+    # improve docs instruction to run spark: why two ways of running spark
 
+    # progress information
 
     # #  --- SQL test code --- #
     # import random
