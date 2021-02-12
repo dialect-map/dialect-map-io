@@ -3,6 +3,7 @@
 import json
 from typing import Generator
 
+from ..parsers import BaseFileParser
 from ..parsers import JSONFileParser
 from ..parsers import PDFFileParser
 from ..parsers import TextFileParser
@@ -11,12 +12,15 @@ from ..parsers import TextFileParser
 class LocalJSONFile:
     """ Class containing the contents of a JSON file """
 
-    def __init__(self, file_path: str, file_parser: JSONFileParser):
+    def __init__(self, file_path: str, file_parser: BaseFileParser = None):
         """
         Initializes the object and parses the JSON contents
         :param file_path: path to the JSON file
-        :param file_parser: parser for the JSON file
+        :param file_parser: parser for the JSON file (optional)
         """
+
+        if file_parser is None:
+            file_parser = JSONFileParser()
 
         self.parser = file_parser
         self.content = file_parser.extract_text(file_path)
@@ -38,12 +42,15 @@ class LocalJSONFile:
 class LocalPDFFile:
     """ Class containing the contents of a PDF file """
 
-    def __init__(self, file_path: str, file_parser: PDFFileParser):
+    def __init__(self, file_path: str, file_parser: BaseFileParser = None):
         """
         Initializes the object and parses the PDF contents
         :param file_path: path to the PDF file
-        :param file_parser: parser for the PDF file
+        :param file_parser: parser for the PDF file (optional)
         """
+
+        if file_parser is None:
+            file_parser = PDFFileParser()
 
         self.parser = file_parser
         self.content = file_parser.extract_text(file_path)
@@ -61,12 +68,15 @@ class LocalPDFFile:
 class LocalTextFile:
     """ Class containing the contents of a TXT file """
 
-    def __init__(self, file_path: str, file_parser: TextFileParser):
+    def __init__(self, file_path: str, file_parser: BaseFileParser = None):
         """
         Initializes the object and parses the TXT contents
         :param file_path: path to the TXT file
-        :param file_parser: parser for the TXT file
+        :param file_parser: parser for the TXT file (optional)
         """
+
+        if file_parser is None:
+            file_parser = TextFileParser()
 
         self.parser = file_parser
         self.content = file_parser.extract_text(file_path)
