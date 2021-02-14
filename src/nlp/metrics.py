@@ -9,6 +9,7 @@ import string
 from fuzzywuzzy import fuzz
 
 
+# ----- static method ----------#
 def preprocess(document: str) -> List[str]:
     """
     simple tokenization
@@ -59,32 +60,34 @@ def phrase_count(phrase: List[str], tokens: List[str], similarity: int = 85) -> 
 class FuzzyMetricsEngine(BaseMetricsEngine):
 
     def __init__(self):
+        # the text of the document is passed on instead of initialized as attribute
+        # this facilitates interfacing with the map-reduce pipeline for large number of documents
         pass
 
     def compute_abs_freq(self, terms: List[str], text: str) -> List[dict]:
         """
-        Calculates the absolute frequency (raw count of number of occurence) of the given term
+        Calculates the absolute term frequency (raw count of number of occurrence) of the given term
         :param terms: list of jargon term to compute the frequency about
         :param text: text of the document
-        :return: a list of dictionary , each corresponds to a jargon { 'jargon': str, 'frequency': int }
+        :return: a list of dictionary , each corresponds to a jargon { 'jargon': str, 'tf': int }
         """
         text = codecs.decode(text, 'unicode_escape')  # convert \\n to \n in text so tokenizer knows to split
         tokens = preprocess(text)  # tokenize
 
         return [{'jargon': " ".join(preprocess(jargon)),
-                 'tf_raw': phrase_count(preprocess(jargon), tokens)}
+                 'tf': phrase_count(preprocess(jargon), tokens)}
                 for jargon in terms]
 
     def compute_rel_freq(self, terms: List[str], text: str) -> List[dict]:
         """
-        Calculates the relative frequency (raw count / document length) of the given term
+        Calculates the relative term frequency (raw count / document length) of the given term
         :param terms: list of jargon term to compute the frequency about
         :param text: text of the document
-        :return: a list of dictionary , each corresponds to a jargon { 'jargon': str, 'frequency': float }
+        :return: a list of dictionary , each corresponds to a jargon { 'jargon': str, 'tf': float }
         """
         text = codecs.decode(text, 'unicode_escape')  # convert \\n to \n in text so tokenizer knows to split
         tokens = preprocess(text)  # tokenize
 
         return [{'jargon': " ".join(preprocess(jargon)),
-                 'tf_norm': phrase_count(preprocess(jargon), tokens) / len(tokens)}
+                 'tf': phrase_count(preprocess(jargon), tokens) / len(tokens)}
                 for jargon in terms]
