@@ -79,8 +79,12 @@ def main(text_dir, rdd_dir, sample_size, terms_file, json_dir):
 
     # get term frequency, group by paperID
     # [{'paperID': str, 'jargon_tf': [{'jargon': str, 'tf_norm': float}, {...}, ...]},{...},...]
+    # rdd_tf = rdd_content.map(lambda x: {"paperID": path2id(x),
+    #                                     "jargon_tf": terms_freq(jargons_list, x, similarity=85, method='norm')})
+    from nlp.metrics import FuzzyMetricsEngine
+    fuzzy_tf = FuzzyMetricsEngine()
     rdd_tf = rdd_content.map(lambda x: {"paperID": path2id(x),
-                                        "jargon_tf": terms_freq(jargons_list, x, similarity=85, method='norm')})
+                                        "jargon_tf": fuzzy_tf.compute_rel_freq(jargons_list, x)})
 
     # keep only paper which has at least 1 non zero term frequency
     rdd_drop = rdd_tf.filter(lambda x: any([y["tf_norm"] for y in x["jargon_tf"]]))
@@ -104,7 +108,7 @@ def main(text_dir, rdd_dir, sample_size, terms_file, json_dir):
             )
 
     # save to json
-    json_file = os.path.join(json_dir,"jargonGroup.json")
+    json_file = os.path.join(json_dir, "jargonGroup.json")
     rdd2json(rdd_jargon_group, json_file)
 
     # lazy read test
@@ -117,7 +121,9 @@ def main(text_dir, rdd_dir, sample_size, terms_file, json_dir):
     print(f'run time is {runtime} hour')
 
     # TODO:
-
+    # share /scratch with setfacl
+    # copy pdfs over /scarch
+    # include both norm and raw TF?
     # supply options with spark submit
     # in parallel: get as much text files as possible?
     # fuzziness must be based on the length of the term
