@@ -20,6 +20,16 @@ class BaseMetricsEngine(metaclass=ABCMeta):
         pass
 
     @abstractmethod
+    def compute_bool_freq(self, terms: List[str], text: str) -> List[dict]:
+        """
+        check if each jargon term is in the document
+        :param terms: list of jargon term to compute the frequency about
+        :param text: text of the document
+        :return: a list of dictionary , each corresponds to a jargon { 'jargon': str, 'tf': int }
+        """
+        pass
+
+    @abstractmethod
     def compute_rel_freq(self, terms: List[str], text: str) -> List[dict]:
         """
         Calculates the relative term frequency (raw count / document length) of the given term

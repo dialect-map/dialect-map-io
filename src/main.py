@@ -83,10 +83,9 @@ def main(text_dir, rdd_dir, sample_size, terms_file, json_dir):
     # rdd_tf = rdd_content.map(lambda x: {"paperID": path2id(x),
     #                                     "jargon_tf": terms_freq(jargons_list, x, similarity=85, method='norm')})
 
-
     fuzzy_tf = FuzzyMetricsEngine()
     rdd_tf = rdd_content.map(lambda x: {"paperID": path2id(x),
-                                        "jargon_tf": fuzzy_tf.compute_abs_freq(jargons_list, x)})
+                                        "jargon_tf": fuzzy_tf.compute_bool_freq(jargons_list, x)})
 
     # keep only paper which has at least 1 non zero term frequency
     rdd_drop = rdd_tf.filter(lambda x: any([y["tf"] for y in x["jargon_tf"]]))
@@ -94,7 +93,7 @@ def main(text_dir, rdd_dir, sample_size, terms_file, json_dir):
     # explode the jargon list of each paper into multiple elements,
     # reorder each is a 2-tuple (jargon,{'paperID':'','tf':''})
     rdd_flat = rdd_drop.flatMap(
-        lambda x: [(y['jargon'], {"paperID": x['paperID'], "tf":y['tf']}) for y in x['jargon_tf']])
+        lambda x: [(y['jargon'], {"paperID": x['paperID'], "tf": y['tf']}) for y in x['jargon_tf']])
 
     # drop tuple element where term frequency = 0
     rdd_jargon_paper_tf = rdd_flat.filter(lambda x: x[1]['tf'] != 0)
@@ -103,11 +102,11 @@ def main(text_dir, rdd_dir, sample_size, terms_file, json_dir):
     rdd_jargon_group = \
         rdd_jargon_paper_tf.combineByKey(
             lambda value: [value],  # create combiner: first value (a dict) -> list[dict]
-            lambda list0, other_value: list0+[other_value],
+            lambda list0, other_value: list0 + [other_value],
             # combine the combiner with other values of the same key: concat 2 list[dict] (same partition)
-            lambda list_i, list_j: list_i+list_j).map(  # combine combiners (across partitions)
+            lambda list_i, list_j: list_i + list_j).map(  # combine combiners (across partitions)
             lambda x: {"jargon": x[0], "paper_tf": x[1]}  # format to dict
-            )
+        )
 
     # save to json
     json_file = os.path.join(json_dir, "jargonGroup.json")
@@ -119,7 +118,7 @@ def main(text_dir, rdd_dir, sample_size, terms_file, json_dir):
         print(row['jargon'], row['paper_tf'][0]['paperID'], row['paper_tf'][0]['tf'])
 
     stop = timeit.default_timer()
-    runtime = (stop - start)/3600
+    runtime = (stop - start) / 3600
     print(f'run time is {runtime} hour')
 
     # TODO:
@@ -159,5 +158,3 @@ def main(text_dir, rdd_dir, sample_size, terms_file, json_dir):
 
 if __name__ == "__main__":
     main()
-
-
