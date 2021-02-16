@@ -9,8 +9,10 @@ class BaseMetricsEngine(metaclass=ABCMeta):
     """ Interface for the NLP metrics computation """
     # these methods take in a list of jargon for each document
     # i.e. each document is open only once for all the listed jargon terms, to improve performance
+
+    @classmethod
     @abstractmethod
-    def compute_abs_freq(self, terms: List[str], text: str) -> List[dict]:
+    def compute_abs_freq(cls, terms: List[str], text: str) -> List[dict]:
         """
         Calculates the absolute term frequency (raw count of number of occurence) of the given term
         :param terms: list of jargon term to compute the frequency about
@@ -19,8 +21,9 @@ class BaseMetricsEngine(metaclass=ABCMeta):
         """
         pass
 
+    @classmethod
     @abstractmethod
-    def compute_bool_freq(self, terms: List[str], text: str) -> List[dict]:
+    def compute_bool_freq(cls, terms: List[str], text: str) -> List[dict]:
         """
         check if each jargon term is in the document
         :param terms: list of jargon term to compute the frequency about
@@ -29,8 +32,9 @@ class BaseMetricsEngine(metaclass=ABCMeta):
         """
         pass
 
+    @classmethod
     @abstractmethod
-    def compute_rel_freq(self, terms: List[str], text: str) -> List[dict]:
+    def compute_rel_freq(cls, terms: List[str], text: str) -> List[dict]:
         """
         Calculates the relative term frequency (raw count / document length) of the given term
         :param terms: list of jargon term to compute the frequency about
