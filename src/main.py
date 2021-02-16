@@ -7,8 +7,7 @@ import timeit
 import click
 from pyspark import SparkConf, SparkContext
 
-from nlp.textprocess import path2id, terms_freq
-from utilities import read_or_load_rdd
+from utilities import read_or_load_rdd, path2id
 from nlp.metrics import FuzzyMetricsEngine  # in job repos, this will be replace by importing the package
 
 
@@ -85,7 +84,7 @@ def main(text_dir, rdd_dir, sample_size, terms_file, json_dir):
 
     fuzzy_tf = FuzzyMetricsEngine()
     rdd_tf = rdd_content.map(lambda x: {"paperID": path2id(x),
-                                        "jargon_tf": fuzzy_tf.compute_rel_freq(jargons_list, x)})
+                                        "jargon_tf": fuzzy_tf.compute_bool_freq(jargons_list, x)})
 
     # keep only paper which has at least 1 non zero term frequency
     rdd_drop = rdd_tf.filter(lambda x: any([y["tf"] for y in x["jargon_tf"]]))
