@@ -2,6 +2,7 @@ import os
 import re
 import glob
 import csv
+import json
 
 
 def sorted_files(globber: str):
@@ -133,3 +134,51 @@ def read_or_load_rdd(all_txt_dir: str, sample_size: float, rdd_content_dir: str,
         raise Exception("empty rdd folder")
     return rdd_content
 
+
+def get_metadata(path_to_meta: str):
+    with open(path_to_meta, 'r') as f:
+        for line in f:
+            yield line
+
+
+def cat_look_up(id: str, path_to_meta: str):
+    """(slow) look up category of paper id (no version included) from metadata"""
+    metadata = get_metadata(path_to_meta)
+    id = id.split('v')[0]  # remove version if included
+    for paper in metadata:
+        if json.loads(paper)['id'] == id:
+            cat = json.loads(paper)['categories']
+            return cat
+
+
+def path2id(text: str) -> str:
+    """ input: text string, containing the SPECIFIC str '(file:path, text)'
+        output: id of the paper, None if f
+    """
+    # math file:path.txt, split by '/', get the last, remove extension
+    match = re.search('file:.*?\.txt', text)  #.*? the shortest match
+    if match:
+        return match.group().split('/')[-1].strip('.txt')
+
+
+def cat_parser(text: str) -> str:
+    """ parse category from text
+        input: text (str), containing SPECIFIC str '(file:path, text)'
+        output: category (str) of the paper, None if the text doesn't contain category tag
+    """
+    # beginning of second part of tuple + something+ ID + something + [ category ]
+    search_str = ',.*' + path2id(text) + '.*?\[.*?\]'  # (.*?) the shortest match, any length, between []
+    match = re.search(search_str, text)
+    if match:
+        return match.group().split('[')[-1].strip(']')
+
+
+def get_cat(text: str, path_to_meta: str):
+    """parse the category from text, if fail, lookup in meta data file (slow) and return the primary category"""
+    cat = cat_parser(text)
+    if cat is not None:
+        return cat
+    else:  # if category can not be parsed from the text, look up in metadata
+        cat_list = cat_look_up(path2id(text),path_to_meta)
+        cat = cat_list.split(' ')[0]  # get the main category if there are more than one
+        return cat
