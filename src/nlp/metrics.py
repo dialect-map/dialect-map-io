@@ -61,7 +61,7 @@ class FuzzyMetricsEngine(BaseMetricsEngine):
 
     def __init__(self):
         # the text of the document is passed on instead of initialized as attribute
-        # this facilitates interfacing with the map-reduce pipeline for large number of documents
+        # this facilitates interfacing with the map-reduce style pipeline for large number of documents
         pass
 
     def compute_abs_freq(self, terms: List[str], text: str) -> List[dict]:
@@ -76,6 +76,20 @@ class FuzzyMetricsEngine(BaseMetricsEngine):
 
         return [{'jargon': " ".join(preprocess(jargon)),
                  'tf': phrase_count(preprocess(jargon), tokens)}
+                for jargon in terms]
+
+    def compute_bool_freq(self, terms: List[str], text: str) -> List[dict]:
+        """
+        check if each jargon term is in the document
+        :param terms: list of jargon term to compute the frequency about
+        :param text: text of the document
+        :return: a list of dictionary , each corresponds to a jargon { 'jargon': str, 'tf': int }
+        """
+        text = codecs.decode(text, 'unicode_escape')  # convert \\n to \n in text so tokenizer knows to split
+        tokens = preprocess(text)  # tokenize
+
+        return [{'jargon': " ".join(preprocess(jargon)),
+                 'tf': int(phrase_count(preprocess(jargon), tokens) >= 1)}
                 for jargon in terms]
 
     def compute_rel_freq(self, terms: List[str], text: str) -> List[dict]:
