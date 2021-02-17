@@ -23,7 +23,9 @@ INSTALLATION_REQS = [
 
 # Development requirements
 DEVELOPMENT_REQS = [
+    "black>=20.8b1",
     "coverage>=5.0.4",
+    "mypy==0.800",
     "pytest>=6.2.2",
     "pytest-cov>=2.11.1",
 ]
