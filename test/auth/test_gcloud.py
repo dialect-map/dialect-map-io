@@ -35,10 +35,10 @@ def openid_auth() -> OpenIDAuthenticator:
         return OpenIDAuthenticator("", "")
 
 
-def test_check_expiration(openid_auth: OpenIDAuthenticator):
+def test_check_expired(openid_auth: OpenIDAuthenticator):
     """
     Checks the correct validation of the credentials expiration date
     :param openid_auth: patched OpenID authenticator
     """
 
-    assert openid_auth.check_expiration() is True
+    assert openid_auth.check_expired() is True
