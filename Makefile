@@ -1,7 +1,19 @@
-PKG_VERSION   = $(shell cat VERSION)
-COV_CONFIG    = ".coveragerc"
-SOURCE_FOLDER = "src"
-TESTS_PARAMS  = "-p no:cacheprovider"
+PKG_VERSION    = $(shell cat VERSION)
+COV_CONFIG     = ".coveragerc"
+SOURCE_FOLDER  = "src"
+TESTS_FOLDER   = "test"
+TESTS_PARAMS   = "-p no:cacheprovider"
+TYPING_PARAMS  = "--allow-redefinition --ignore-missing-imports --cache-dir=/dev/null"
+
+
+.PHONY: check
+check:
+	@echo "Checking code format"
+	@black --check $(SOURCE_FOLDER)
+	@black --check $(TESTS_FOLDER)
+	@echo "Checking type annotations"
+	@mypy "$(TYPING_PARAMS)" $(SOURCE_FOLDER)
+	@mypy "$(TYPING_PARAMS)" $(TESTS_FOLDER)
 
 
 .PHONY: tag
