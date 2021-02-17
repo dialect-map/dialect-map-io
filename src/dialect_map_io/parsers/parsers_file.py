@@ -112,7 +112,7 @@ class PDFFileParser(BaseFileParser):
 class PlainFileParser(BaseFileParser):
     """ Class for parsing and extracting text out of plain format files """
 
-    extension = None
+    extension: str
 
     def __init__(self, encoding: str = "UTF-8"):
         """
