@@ -3,20 +3,11 @@
 from pathlib import Path
 
 
-DATA_FOLDER = ".data"
+PROJECT_PATH = Path(__file__).parent
 
-FEED_FOLDER = Path(__file__).parent \
-    .joinpath(DATA_FOLDER) \
-    .joinpath("feed")
+DATA_FOLDER = PROJECT_PATH.joinpath(".data")
 
-JSON_FOLDER = Path(__file__).parent \
-    .joinpath(DATA_FOLDER) \
-    .joinpath("json")
-
-PDF_FOLDER = Path(__file__).parent \
-    .joinpath(DATA_FOLDER) \
-    .joinpath("pdf")
-
-TXT_FOLDER = Path(__file__).parent \
-    .joinpath(DATA_FOLDER) \
-    .joinpath("txt")
+FEED_FOLDER = DATA_FOLDER.joinpath("feed")
+JSON_FOLDER = DATA_FOLDER.joinpath("json")
+PDF_FOLDER = DATA_FOLDER.joinpath("pdf")
+TXT_FOLDER = DATA_FOLDER.joinpath("txt")
