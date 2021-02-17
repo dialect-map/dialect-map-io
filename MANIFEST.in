@@ -1,0 +1,7 @@
+### NOTE:
+###
+### This file is only useful when creating a "software distribution":
+### Reference: https://packaging.python.org/guides/using-manifest-in/
+### Command: $ python3 setup.py sdist
+
+include VERSION

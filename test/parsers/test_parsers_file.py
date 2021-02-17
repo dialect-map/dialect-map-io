@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import pytest
-from src.parsers import PDFFileParser
+from src.dialect_map_io.parsers import PDFFileParser
 
 from ..__paths import PDF_FOLDER
 from ..__paths import TXT_FOLDER

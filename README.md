@@ -1,67 +1,38 @@
-# Dialect map computing
+# Dialect map I/O
 
-Source code for nlp mining of arxiv text files. This is a part of the larger project [ds-dialect-map](https://github.com/ds3-nyu-archive/ds-dialect-map).
+### About
+This repository contains the Input / Output capabilities to be used in data-ingestion jobs.
 
-Current functionalities:
-- convert pdfs to texts
-- parse article ID from text
-- get term frequency in each article
+It will be used as a Python dependency in a small variety of data-ingestion pipelines
+(_static-data_, _NLP metrics_...), in order to send curated information to the Dialect Map database,
+making use of the private [Dialect map API][dialect-map-api-private].
 
-## How to get arxiv articles and convert them to text for processing
-To download all arxiv pdfs: https://arxiv.org/help/bulk_data.  
-To convert all pdfs in a directory to text:
 
-First clone this
+### Dependencies
+Python dependencies are specified within the `setup.py` file.
 
-```
-git clone https://github.com/quynhneo/arxiv-public-datasets_for_kaggle
-```
-Follow instruction there to convert pdfs to text files. 
-
-## Prerequisites for running nlp analysis test
-- a folder containing text files of arxiv articles
-- spark environment setup
-
-In `main.py`, set the folder to `all_txt_dir`, choose a `sample_size` to sub sample the data, and a path for holding intermediate data at `rdd_content_dir`
-
-To run the test from shell:
-```
-$spark-submit main.py
+In order to install the development packages, as long as the defined commit hooks:
+```sh
+pip install ".[dev]"
+pre-commit install
 ```
 
-or to run interactively:
-```
-$pyspark
-```
 
-then
-
-```
->> exec(open('main.py').read())
+### Testing
+Project testing is performed using [Pytest][pytest-web]. In order to run the tests:
+```sh
+make test
 ```
 
-Currently, given a hard-coded list of `[ term1, term2, ...]`, this will return rdd objects `rdd_count` which is a dictionary `{paper1,[ tf11, tf12 ,...], paper2,[tf21,tf22..}...}` where tfij is term frequency of term j in paper i.
 
-Eventually, the dictionary will be transformed into a different schema and saved into a databased that faccilitate server access. 
+### Tagging
+Commits can be tagged to create _informal_ releases of the package. In order to do so:
+
+1. Bump up the package version (`VERSION`) following [Semantic Versioning][semantic-web].
+2. Create and push a tag: `make tag`.
 
 
-## Development
-To install all the source code that is necessary to operate with this project:
-
-```shell script
-git clone --recurse-submodules https://github.com/dialect-map/dialect-map-computing
-```
-
-For cases where the project has already been cloned:
-
-```shell script
-git submodule update --init --recursive
-```
-
-The repositories defined as sub-modules will follow their own development pace.
-For cases where the sub-module repositories has been updated on GitHub, and want
-to propagate those changes to your local copy of the repositories:
-
-```shell script
-git submodule update --remote
-```
+[dialect-map-api-private]: https://github.com/dialect-map/dialect-map-private-api
+[dialect-map-main]: https://github.com/dialect-map/dialect-map
+[pytest-web]: https://docs.pytest.org/en/latest/#
+[semantic-web]: https://semver.org/

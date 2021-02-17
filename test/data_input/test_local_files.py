@@ -1,9 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import pytest
-
-from src.data_input import LocalJSONFile
-from src.parsers import JSONFileParser
+from src.dialect_map_io.data_input import LocalJSONFile
 
 from ..__paths import JSON_FOLDER
 
@@ -18,7 +16,7 @@ def json_array_input() -> LocalJSONFile:
     file_path = JSON_FOLDER.joinpath("example_data.json")
     file_path = str(file_path)
 
-    return LocalJSONFile(file_path, JSONFileParser())
+    return LocalJSONFile(file_path)
 
 
 @pytest.fixture(scope="module")
@@ -31,7 +29,7 @@ def json_object_input() -> LocalJSONFile:
     file_path = JSON_FOLDER.joinpath("example_error.json")
     file_path = str(file_path)
 
-    return LocalJSONFile(file_path, JSONFileParser())
+    return LocalJSONFile(file_path)
 
 
 def test_json_file_all_items(json_array_input: LocalJSONFile):
