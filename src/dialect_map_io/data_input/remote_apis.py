@@ -12,7 +12,7 @@ class BaseAPIInput(metaclass=ABCMeta):
     """ Interface for the API data input classes """
 
     @abstractmethod
-    def request_paper(self, paper_id: str) -> dict:
+    def request_paper(self, paper_id: str) -> str:
         """
         Requests information about a certain Paper
         :param paper_id: paper ID
