@@ -7,11 +7,11 @@ from datetime import time
 from datetime import timedelta
 from datetime import timezone
 
-from src.models import ArxivFeedHeader
-from src.models import ArxivFeedEntry
-from src.models import ArxivFeedEntryAuthor
-from src.models import ArxivFeedEntryLink
-from src.parsers import ArxivFeedParser
+from src.dialect_map_io.models import ArxivFeedHeader
+from src.dialect_map_io.models import ArxivFeedEntry
+from src.dialect_map_io.models import ArxivFeedEntryAuthor
+from src.dialect_map_io.models import ArxivFeedEntryLink
+from src.dialect_map_io.parsers import ArxivFeedParser
 
 from ..__paths import FEED_FOLDER
 

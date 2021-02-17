@@ -6,7 +6,7 @@ from datetime import datetime
 from datetime import timedelta
 from unittest.mock import patch
 
-from src.auth.gcloud import OpenIDAuthenticator
+from src.dialect_map_io.auth import OpenIDAuthenticator
 
 
 def patched_init(self, key_path: str, target_url: str):
