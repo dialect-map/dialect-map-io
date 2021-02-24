@@ -18,6 +18,14 @@ pre-commit install
 ```
 
 
+### Formatting
+All Python files are formatted using [Black][black-web], and the custom properties defined
+in the `pyproject.toml` file.
+```sh
+make check
+```
+
+
 ### Testing
 Project testing is performed using [Pytest][pytest-web]. In order to run the tests:
 ```sh
@@ -32,6 +40,7 @@ Commits can be tagged to create _informal_ releases of the package. In order to 
 2. Create and push a tag: `make tag`.
 
 
+[black-web]: https://black.readthedocs.io/en/stable/
 [dialect-map-api-private]: https://github.com/dialect-map/dialect-map-private-api
 [dialect-map-main]: https://github.com/dialect-map/dialect-map
 [pytest-web]: https://docs.pytest.org/en/latest/#
