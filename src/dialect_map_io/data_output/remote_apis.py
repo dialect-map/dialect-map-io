@@ -30,17 +30,6 @@ class BaseAPIOutput(metaclass=ABCMeta):
 class DialectMapAPI(BaseAPIOutput):
     """ Class for the data persistence Dialect Map API """
 
-    path_category = "/category"
-    path_category_metric = "/category/metrics"
-    path_jargon = "/jargon"
-    path_jargon_group = "/jargon-group"
-    path_paper = "/paper"
-    path_paper_author = "/paper/author"
-    path_paper_metric = "/paper/metrics"
-    path_paper_mem = "/membership"
-    path_paper_ref = "/reference"
-    path_paper_ref_counter = "/paper/reference/counters"
-
     def __init__(self, base_url: str, auth_ctl: BaseAuthenticator = None):
         """
         Initializes the remote API output reference
@@ -94,7 +83,10 @@ class DialectMapAPI(BaseAPIOutput):
         return response
 
     def _refresh_token(self) -> None:
-        """ Updates the API token and request headers """
+        """
+        Updates the API token and request headers
+        :return: None
+        """
 
         if self.auth_ctl.check_expired():
             self.api_token = self.auth_ctl.refresh_token()
@@ -108,7 +100,7 @@ class DialectMapAPI(BaseAPIOutput):
         """
 
         self._refresh_token()
+
         resp = self._perform_request(api_path, record)
         resp = self._decode_response(resp)
-
         return resp
