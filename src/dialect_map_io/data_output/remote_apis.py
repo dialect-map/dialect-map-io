@@ -6,6 +6,8 @@ import requests
 from abc import ABCMeta
 from abc import abstractmethod
 from requests import Response
+from typing import Callable
+
 from ..auth import BaseAuthenticator
 from ..auth import DummyAuthenticator
 
@@ -21,6 +23,16 @@ class BaseAPIOutput(metaclass=ABCMeta):
         Sends a record information to a data persistent layer URL
         :param api_path: remote host API endpoint
         :param record: the record itself
+        :return: JSON-encoded response
+        """
+
+        raise NotImplementedError()
+
+    @abstractmethod
+    def archive_record(self, api_path: str) -> dict:
+        """
+        Sends a record archive order through a data persistence layer URL
+        :param api_path: remote host API endpoint
         :return: JSON-encoded response
         """
 
@@ -60,9 +72,10 @@ class DialectMapAPI(BaseAPIOutput):
 
         return json
 
-    def _perform_request(self, api_path: str, api_data: dict) -> Response:
+    def _perform_request(self, func: Callable, api_path: str, api_data: dict) -> Response:
         """
-        Performs a HTTP POST request to the given API path
+        Performs a HTTP request to the given API path
+        :param func: function to perform the HTTP request
         :param api_path: API path to send the request
         :param api_data: JSON data to send in the request
         :return: API response
@@ -73,7 +86,7 @@ class DialectMapAPI(BaseAPIOutput):
             "Content-Type": f"application/json; charset=utf-8",
         }
 
-        response = requests.post(
+        response = func(
             url=f"{self.base_url}{api_path}",
             headers=headers,
             json=api_data,
@@ -101,6 +114,19 @@ class DialectMapAPI(BaseAPIOutput):
 
         self._refresh_token()
 
-        resp = self._perform_request(api_path, record)
+        resp = self._perform_request(requests.post, api_path, record)
+        resp = self._decode_response(resp)
+        return resp
+
+    def archive_record(self, api_path: str) -> dict:
+        """
+        Sends a record archive order through a data persistence layer URL
+        :param api_path: remote host API endpoint
+        :return: JSON-encoded response
+        """
+
+        self._refresh_token()
+
+        resp = self._perform_request(requests.patch, api_path, {})
         resp = self._decode_response(resp)
         return resp
