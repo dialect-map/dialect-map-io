@@ -16,7 +16,7 @@ class BaseAPIOutput(metaclass=ABCMeta):
     """ Interface for the API data output classes """
 
     @abstractmethod
-    def send_record(self, api_path: str, record: dict) -> dict:
+    def create_record(self, api_path: str, record: dict) -> dict:
         """
         Sends a record information to a data persistent layer URL
         :param api_path: remote host API endpoint
@@ -91,7 +91,7 @@ class DialectMapAPI(BaseAPIOutput):
         if self.auth_ctl.check_expired():
             self.api_token = self.auth_ctl.refresh_token()
 
-    def send_record(self, api_path: str, record: dict) -> dict:
+    def create_record(self, api_path: str, record: dict) -> dict:
         """
         Sends a record information to a data persistent layer URL
         :param api_path: remote host API endpoint
