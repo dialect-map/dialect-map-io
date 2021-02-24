@@ -6,3 +6,5 @@ from .local_files import TextFileWriter
 
 from .remote_apis import BaseAPIOutput
 from .remote_apis import DialectMapAPI
+
+from .remote_routes import *
