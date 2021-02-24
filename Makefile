@@ -1,9 +1,9 @@
-PKG_VERSION    = $(shell cat VERSION)
-COV_CONFIG     = ".coveragerc"
-SOURCE_FOLDER  = "src"
-TESTS_FOLDER   = "test"
-TESTS_PARAMS   = "-p no:cacheprovider"
-TYPING_PARAMS  = "--allow-redefinition --ignore-missing-imports --cache-dir=/dev/null"
+PKG_VERSION   = $(shell cat VERSION)
+COV_CONFIG    = ".coveragerc"
+SOURCE_FOLDER = "src"
+TESTS_FOLDER  = "tests"
+TESTS_PARAMS  = "-p no:cacheprovider"
+TYPING_PARAMS = "--allow-redefinition --ignore-missing-imports --cache-dir=/dev/null"
 
 
 .PHONY: check
