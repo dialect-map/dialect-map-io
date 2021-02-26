@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from abc import ABCMeta
+from abc import ABC
 from abc import abstractmethod
 from io import StringIO
 from pathlib import Path
@@ -12,7 +12,7 @@ from pdfminer.pdfinterp import PDFResourceManager
 from pdfminer.pdfpage import PDFPage
 
 
-class BaseFileParser(metaclass=ABCMeta):
+class BaseFileParser(ABC):
     """ Interface for the file parser classes """
 
     @property

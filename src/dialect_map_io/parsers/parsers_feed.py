@@ -3,7 +3,7 @@
 import logging
 import re
 
-from abc import ABCMeta
+from abc import ABC
 from abc import abstractmethod
 from datetime import datetime
 from feedparser import FeedParserDict
@@ -18,7 +18,7 @@ from ..models import ArxivFeedEntryLink
 logger = logging.getLogger()
 
 
-class BaseFeedParser(metaclass=ABCMeta):
+class BaseFeedParser(ABC):
     """ Interface for the feed string parser classes """
 
     @abstractmethod

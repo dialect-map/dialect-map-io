@@ -3,12 +3,12 @@
 import requests
 import time
 
-from abc import ABCMeta
+from abc import ABC
 from abc import abstractmethod
 from requests import Response
 
 
-class BaseAPIInput(metaclass=ABCMeta):
+class BaseAPIInput(ABC):
     """ Interface for the API data input classes """
 
     @abstractmethod

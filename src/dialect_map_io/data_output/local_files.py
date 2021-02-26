@@ -2,12 +2,12 @@
 
 import json
 
-from abc import ABCMeta
+from abc import ABC
 from abc import abstractmethod
 from typing import Any
 
 
-class BaseFileWriter(metaclass=ABCMeta):
+class BaseFileWriter(ABC):
     """ Interface for the data-output file writer classes """
 
     @abstractmethod
