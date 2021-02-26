@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 
-from abc import ABCMeta
+from abc import ABC
 from abc import abstractmethod
 
 
-class BaseAuthenticator(metaclass=ABCMeta):
+class BaseAuthenticator(ABC):
     """ Interface for the API authenticator classes """
 
     @abstractmethod

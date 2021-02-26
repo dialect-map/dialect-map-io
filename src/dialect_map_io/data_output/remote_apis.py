@@ -3,7 +3,7 @@
 import logging
 import requests
 
-from abc import ABCMeta
+from abc import ABC
 from abc import abstractmethod
 from requests import Response
 from typing import Callable
@@ -14,7 +14,7 @@ from ..auth import DummyAuthenticator
 logger = logging.getLogger()
 
 
-class BaseAPIOutput(metaclass=ABCMeta):
+class BaseAPIOutput(ABC):
     """ Interface for the API data output classes """
 
     @abstractmethod
