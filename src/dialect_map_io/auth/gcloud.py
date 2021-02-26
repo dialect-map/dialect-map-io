@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from datetime import datetime
-from google.oauth2 import service_account
+from google.oauth2.service_account import IDTokenCredentials
 from google.auth.transport.requests import Request
 
 from .base import BaseAuthenticator
@@ -21,7 +21,7 @@ class OpenIDAuthenticator(BaseAuthenticator):
         :param target_url: URL authenticating against
         """
 
-        self.credentials = service_account.IDTokenCredentials.from_service_account_file(
+        self.credentials = IDTokenCredentials.from_service_account_file(
             filename=key_path,
             target_audience=target_url,
         )
