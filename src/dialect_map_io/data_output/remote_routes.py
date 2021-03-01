@@ -7,17 +7,17 @@ from ..models import APIRoute
 
 DM_CATEGORY_ROUTE = APIRoute(
     api_name="dialect-map",
-    api_route="/category",
+    api_path="/category",
     model_name="Category",
 )
 DM_CATEGORY_MEMBER_ROUTE = APIRoute(
     api_name="dialect-map",
-    api_route="/membership",
+    api_path="/category/membership",
     model_name="CategoryMembership",
 )
 DM_CATEGORY_METRICS_ROUTE = APIRoute(
     api_name="dialect-map",
-    api_route="/category/metrics",
+    api_path="/category/metrics",
     model_name="JargonCategoryMetrics",
 )
 
@@ -26,12 +26,12 @@ DM_CATEGORY_METRICS_ROUTE = APIRoute(
 
 DM_JARGON_ROUTE = APIRoute(
     api_name="dialect-map",
-    api_route="/jargon",
+    api_path="/jargon",
     model_name="Jargon",
 )
 DM_JARGON_GROUP_ROUTE = APIRoute(
     api_name="dialect-map",
-    api_route="/jargon-group",
+    api_path="/jargon-group",
     model_name="JargonGroup",
 )
 
@@ -40,17 +40,17 @@ DM_JARGON_GROUP_ROUTE = APIRoute(
 
 DM_PAPER_ROUTE = APIRoute(
     api_name="dialect-map",
-    api_route="/paper",
+    api_path="/paper",
     model_name="Paper",
 )
 DM_PAPER_AUTHOR_ROUTE = APIRoute(
     api_name="dialect-map",
-    api_route="/paper/author",
+    api_path="/paper/author",
     model_name="PaperAuthor",
 )
 DM_PAPER_METRICS_ROUTE = APIRoute(
     api_name="dialect-map",
-    api_route="/paper/metrics",
+    api_path="/paper/metrics",
     model_name="JargonPaperMetrics",
 )
 
@@ -59,11 +59,11 @@ DM_PAPER_METRICS_ROUTE = APIRoute(
 
 DM_REFERENCE_ROUTE = APIRoute(
     api_name="dialect-map",
-    api_route="/reference",
+    api_path="/reference",
     model_name="PaperReference",
 )
 DM_REFERENCE_COUNTERS_ROUTE = APIRoute(
     api_name="dialect-map",
-    api_route="/paper/reference/counters",
+    api_path="/paper/reference/counters",
     model_name="PaperReferenceCounters",
 )
