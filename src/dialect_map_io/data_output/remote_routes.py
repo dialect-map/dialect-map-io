@@ -12,7 +12,7 @@ DM_CATEGORY_ROUTE = APIRoute(
 )
 DM_CATEGORY_MEMBER_ROUTE = APIRoute(
     api_name="dialect-map",
-    api_path="/membership",
+    api_path="/category/membership",
     model_name="CategoryMembership",
 )
 DM_CATEGORY_METRICS_ROUTE = APIRoute(
