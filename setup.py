@@ -16,7 +16,6 @@ VERSION = open("VERSION", "r").read().strip()
 # Installation requirements
 INSTALLATION_REQS = [
     "feedparser==6.0.2",
-    "google-auth==1.24.0",
     "pdfminer.six==20201018",
     "requests==2.25.1",
 ]
@@ -29,6 +28,18 @@ DEVELOPMENT_REQS = [
     "pre-commit>=2.10.0",
     "pytest>=6.2.2",
     "pytest-cov>=2.11.1",
+]
+
+# Google Cloud requirements
+GOOGLE_CLOUD_REQS = [
+    "google-auth==1.24.0",
+    "google-cloud-pubsub==2.3.0",
+]
+
+# All extra requirements
+ALL_EXTRA_DEPS = [
+    *DEVELOPMENT_REQS,
+    *GOOGLE_CLOUD_REQS,
 ]
 
 
@@ -44,7 +55,9 @@ setup(
     include_package_data=True,
     install_requires=INSTALLATION_REQS,
     extras_require={
+        "all": ALL_EXTRA_DEPS,
         "dev": DEVELOPMENT_REQS,
+        "gcp": GOOGLE_CLOUD_REQS,
     },
     license="MIT",
     classifiers=[
