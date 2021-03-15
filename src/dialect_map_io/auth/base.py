@@ -7,6 +7,13 @@ from abc import abstractmethod
 class BaseAuthenticator(ABC):
     """ Interface for the API authenticator classes """
 
+    @property
+    @abstractmethod
+    def credentials(self):
+        """ Credentials holding entity """
+
+        raise NotImplementedError()
+
     @abstractmethod
     def check_expired(self) -> bool:
         """

@@ -3,6 +3,7 @@
 from datetime import datetime
 from google.oauth2.service_account import IDTokenCredentials
 from google.auth.transport.requests import Request
+from google.auth.credentials import Credentials
 
 from .base import BaseAuthenticator
 
@@ -21,10 +22,19 @@ class OpenIDAuthenticator(BaseAuthenticator):
         :param target_url: URL authenticating against
         """
 
-        self.credentials = IDTokenCredentials.from_service_account_file(
+        self._credentials = IDTokenCredentials.from_service_account_file(
             filename=key_path,
             target_audience=target_url,
         )
+
+    @property
+    def credentials(self) -> Credentials:
+        """
+        Credentials holding entity
+        :return: Google Cloud credentials object
+        """
+
+        return self._credentials
 
     def check_expired(self) -> bool:
         """
@@ -32,7 +42,7 @@ class OpenIDAuthenticator(BaseAuthenticator):
         :return: whether the credentials have expired
         """
 
-        expiry_date = self.credentials.expiry
+        expiry_date = self._credentials.expiry
         current_date = datetime.now()
 
         return expiry_date < current_date
@@ -43,5 +53,5 @@ class OpenIDAuthenticator(BaseAuthenticator):
         :return: new valid token
         """
 
-        self.credentials.refresh(Request())
-        return self.credentials.token
+        self._credentials.refresh(Request())
+        return self._credentials.token
