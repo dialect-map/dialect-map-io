@@ -21,7 +21,7 @@ def patched_init(self, key_path: str, target_url: str):
     date_yesterday = date.today() - timedelta(days=1)
     date_yesterday = datetime.combine(date_yesterday, time_mid_night)
 
-    self.credentials = type("PatchedCredentials", (object,), {"expiry": date_yesterday})
+    self._credentials = type("PatchedCredentials", (object,), {"expiry": date_yesterday})
 
 
 @pytest.fixture(scope="module")
