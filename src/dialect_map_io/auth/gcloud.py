@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from datetime import datetime
 from google.oauth2.service_account import IDTokenCredentials
 from google.auth.transport.requests import Request
 from google.auth.credentials import Credentials
@@ -42,10 +41,7 @@ class OpenIDAuthenticator(BaseAuthenticator):
         :return: whether the credentials have expired
         """
 
-        expiry_date = self._credentials.expiry
-        current_date = datetime.now()
-
-        return expiry_date < current_date
+        return self._credentials.expired
 
     def refresh_token(self) -> str:
         """
