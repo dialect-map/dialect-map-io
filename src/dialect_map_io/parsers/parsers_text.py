@@ -12,8 +12,8 @@ from pdfminer.pdfinterp import PDFResourceManager
 from pdfminer.pdfpage import PDFPage
 
 
-class BaseFileParser(ABC):
-    """ Interface for the file parser classes """
+class BaseTextParser(ABC):
+    """ Interface for the text parser classes """
 
     @property
     @abstractmethod
@@ -23,33 +23,24 @@ class BaseFileParser(ABC):
         raise NotImplementedError()
 
     @abstractmethod
-    def extract_text(self, file_path: str) -> str:
+    def parse_file(self, file_path: str) -> str:
         """
-        Extracts plain text from a more extensible file type.
+        Parses the provided text containing file
         :param file_path: path to the target file
-        :return: plain text
+        :return: decoded data
         """
 
         raise NotImplementedError()
 
-    def check_extension(self, file_path: str) -> bool:
-        """
-        Checks for the file extension of the provided file.
-        :param file_path: path to the target file
-        :return: whether it has a valid extension
-        """
 
-        return Path(file_path).suffix == self.extension
-
-
-class PDFFileParser(BaseFileParser):
-    """ Class for parsing and extracting text out of PDF files """
+class PDFTextParser(BaseTextParser):
+    """ Class for parsing and extracting text from PDF files """
 
     extension = ".pdf"
 
     def __init__(self, encoding: str = "UTF-8"):
         """
-        Initializes the PDF file parser internal attributes
+        Initializes the PDF text parser internal attributes
         :param encoding: PDF files encoding
         """
 
@@ -64,6 +55,15 @@ class PDFFileParser(BaseFileParser):
             outfp=self.string_buffer,
             codec=self.file_encoding,
         )
+
+    def _check_extension(self, file_path: str) -> bool:
+        """
+        Checks for the file extension of the provided file
+        :param file_path: path to the target file
+        :return: whether it has a valid extension
+        """
+
+        return Path(file_path).suffix == self.extension
 
     def _reset_buffer(self) -> int:
         """
@@ -85,14 +85,14 @@ class PDFFileParser(BaseFileParser):
         text = (line.replace("\n", " ") for line in text.split("\n\n"))
         return "\n".join(text)
 
-    def extract_text(self, file_path: str) -> str:
+    def parse_file(self, file_path: str) -> str:
         """
-        Extracts plain text from a more extensible file type.
+        Extracts text from the provided PDF file
         :param file_path: path to the target file
         :return: plain text
         """
 
-        if self.check_extension(file_path) is False:
+        if self._check_extension(file_path) is False:
             raise ValueError(f"Invalid extension: {file_path}")
 
         interpreter = PDFPageInterpreter(
@@ -100,7 +100,7 @@ class PDFFileParser(BaseFileParser):
             device=self.text_converter,
         )
 
-        with open(file_path, mode="rb") as file:
+        with open(file=file_path, mode="rb") as file:
             for page in PDFPage.get_pages(file):
                 interpreter.process_page(page)
 
@@ -109,42 +109,31 @@ class PDFFileParser(BaseFileParser):
         return t
 
 
-class PlainFileParser(BaseFileParser):
-    """ Class for parsing and extracting text out of plain format files """
-
-    extension: str
-
-    def __init__(self, encoding: str = "UTF-8"):
-        """
-        Initializes the plain file parser internal attributes
-        :param encoding: plain file encoding
-        """
-
-        self.file_encoding = encoding
-
-    def extract_text(self, file_path: str) -> str:
-        """
-        Extracts the file text from a readable file type.
-        :param file_path: path to the target file
-        :return: file text
-        """
-
-        if self.check_extension(file_path) is False:
-            raise ValueError(f"Invalid extension: {file_path}")
-
-        with open(file_path, mode="r", encoding=self.file_encoding) as file:
-            text = file.read()
-
-        return text
-
-
-class JSONFileParser(PlainFileParser):
-    """ Class for parsing and extracting text out of JSON files """
-
-    extension = ".json"
-
-
-class TextFileParser(PlainFileParser):
-    """ Class for parsing and extracting text out of TXT files """
+class TXTTextParser(BaseTextParser):
+    """ Class for parsing and extracting text from TXT files """
 
     extension = ".txt"
+
+    def _check_extension(self, file_path: str) -> bool:
+        """
+        Checks for the file extension of the provided file
+        :param file_path: path to the target file
+        :return: whether it has a valid extension
+        """
+
+        return Path(file_path).suffix == self.extension
+
+    def parse_file(self, file_path: str) -> str:
+        """
+        Extracts text from the provided TXT file
+        :param file_path: path to the target file
+        :return: plain text
+        """
+
+        if self._check_extension(file_path) is False:
+            raise ValueError(f"Invalid extension: {file_path}")
+
+        with open(file=file_path, mode="r") as file:
+            contents = file.read()
+
+        return contents

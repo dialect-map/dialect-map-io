@@ -2,7 +2,7 @@
 
 from .local_files import LocalJSONFile
 from .local_files import LocalPDFFile
-from .local_files import LocalTextFile
+from .local_files import LocalTXTFile
 
 from .pubsub_gcp import PubSubReader
 

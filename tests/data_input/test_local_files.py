@@ -38,7 +38,7 @@ def test_json_file_all_items(json_array_input: LocalJSONFile):
     :param json_array_input: JSON file input
     """
 
-    for index, struct in enumerate(json_array_input.all_items()):
+    for index, struct in enumerate(json_array_input.iter_items()):
         number = index + 1
 
         assert struct["field_1"] == f"name {number}"
@@ -52,4 +52,4 @@ def test_json_file_error(json_object_input: LocalJSONFile):
     :param json_object_input: JSON file input
     """
 
-    assert pytest.raises(ValueError, next, json_object_input.all_items())
+    assert pytest.raises(ValueError, next, json_object_input.iter_items())
