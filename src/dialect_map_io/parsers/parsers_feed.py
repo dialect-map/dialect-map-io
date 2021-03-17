@@ -6,6 +6,7 @@ import re
 from abc import ABC
 from abc import abstractmethod
 from datetime import datetime
+from datetime import timezone
 from feedparser import FeedParserDict
 from feedparser import parse as feed_parse
 from typing import List
@@ -49,20 +50,48 @@ class ArxivFeedParser(BaseFeedParser):
     ArXiv feed: https://arxiv.org/help/api/user-manual#52-details-of-atom-results-returned
     """
 
-    def __init__(self, datetime_format: str = None):
-        """
-        Initializes the Arxiv feed parser object
-        :param datetime_format: format taking the Arxiv feed dates
-        """
+    def __init__(self):
+        """ Initializes the Arxiv feed parser object """
 
-        if datetime_format is None:
-            date_format = "%Y-%m-%d"
-            time_format = "%H:%M:%S%z"
-            datetime_format = f"{date_format}T{time_format}"
-
-        self.datetime_format = datetime_format
         self.entry_id_prefix = re.compile(r"http://arxiv.org/abs/")
         self.entry_id_suffix = re.compile(r"v\d+")
+
+    @staticmethod
+    def _parse_date(date_string: str) -> datetime:
+        """
+        Parses a date string to a UTC datetime object
+        :param date_string: ArXiv date in string format
+        :return: UTC datetime object
+        """
+
+        try:
+            off_date = datetime.fromisoformat(date_string)
+            utc_date = datetime.fromtimestamp(off_date.timestamp(), timezone.utc)
+        except Exception as err:
+            logger.error(err)
+            raise err
+
+        return utc_date
+
+    @staticmethod
+    def _parse_string(long_string: str) -> str:
+        """
+        Parses and cleans a potentially multi-line string
+        :param long_string: potentially multi-line string
+        :return: trimmed string
+        """
+
+        return re.sub(r"\s\s+", " ", long_string)
+
+    @staticmethod
+    def _parse_links(link_entries: list) -> List[str]:
+        """
+        Parses and extracts a link href attributes from the feed
+        :param link_entries: list encapsulating current level links
+        :return: link URLs
+        """
+
+        return [link.href for link in link_entries]
 
     def _extract_id(self, entry_id: str) -> str:
         """
@@ -102,39 +131,6 @@ class ArxivFeedParser(BaseFeedParser):
             logger.info(f"Paper {paper_id} does not specify a DOI")
 
         return paper_doi
-
-    def _parse_date(self, date_string: str) -> datetime:
-        """
-        Parses a date string to a Datetime object
-        :param date_string: ArXiv date in string format
-        :return: datetime object
-        """
-
-        try:
-            date = datetime.strptime(date_string, self.datetime_format)
-        except Exception as err:
-            logger.error(err)
-            raise err
-
-        return date
-
-    def _parse_string(self, long_string: str) -> str:
-        """
-        Parses and cleans a potentially multi-line string
-        :param long_string: potentially multi-line string
-        :return: trimmed string
-        """
-
-        return re.sub(r"\s\s+", " ", long_string)
-
-    def _parse_links(self, link_entries: list) -> List[str]:
-        """
-        Parses and extracts a link href attributes from the feed
-        :param link_entries: list encapsulating current level links
-        :return: link URLs
-        """
-
-        return [link.href for link in link_entries]
 
     def parse_header(self, feed: str) -> ArxivFeedHeader:
         """
