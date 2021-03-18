@@ -53,3 +53,27 @@ class DiffMessage:
 
         if self.value_prev == self.value_post:
             raise ValueError("Invalid value change. Both values are equal")
+
+    def is_creation(self) -> bool:
+        """
+        Checks if the diff message correspond to a creation
+        :return: whether it is a creation
+        """
+
+        return self.value_prev is None and self.value_post is not None
+
+    def is_deletion(self) -> bool:
+        """
+        Checks if the diff message correspond to a deletion
+        :return: whether it is a deletion
+        """
+
+        return self.value_prev is not None and self.value_post is None
+
+    def is_edition(self) -> bool:
+        """
+        Checks if the diff message correspond to an edition
+        :return: whether it is a edition
+        """
+
+        return self.value_prev is not None and self.value_post is not None
