@@ -2,10 +2,10 @@
 
 from abc import ABC
 from abc import abstractmethod
-
 from json import JSONDecoder
-from pathlib import Path
 from typing import Any
+
+from .__utils import check_extension
 
 
 class BaseDataParser(ABC):
@@ -68,15 +68,6 @@ class JSONDataParser(BaseDataParser):
 
         self.decoder = JSONDecoder(**decoder_args)
 
-    def _check_extension(self, file_path: str) -> bool:
-        """
-        Checks for the file extension of the provided file
-        :param file_path: path to the target file
-        :return: whether it has a valid extension
-        """
-
-        return Path(file_path).suffix == self.extension
-
     def parse_file(self, file_path: str) -> Any:
         """
         Parses the provided JSON data file
@@ -84,8 +75,8 @@ class JSONDataParser(BaseDataParser):
         :return: decoded data
         """
 
-        if self._check_extension(file_path) is False:
-            raise ValueError(f"Invalid extension: {file_path}")
+        if check_extension(file_path, self.extension) is False:
+            raise ValueError(f"Invalid file extension: {file_path}")
 
         with open(file=file_path, mode="r") as file:
             contents = file.read()

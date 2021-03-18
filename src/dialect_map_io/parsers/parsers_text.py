@@ -3,13 +3,14 @@
 from abc import ABC
 from abc import abstractmethod
 from io import StringIO
-from pathlib import Path
 
 from pdfminer.converter import TextConverter
 from pdfminer.layout import LAParams
 from pdfminer.pdfinterp import PDFPageInterpreter
 from pdfminer.pdfinterp import PDFResourceManager
 from pdfminer.pdfpage import PDFPage
+
+from .__utils import check_extension
 
 
 class BaseTextParser(ABC):
@@ -56,15 +57,6 @@ class PDFTextParser(BaseTextParser):
             codec=self.file_encoding,
         )
 
-    def _check_extension(self, file_path: str) -> bool:
-        """
-        Checks for the file extension of the provided file
-        :param file_path: path to the target file
-        :return: whether it has a valid extension
-        """
-
-        return Path(file_path).suffix == self.extension
-
     def _reset_buffer(self) -> int:
         """
         Resets the current string buffer so future reads do not accumulate
@@ -92,8 +84,8 @@ class PDFTextParser(BaseTextParser):
         :return: plain text
         """
 
-        if self._check_extension(file_path) is False:
-            raise ValueError(f"Invalid extension: {file_path}")
+        if check_extension(file_path, self.extension) is False:
+            raise ValueError(f"Invalid file extension: {file_path}")
 
         interpreter = PDFPageInterpreter(
             rsrcmgr=self._resource_manager,
@@ -114,15 +106,6 @@ class TXTTextParser(BaseTextParser):
 
     extension = ".txt"
 
-    def _check_extension(self, file_path: str) -> bool:
-        """
-        Checks for the file extension of the provided file
-        :param file_path: path to the target file
-        :return: whether it has a valid extension
-        """
-
-        return Path(file_path).suffix == self.extension
-
     def parse_file(self, file_path: str) -> str:
         """
         Extracts text from the provided TXT file
@@ -130,8 +113,8 @@ class TXTTextParser(BaseTextParser):
         :return: plain text
         """
 
-        if self._check_extension(file_path) is False:
-            raise ValueError(f"Invalid extension: {file_path}")
+        if check_extension(file_path, self.extension) is False:
+            raise ValueError(f"Invalid file extension: {file_path}")
 
         with open(file=file_path, mode="r") as file:
             contents = file.read()
