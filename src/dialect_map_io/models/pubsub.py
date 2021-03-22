@@ -36,7 +36,7 @@ class DiffMessage:
         :return: diff message object
         """
 
-        return DiffMessage(
+        return cls(
             message["container"],
             message["fieldName"],
             message["valuePrev"],
@@ -54,6 +54,7 @@ class DiffMessage:
         if self.value_prev == self.value_post:
             raise ValueError("Invalid value change. Both values are equal")
 
+    @property
     def is_creation(self) -> bool:
         """
         Checks if the diff message correspond to a creation
@@ -62,6 +63,7 @@ class DiffMessage:
 
         return self.value_prev is None and self.value_post is not None
 
+    @property
     def is_deletion(self) -> bool:
         """
         Checks if the diff message correspond to a deletion
@@ -70,6 +72,7 @@ class DiffMessage:
 
         return self.value_prev is not None and self.value_post is None
 
+    @property
     def is_edition(self) -> bool:
         """
         Checks if the diff message correspond to an edition
