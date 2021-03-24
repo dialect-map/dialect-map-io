@@ -70,7 +70,7 @@ class PubSubReader:
 
         return message.message.publish_time
 
-    def _close(self):
+    def close(self):
         """ Closes the Pubsub connection """
 
         logger.info("Disconnecting from PubSub")
