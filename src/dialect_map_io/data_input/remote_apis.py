@@ -8,7 +8,7 @@ from abc import abstractmethod
 from requests import Response
 
 
-class BaseAPIInput(ABC):
+class BaseInputAPI(ABC):
     """ Interface for the API data input classes """
 
     @abstractmethod
@@ -22,8 +22,8 @@ class BaseAPIInput(ABC):
         raise NotImplementedError()
 
 
-class ArxivAPI(BaseAPIInput):
-    """ Class for the ArXiv API input data retrieval """
+class ArxivInputAPI(BaseInputAPI):
+    """ Class for the ArXiv API data retrieval """
 
     def __init__(self, base_url: str, wait_secs: int = 3):
         """
