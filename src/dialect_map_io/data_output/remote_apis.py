@@ -14,7 +14,7 @@ from ..auth import DummyAuthenticator
 logger = logging.getLogger()
 
 
-class BaseAPIOutput(ABC):
+class BaseOutputAPI(ABC):
     """ Interface for the API data output classes """
 
     @abstractmethod
@@ -39,8 +39,8 @@ class BaseAPIOutput(ABC):
         raise NotImplementedError()
 
 
-class DialectMapAPI(BaseAPIOutput):
-    """ Class for the data persistence Dialect Map API """
+class RestOutputAPI(BaseOutputAPI):
+    """ Class for sending data to REST APIs """
 
     def __init__(self, base_url: str, auth_ctl: BaseAuthenticator = None):
         """
