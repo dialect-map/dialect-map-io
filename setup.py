@@ -18,6 +18,7 @@ INSTALLATION_REQS = [
     "feedparser==6.0.2",
     "pdfminer.six==20201018",
     "requests==2.25.1",
+    "dateutil"
 ]
 
 # Development requirements
