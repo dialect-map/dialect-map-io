@@ -5,6 +5,7 @@ import re
 
 from abc import ABC
 from abc import abstractmethod
+import dateutil.parser
 from datetime import datetime
 from datetime import timezone
 from feedparser import FeedParserDict
@@ -65,8 +66,7 @@ class ArxivFeedParser(BaseFeedParser):
         """
 
         try:
-            off_date = datetime.fromisoformat(date_string)
-            utc_date = datetime.fromtimestamp(off_date.timestamp(), timezone.utc)
+            utc_date = dateutil.parser.isoparse(date_string)
         except Exception as err:
             logger.error(err)
             raise err
