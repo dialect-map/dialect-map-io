@@ -57,6 +57,20 @@ class RestOutputAPI(BaseOutputAPI):
         self.api_token = auth_ctl.refresh_token()
 
     @staticmethod
+    def _check_response(response: Response):
+        """
+        Checks the status of the response for HTTP 4XX and 5XX codes
+        :param response: raw API response
+        """
+
+        try:
+            response.raise_for_status()
+        except requests.HTTPError:
+            logger.error(f"The API response does not have a valid HTTP code")
+            logger.error(f"Error: {response.text}")
+            raise ConnectionError(response.text)
+
+    @staticmethod
     def _decode_response(response: Response) -> dict:
         """
         Decodes the response assuming a serialized JSON
@@ -67,10 +81,11 @@ class RestOutputAPI(BaseOutputAPI):
         try:
             json = response.json()
         except ValueError:
-            logger.warning("The API did not respond with a valid JSON")
-            json = {"response": response}
-
-        return json
+            logger.error(f"The API response does not contains a valid JSON")
+            logger.error(f"Response: {response.text}")
+            raise
+        else:
+            return json
 
     def _perform_request(self, func: Callable, api_path: str, api_data: dict) -> Response:
         """
@@ -92,7 +107,7 @@ class RestOutputAPI(BaseOutputAPI):
             json=api_data,
         )
 
-        response.raise_for_status()
+        self._check_response(response)
         return response
 
     def _refresh_token(self) -> None:
