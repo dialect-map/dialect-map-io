@@ -10,6 +10,7 @@ from datetime import timezone
 from feedparser import FeedParserDict
 from feedparser import parse as feed_parse
 from typing import List
+from urllib import parse
 
 from ..models import ArxivFeedHeader
 from ..models import ArxivFeedEntry
@@ -91,7 +92,7 @@ class ArxivFeedParser(BaseFeedParser):
         :return: link URLs
         """
 
-        return [link.href for link in link_entries]
+        return [parse.unquote(link.href) for link in link_entries]
 
     def _extract_id(self, entry_id: str) -> str:
         """
