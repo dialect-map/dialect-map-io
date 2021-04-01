@@ -10,6 +10,7 @@ from datetime import timezone
 from feedparser import FeedParserDict
 from feedparser import parse as feed_parse
 from typing import List
+from urllib import parse
 
 from ..models import ArxivFeedHeader
 from ..models import ArxivFeedEntry
@@ -65,7 +66,7 @@ class ArxivFeedParser(BaseFeedParser):
         """
 
         try:
-            off_date = datetime.fromisoformat(date_string)
+            off_date = datetime.fromisoformat(date_string.replace("Z", "+00:00"))
             utc_date = datetime.fromtimestamp(off_date.timestamp(), timezone.utc)
         except Exception as err:
             logger.error(err)
@@ -91,7 +92,7 @@ class ArxivFeedParser(BaseFeedParser):
         :return: link URLs
         """
 
-        return [link.href for link in link_entries]
+        return [parse.unquote(link.href) for link in link_entries]
 
     def _extract_id(self, entry_id: str) -> str:
         """

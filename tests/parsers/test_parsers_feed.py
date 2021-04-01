@@ -51,19 +51,19 @@ def arxiv_entry() -> ArxivFeedEntry:
 def test_arxiv_header_parse(arxiv_header: ArxivFeedHeader):
     """
     Tests the correct parsing of the Arxiv feed headers fields
-    :param feed_header: feed header object
+    :param arxiv_header: feed header object
     """
 
-    assert arxiv_header.query_id == "http://arxiv.org/api/cHxbiOdZaP56ODnBPIenZhzg5f8"
+    assert arxiv_header.query_id == "http://arxiv.org/api/vBQMi2rCJvODLLmHWAdImdorN/8"
     assert arxiv_header.query_url == (
-        "http://arxiv.org/api/query?search_query=all:electron"
-        "&id_list="
+        "http://arxiv.org/api/query?search_query="
+        "&id_list=hep-ex/0307015"
         "&start=0"
-        "&max_results=1"
+        "&max_results=10"
     )
 
     assert arxiv_header.results_ts == datetime.combine(
-        date=date(2007, 10, 8),
+        date=date(2021, 3, 25),
         time=time(00, 00, 00),
         tzinfo=timezone(timedelta(hours=-4)),
     )
@@ -76,7 +76,8 @@ def test_arxiv_entries_parse(arxiv_entry: ArxivFeedEntry):
     """
 
     assert arxiv_entry.paper_id == "hep-ex/0307015"
-    assert arxiv_entry.paper_rev == "1"
+    assert arxiv_entry.paper_rev == "v1"
+    assert arxiv_entry.paper_doi == "10.1140/epjc/s2003-01326-x"
     assert arxiv_entry.paper_category == "hep-ex"
     assert arxiv_entry.paper_title == (
         "Multi-Electron Production at High Transverse Momenta in ep Collisions at HERA"
@@ -91,14 +92,14 @@ def test_arxiv_entries_parse(arxiv_entry: ArxivFeedEntry):
 
     assert arxiv_entry.paper_created_at == datetime.combine(
         date=date(2003, 7, 7),
-        time=time(13, 46, 40),
-        tzinfo=timezone(timedelta(hours=-4)),
+        time=time(17, 46, 40),
+        tzinfo=timezone.utc,
     )
 
     assert arxiv_entry.paper_updated_at == datetime.combine(
-        date=date(2003, 7, 8),
-        time=time(13, 46, 40),
-        tzinfo=timezone(timedelta(hours=-4)),
+        date=date(2003, 7, 7),
+        time=time(17, 46, 40),
+        tzinfo=timezone.utc,
     )
 
 
@@ -120,6 +121,7 @@ def test_arxiv_entries_links_parse(arxiv_entry: ArxivFeedEntry):
     """
 
     assert arxiv_entry.paper_links == [
+        ArxivFeedEntryLink("http://dx.doi.org/10.1140/epjc/s2003-01326-x", "text/html"),
         ArxivFeedEntryLink("http://arxiv.org/abs/hep-ex/0307015v1", "text/html"),
         ArxivFeedEntryLink("http://arxiv.org/pdf/hep-ex/0307015v1", "application/pdf"),
     ]
