@@ -65,7 +65,7 @@ class ArxivFeedParser(BaseFeedParser):
         """
 
         try:
-            off_date = datetime.fromisoformat(date_string)
+            off_date = datetime.fromisoformat(date_string.replace("Z", "+00:00"))
             utc_date = datetime.fromtimestamp(off_date.timestamp(), timezone.utc)
         except Exception as err:
             logger.error(err)
