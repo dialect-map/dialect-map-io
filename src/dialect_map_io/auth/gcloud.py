@@ -1,33 +1,26 @@
 # -*- coding: utf-8 -*-
 
-from google.oauth2.service_account import IDTokenCredentials
+from google.auth.credentials import Credentials as BaseCredentials
 from google.auth.transport.requests import Request
-from google.auth.credentials import Credentials
+from google.oauth2.service_account import Credentials
+from google.oauth2.service_account import IDTokenCredentials
 
 from .base import BaseAuthenticator
 
 
-class OpenIDAuthenticator(BaseAuthenticator):
-    """
-    Class implementing the OpenID Connect authentication protocol with GCP
-    Protocol reference: https://openid.net/connect/
-    GCP documentation: https://google-auth.readthedocs.io/en/latest/index.html
-    """
+class GCPAuthenticator(BaseAuthenticator):
+    """ Class defining GCP authentication basic methods """
 
-    def __init__(self, key_path: str, target_url: str):
+    def __init__(self, credentials: BaseCredentials):
         """
-        Initiates a IDTokenCredentials object using a Service Account key
-        :param key_path: path to the Service Account key
-        :param target_url: URL authenticating against
+        Initiates the class with a provided Credentials object
+        :param credentials: the provided Credentials object
         """
 
-        self._credentials = IDTokenCredentials.from_service_account_file(
-            filename=key_path,
-            target_audience=target_url,
-        )
+        self._credentials = credentials
 
     @property
-    def credentials(self) -> Credentials:
+    def credentials(self) -> BaseCredentials:
         """
         Credentials holding entity
         :return: Google Cloud credentials object
@@ -51,3 +44,41 @@ class OpenIDAuthenticator(BaseAuthenticator):
 
         self._credentials.refresh(Request())
         return self._credentials.token
+
+
+class DefaultAuthenticator(GCPAuthenticator):
+    """ Class implementing the default Service Account authentication with GCP """
+
+    def __init__(self, key_path: str):
+        """
+        Initiates a Credentials object using a Service Account key
+        :param key_path: path to the Service Account key
+        """
+
+        super().__init__(
+            Credentials.from_service_account_file(
+                filename=key_path,
+            )
+        )
+
+
+class OpenIDAuthenticator(GCPAuthenticator):
+    """
+    Class implementing the OpenID Connect authentication protocol with GCP
+    Protocol reference: https://openid.net/connect/
+    GCP documentation: https://google-auth.readthedocs.io/en/latest/index.html
+    """
+
+    def __init__(self, key_path: str, target_url: str):
+        """
+        Initiates a IDTokenCredentials object using a Service Account key
+        :param key_path: path to the Service Account key
+        :param target_url: URL authenticating against
+        """
+
+        super().__init__(
+            IDTokenCredentials.from_service_account_file(
+                filename=key_path,
+                target_audience=target_url,
+            )
+        )
