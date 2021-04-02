@@ -3,7 +3,9 @@
 import logging
 
 from datetime import datetime
+from datetime import timezone
 from typing import List
+
 from google.cloud.pubsub_v1 import SubscriberClient
 from google.pubsub_v1.types import ReceivedMessage
 
@@ -65,10 +67,13 @@ class PubSubReader:
         """
         Parses a Pub/Sub high level message, getting its publish time
         :param message: high level Pub/Sub message
-        :return: message publish time
+        :return: message publish time (UTC)
         """
 
-        return message.message.publish_time
+        str_date = message.message.publish_time.rfc3339()
+        off_date = datetime.fromisoformat(str_date.replace("Z", "+00:00"))
+        utc_date = datetime.fromtimestamp(off_date.timestamp(), timezone.utc)
+        return utc_date
 
     def close(self):
         """ Closes the Pubsub connection """
