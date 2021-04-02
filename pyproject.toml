@@ -1,4 +1,4 @@
-# File containing Black formatting options
+# Black formatting options
 [tool.black]
 line-length = 100
 target-version = ['py37']
@@ -19,3 +19,9 @@ exclude = '''
   )/
 )
 '''
+
+# Pytest available markers
+[tool.pytest.ini_options]
+markers = [
+    "gcp: Google Cloud SDK dependent tests",
+]
