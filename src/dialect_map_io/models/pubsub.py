@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from dataclasses import dataclass
+from dataclasses import fields
 from datetime import datetime
 from typing import Any
 from typing import Dict
@@ -27,6 +28,15 @@ class DiffMessage:
     value_post: Any
     source_file: str
     created_at: datetime
+
+    @classmethod
+    def fields(cls) -> set:
+        """
+        Returns a set with the dataclass field names
+        :return: set with the dataclass field names
+        """
+
+        return {f.name for f in fields(cls)}
 
     @classmethod
     def from_pubsub(cls, message: dict):
