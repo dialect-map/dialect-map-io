@@ -32,6 +32,19 @@ Project testing is performed using [Pytest][pytest-web]. In order to run the tes
 make test
 ```
 
+In addition to the common _unit-tests_, there are specific groups of tests that require
+non Python tools to be installed first. Those tests have been _marked_ using Pytest so that
+they are not run by default.
+
+The complete list of _markers_ is defined within the [pyproject.toml][pyproject-file] file.
+
+To run a particular group of tests, set the `TESTS_MARKERS` environment variable to the name
+of the desirable _marked group_ to run, or set it empty for full execution. Example:
+```sh
+export TESTS_MARKERS=""
+make test
+```
+
 
 ### Tagging
 Commits can be tagged to create _informal_ releases of the package. In order to do so:
@@ -43,5 +56,6 @@ Commits can be tagged to create _informal_ releases of the package. In order to 
 [black-web]: https://black.readthedocs.io/en/stable/
 [dialect-map-api-private]: https://github.com/dialect-map/dialect-map-private-api
 [dialect-map-main]: https://github.com/dialect-map/dialect-map
+[pyproject-file]: pyproject.toml
 [pytest-web]: https://docs.pytest.org/en/latest/#
 [semantic-web]: https://semver.org/
