@@ -85,6 +85,7 @@ class PubSubReader:
         str_date = message.message.publish_time.rfc3339()
         off_date = datetime.fromisoformat(str_date.replace("Z", "+00:00"))
         utc_date = datetime.fromtimestamp(off_date.timestamp(), timezone.utc)
+
         return utc_date
 
     def close(self):
@@ -118,8 +119,10 @@ class PubSubReader:
         :return: number of messages acknowledged
         """
 
-        ack_ids = []
+        if len(messages) == 0:
+            return 0
 
+        ack_ids = []
         for message in messages:
             logger.info(f"Acknowledging ID: {message.ack_id}")
             ack_ids.append(message.ack_id)

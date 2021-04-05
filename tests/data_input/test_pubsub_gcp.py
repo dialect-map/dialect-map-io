@@ -59,6 +59,17 @@ class TestPubSubReader:
         assert reader.get_message_data(messages[0]) == msg_data
         assert reader.get_message_metadata(messages[0]) == msg_meta
 
+    def test_pull_no_messages(self, reader: PubSubReader):
+        """
+        Tests the correct handling of the no-more-messages scenario
+        :param reader: Pub/Sub reader
+        """
+
+        messages = reader.pull_messages(10)
+        ________ = reader.ack_messages(messages)
+
+        assert len(messages) == 0
+
     def test_ack_messages(self, reader: PubSubReader):
         """
         Tests the correct acknowledgement of pulled messages
