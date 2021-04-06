@@ -35,10 +35,9 @@ jobs:
 
   test:
     needs: [check]
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
     strategy:
       matrix:
-        os: [ubuntu-latest, macos-latest]
         python-version: [3.7, 3.8]
     steps:
     - name: "Set up GitHub Actions"
