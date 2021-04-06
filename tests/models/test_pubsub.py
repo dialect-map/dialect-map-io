@@ -26,7 +26,7 @@ def test_diff_message_pubsub_init_success():
 
     created = datetime.utcnow()
     message = {
-        "container": [],
+        "container": {},
         "fieldName": "example",
         "valuePrev": 5,
         "valuePost": 10,
@@ -36,7 +36,7 @@ def test_diff_message_pubsub_init_success():
 
     diff_msg = DiffMessage.from_pubsub(message)
 
-    assert diff_msg.container == []
+    assert diff_msg.container == {}
     assert diff_msg.field_name == "example"
     assert diff_msg.value_prev == 5
     assert diff_msg.value_post == 10

@@ -6,6 +6,7 @@ from datetime import datetime
 from datetime import timezone
 from typing import List
 
+from google.api_core.exceptions import DeadlineExceeded
 from google.cloud.pubsub_v1 import SubscriberClient
 from google.pubsub_v1.types import ReceivedMessage
 
@@ -85,6 +86,7 @@ class PubSubReader:
         str_date = message.message.publish_time.rfc3339()
         off_date = datetime.fromisoformat(str_date.replace("Z", "+00:00"))
         utc_date = datetime.fromtimestamp(off_date.timestamp(), timezone.utc)
+
         return utc_date
 
     def close(self):
@@ -100,14 +102,24 @@ class PubSubReader:
         :return: list of messages
         """
 
-        response = self.pubsub_client.pull(
-            subscription=self.messages_path,
-            max_messages=num_messages,
-            timeout=self.timeout_secs,
-        )
-
-        messages = response.received_messages
-        logger.info(f"Received {len(messages)} new messages")
+        ### NOTE:
+        ### To allow a <20 seconds timeout, the pull operation needs to be wrapped
+        ### around a try-except block (until DeadlineExceeded exception is better handled)
+        ###
+        ### Ref: https://github.com/googleapis/google-cloud-python/issues/9390
+        ### Ref: https://github.com/googleapis/python-pubsub/issues/343
+        try:
+            response = self.pubsub_client.pull(
+                subscription=self.messages_path,
+                max_messages=num_messages,
+                timeout=self.timeout_secs,
+            )
+        except DeadlineExceeded:
+            messages = []  # type: ignore
+            logger.info(f"Received {len(messages)} new messages")
+        else:
+            messages = response.received_messages
+            logger.info(f"Received {len(messages)} new messages")
 
         return messages
 
@@ -118,8 +130,10 @@ class PubSubReader:
         :return: number of messages acknowledged
         """
 
-        ack_ids = []
+        if len(messages) == 0:
+            return 0
 
+        ack_ids = []
         for message in messages:
             logger.info(f"Acknowledging ID: {message.ack_id}")
             ack_ids.append(message.ack_id)
