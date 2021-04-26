@@ -7,7 +7,7 @@ from src.dialect_map_io.models import DiffMessage
 
 
 def test_diff_message_default_init_error():
-    """ Checks the default creation of a Diff Message object """
+    """Checks the default creation of a Diff Message object"""
 
     init_args = {
         "container": [],
@@ -22,7 +22,7 @@ def test_diff_message_default_init_error():
 
 
 def test_diff_message_pubsub_init_success():
-    """ Checks the creation of a Diff Message object from a Pub/Sub message """
+    """Checks the creation of a Diff Message object from a Pub/Sub message"""
 
     created = datetime.utcnow()
     message = {
@@ -45,7 +45,7 @@ def test_diff_message_pubsub_init_success():
 
 
 def test_diff_message_pubsub_init_error():
-    """ Checks the creation of a Diff Message object from a Pub/Sub message """
+    """Checks the creation of a Diff Message object from a Pub/Sub message"""
 
     message = {}
     assert pytest.raises(KeyError, DiffMessage.from_pubsub, message)
