@@ -56,7 +56,7 @@ class DiffMessage:
         )
 
     def __post_init__(self):
-        """ Checks the provided previous and posterior values consistency """
+        """Checks the provided previous and posterior values consistency"""
 
         if self.value_prev is None and self.value_post is None:
             raise ValueError("Invalid value change. Both values are NULL")

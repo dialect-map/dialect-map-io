@@ -14,12 +14,12 @@ from .__utils import check_extension
 
 
 class BaseTextParser(ABC):
-    """ Interface for the text parser classes """
+    """Interface for the text parser classes"""
 
     @property
     @abstractmethod
     def extension(self):
-        """ File extension for a particular parser """
+        """File extension for a particular parser"""
 
         raise NotImplementedError()
 
@@ -35,7 +35,7 @@ class BaseTextParser(ABC):
 
 
 class PDFTextParser(BaseTextParser):
-    """ Class for parsing and extracting text from PDF files """
+    """Class for parsing and extracting text from PDF files"""
 
     extension = ".pdf"
 
@@ -102,7 +102,7 @@ class PDFTextParser(BaseTextParser):
 
 
 class TXTTextParser(BaseTextParser):
-    """ Class for parsing and extracting text from TXT files """
+    """Class for parsing and extracting text from TXT files"""
 
     extension = ".txt"
 

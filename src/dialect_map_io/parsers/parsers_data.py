@@ -9,12 +9,12 @@ from .__utils import check_extension
 
 
 class BaseDataParser(ABC):
-    """ Interface for the data parser classes """
+    """Interface for the data parser classes"""
 
     @property
     @abstractmethod
     def extension(self):
-        """ File extension for a particular parser """
+        """File extension for a particular parser"""
 
         raise NotImplementedError()
 

@@ -4,7 +4,7 @@ from .base import BaseAuthenticator
 
 
 class DummyAuthenticator(BaseAuthenticator):
-    """ Class defining a dummy authentication (useful when the API is public) """
+    """Class defining a dummy authentication (useful when the API is public)"""
 
     @property
     def credentials(self) -> object:

@@ -21,7 +21,7 @@ logger = logging.getLogger()
 
 
 class BaseFeedParser(ABC):
-    """ Interface for the feed string parser classes """
+    """Interface for the feed string parser classes"""
 
     @abstractmethod
     def parse_header(self, feed: str) -> ArxivFeedHeader:
@@ -52,7 +52,7 @@ class ArxivFeedParser(BaseFeedParser):
     """
 
     def __init__(self):
-        """ Initializes the Arxiv feed parser object """
+        """Initializes the Arxiv feed parser object"""
 
         self.entry_id_prefix = re.compile(r"http://arxiv.org/abs/")
         self.entry_id_suffix = re.compile(r"v\d+")

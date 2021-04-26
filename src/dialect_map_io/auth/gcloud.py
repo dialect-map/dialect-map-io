@@ -9,7 +9,7 @@ from .base import BaseAuthenticator
 
 
 class GCPAuthenticator(BaseAuthenticator):
-    """ Class defining GCP authentication basic methods """
+    """Class defining GCP authentication basic methods"""
 
     def __init__(self, credentials: BaseCredentials):
         """
@@ -47,7 +47,7 @@ class GCPAuthenticator(BaseAuthenticator):
 
 
 class DefaultAuthenticator(GCPAuthenticator):
-    """ Class implementing the default Service Account authentication with GCP """
+    """Class implementing the default Service Account authentication with GCP"""
 
     def __init__(self, key_path: str):
         """

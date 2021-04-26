@@ -15,7 +15,7 @@ logger = logging.getLogger()
 
 
 class BaseOutputAPI(ABC):
-    """ Interface for the API data output classes """
+    """Interface for the API data output classes"""
 
     @abstractmethod
     def create_record(self, api_path: str, record: dict) -> dict:
@@ -40,7 +40,7 @@ class BaseOutputAPI(ABC):
 
 
 class RestOutputAPI(BaseOutputAPI):
-    """ Class for sending data to REST APIs """
+    """Class for sending data to REST APIs"""
 
     def __init__(self, base_url: str, auth_ctl: BaseAuthenticator = None):
         """

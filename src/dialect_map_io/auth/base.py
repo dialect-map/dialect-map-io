@@ -5,12 +5,12 @@ from abc import abstractmethod
 
 
 class BaseAuthenticator(ABC):
-    """ Interface for the API authenticator classes """
+    """Interface for the API authenticator classes"""
 
     @property
     @abstractmethod
     def credentials(self):
-        """ Credentials holding entity """
+        """Credentials holding entity"""
 
         raise NotImplementedError()
 

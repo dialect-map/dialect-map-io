@@ -10,7 +10,7 @@ from ..parsers import TXTTextParser
 
 
 class LocalDataFile:
-    """ Class containing the contents of a data file """
+    """Class containing the contents of a data file"""
 
     def __init__(self, file_path: str, data_parser: BaseDataParser):
         """
@@ -36,7 +36,7 @@ class LocalDataFile:
 
 
 class LocalTextFile:
-    """ Class containing the contents of a text file """
+    """Class containing the contents of a text file"""
 
     def __init__(self, file_path: str, text_parser: BaseTextParser):
         """
@@ -59,7 +59,7 @@ class LocalTextFile:
 
 
 class LocalJSONFile(LocalDataFile):
-    """ Class containing the contents of a JSON file """
+    """Class containing the contents of a JSON file"""
 
     def __init__(self, file_path: str):
         """
@@ -71,7 +71,7 @@ class LocalJSONFile(LocalDataFile):
 
 
 class LocalPDFFile(LocalTextFile):
-    """ Class containing the contents of a PDF file """
+    """Class containing the contents of a PDF file"""
 
     def __init__(self, file_path: str):
         """
@@ -83,7 +83,7 @@ class LocalPDFFile(LocalTextFile):
 
 
 class LocalTXTFile(LocalTextFile):
-    """ Class containing the contents of a TXT file """
+    """Class containing the contents of a TXT file"""
 
     def __init__(self, file_path: str):
         """

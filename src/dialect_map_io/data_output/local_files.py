@@ -8,7 +8,7 @@ from typing import Any
 
 
 class BaseFileWriter(ABC):
-    """ Interface for the data-output file writer classes """
+    """Interface for the data-output file writer classes"""
 
     @abstractmethod
     def write_file(self, file_path: str, content: Any) -> None:
@@ -22,7 +22,7 @@ class BaseFileWriter(ABC):
 
 
 class JSONFileWriter(BaseFileWriter):
-    """ Class to write JSON-style content in a local file """
+    """Class to write JSON-style content in a local file"""
 
     def __init__(self, encoding: str = "UTF-8", **json_kwargs):
         """
@@ -49,7 +49,7 @@ class JSONFileWriter(BaseFileWriter):
 
 
 class TextFileWriter(BaseFileWriter):
-    """ Class to write text content in a local file """
+    """Class to write text content in a local file"""
 
     def __init__(self, encoding: str = "UTF-8"):
         """

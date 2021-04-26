@@ -90,7 +90,7 @@ class PubSubReader:
         return utc_date
 
     def close(self):
-        """ Closes the Pubsub connection """
+        """Closes the Pubsub connection"""
 
         logger.info("Disconnecting from PubSub")
         self.pubsub_client.close()

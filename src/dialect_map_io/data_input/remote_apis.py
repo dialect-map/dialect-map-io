@@ -9,7 +9,7 @@ from requests import Response
 
 
 class BaseInputAPI(ABC):
-    """ Interface for the API data input classes """
+    """Interface for the API data input classes"""
 
     @abstractmethod
     def request_paper(self, paper_id: str) -> str:
@@ -23,7 +23,7 @@ class BaseInputAPI(ABC):
 
 
 class ArxivInputAPI(BaseInputAPI):
-    """ Class for the ArXiv API data retrieval """
+    """Class for the ArXiv API data retrieval"""
 
     def __init__(self, base_url: str, wait_secs: int = 3):
         """
