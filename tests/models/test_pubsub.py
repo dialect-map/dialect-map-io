@@ -3,7 +3,7 @@
 import pytest
 
 from datetime import datetime
-from src.dialect_map_io.models import DiffMessage
+from src.dialect_map_gcp.models import DiffMessage
 
 
 def test_diff_message_default_init_error():
