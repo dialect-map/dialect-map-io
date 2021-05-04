@@ -10,8 +10,8 @@ from google.api_core.exceptions import DeadlineExceeded
 from google.cloud.pubsub_v1 import SubscriberClient
 from google.pubsub_v1.types import ReceivedMessage
 
-from ..auth import BaseAuthenticator
-from ..auth import DummyAuthenticator
+from dialect_map_io.auth import BaseAuthenticator
+from dialect_map_io.auth import DummyAuthenticator
 
 logger = logging.getLogger()
 
