@@ -17,7 +17,7 @@ DM_CATEGORY_MEMBER_ROUTE = APIRoute(
 )
 DM_CATEGORY_METRICS_ROUTE = APIRoute(
     api_name="dialect-map",
-    api_path="/category/metrics",
+    api_path="/category-metrics",
     model_name="JargonCategoryMetrics",
 )
 
@@ -50,7 +50,7 @@ DM_PAPER_AUTHOR_ROUTE = APIRoute(
 )
 DM_PAPER_METRICS_ROUTE = APIRoute(
     api_name="dialect-map",
-    api_path="/paper/metrics",
+    api_path="/paper-metrics",
     model_name="JargonPaperMetrics",
 )
 
