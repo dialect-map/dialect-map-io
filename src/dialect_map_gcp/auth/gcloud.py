@@ -5,7 +5,7 @@ from google.auth.transport.requests import Request
 from google.oauth2.service_account import Credentials
 from google.oauth2.service_account import IDTokenCredentials
 
-from .base import BaseAuthenticator
+from dialect_map_io.auth import BaseAuthenticator
 
 
 class GCPAuthenticator(BaseAuthenticator):

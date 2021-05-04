@@ -4,7 +4,7 @@ import pytest
 import time
 
 from google.cloud.pubsub_v1 import PublisherClient
-from src.dialect_map_io import PubSubReader
+from src.dialect_map_gcp import PubSubReader
 
 from .conftest import PUBSUB_PROJECT
 from .conftest import PUBSUB_TOPIC
