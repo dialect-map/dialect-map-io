@@ -3,7 +3,6 @@
 from dataclasses import dataclass
 from dataclasses import fields
 from datetime import datetime
-from typing import Any
 from typing import Dict
 from typing import List
 from typing import Union
@@ -24,8 +23,8 @@ class DiffMessage:
 
     container: Union[Dict, List]
     field_name: str
-    value_prev: Any
-    value_post: Any
+    value_prev: object
+    value_post: object
     source_file: str
     created_at: datetime
 

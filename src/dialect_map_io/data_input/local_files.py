@@ -28,7 +28,7 @@ class LocalDataFile:
         :return: deeper-level object
         """
 
-        if type(self.content) != list:
+        if not isinstance(self.content, list):
             raise ValueError("The data file must be a top-level array")
 
         for item in self.content:

@@ -3,7 +3,6 @@
 from abc import ABC
 from abc import abstractmethod
 from json import JSONDecoder
-from typing import Any
 
 from .__utils import check_extension
 
@@ -19,7 +18,7 @@ class BaseDataParser(ABC):
         raise NotImplementedError()
 
     @abstractmethod
-    def parse_file(self, file_path: str) -> Any:
+    def parse_file(self, file_path: str) -> object:
         """
         Parses the provided data containing file
         :param file_path: path to the target file
@@ -29,7 +28,7 @@ class BaseDataParser(ABC):
         raise NotImplementedError()
 
     @abstractmethod
-    def parse_bytes(self, encoded_str: bytes) -> Any:
+    def parse_bytes(self, encoded_str: bytes) -> object:
         """
         Parses the provided bytes encoded JSON
         :param encoded_str: bytes encoded JSON
@@ -39,7 +38,7 @@ class BaseDataParser(ABC):
         raise NotImplementedError()
 
     @abstractmethod
-    def parse_str(self, encoded_str: str) -> Any:
+    def parse_str(self, encoded_str: str) -> object:
         """
         Parses the provided string encoded data
         :param encoded_str: string encoded data
@@ -68,7 +67,7 @@ class JSONDataParser(BaseDataParser):
 
         self.decoder = JSONDecoder(**decoder_args)
 
-    def parse_file(self, file_path: str) -> Any:
+    def parse_file(self, file_path: str) -> object:
         """
         Parses the provided JSON data file
         :param file_path: path to the target file
@@ -83,7 +82,7 @@ class JSONDataParser(BaseDataParser):
 
         return self.decoder.decode(contents)
 
-    def parse_bytes(self, encoded_str: bytes) -> Any:
+    def parse_bytes(self, encoded_str: bytes) -> object:
         """
         Parses the provided bytes encoded JSON
         :param encoded_str: bytes encoded JSON
@@ -93,7 +92,7 @@ class JSONDataParser(BaseDataParser):
         string = encoded_str.decode("UTF-8")
         return self.decoder.decode(string)
 
-    def parse_str(self, encoded_str: str) -> Any:
+    def parse_str(self, encoded_str: str) -> object:
         """
         Parses the provided string encoded JSON
         :param encoded_str: string encoded JSON

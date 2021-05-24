@@ -4,14 +4,13 @@ import json
 
 from abc import ABC
 from abc import abstractmethod
-from typing import Any
 
 
 class BaseFileWriter(ABC):
     """Interface for the data-output file writer classes"""
 
     @abstractmethod
-    def write_file(self, file_path: str, content: Any) -> None:
+    def write_file(self, file_path: str, content: object) -> None:
         """
         Writes into the provided content into the target file
         :param file_path: path to the writable file
@@ -37,7 +36,7 @@ class JSONFileWriter(BaseFileWriter):
         self.file_encoding = encoding
         self.json_kwargs = json_kwargs
 
-    def write_file(self, file_path: str, content: Any) -> None:
+    def write_file(self, file_path: str, content: object) -> None:
         """
         Writes into the provided content string into the target file
         :param file_path: path to the writable file
@@ -59,12 +58,15 @@ class TextFileWriter(BaseFileWriter):
 
         self.file_encoding = encoding
 
-    def write_file(self, file_path: str, content: str) -> None:
+    def write_file(self, file_path: str, content: object) -> None:
         """
         Writes into the provided content string into the target file
         :param file_path: path to the writable file
         :param content: text to write
         """
+
+        if not isinstance(content, str):
+            raise ValueError("The content must be a string")
 
         with open(file_path, "w", encoding=self.file_encoding) as file:
             file.write(content)
