@@ -30,8 +30,8 @@ class BaseDataParser(ABC):
     @abstractmethod
     def parse_bytes(self, encoded_str: bytes) -> object:
         """
-        Parses the provided bytes encoded JSON
-        :param encoded_str: bytes encoded JSON
+        Parses the provided bytes encoded data
+        :param encoded_str: bytes encoded data
         :return: decoded data
         """
 
