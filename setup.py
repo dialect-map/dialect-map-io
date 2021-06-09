@@ -24,7 +24,7 @@ INSTALLATION_REQS = [
 DEVELOPMENT_REQS = [
     "black>=21.4b0",
     "coverage>=5.0.4",
-    "mypy==0.800",
+    "mypy==0.902",
     "pre-commit>=2.13.0",
     "pytest>=6.2.2",
     "pytest-cov>=2.11.1",
