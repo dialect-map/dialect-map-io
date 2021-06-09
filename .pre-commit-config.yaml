@@ -14,11 +14,12 @@ repos:
     hooks:
     -   id: mypy
         name: "Python types analyzer (source)"
-        args: ["--allow-redefinition", "--ignore-missing-imports", "--cache-dir=/dev/null", "src"]
+        args: ["src"]
         language: python
         pass_filenames: false
+        additional_dependencies: ["types-requests ~= 0.1.0"]
     -   id: mypy
         name: "Python types analyzer (tests)"
-        args: ["--allow-redefinition", "--ignore-missing-imports", "--cache-dir=/dev/null", "tests"]
+        args: ["tests"]
         language: python
         pass_filenames: false
