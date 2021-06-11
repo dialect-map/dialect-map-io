@@ -28,6 +28,7 @@ DEVELOPMENT_REQS = [
     "pre-commit>=2.13.0",
     "pytest>=6.2.2",
     "pytest-cov>=2.11.1",
+    "types-requests~=0.1.0",
 ]
 
 # Google Cloud requirements
