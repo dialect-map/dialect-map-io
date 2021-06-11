@@ -3,7 +3,6 @@ COV_CONFIG    = ".coveragerc"
 SOURCE_FOLDER = "src"
 TESTS_FOLDER  = "tests"
 TESTS_PARAMS  = "-p no:cacheprovider --strict-markers"
-TYPING_PARAMS = "--allow-redefinition --ignore-missing-imports --cache-dir=/dev/null"
 
 # Configurable options
 TESTS_MARKERS ?= "'not gcp'"
@@ -15,8 +14,8 @@ check:
 	@black --check $(SOURCE_FOLDER)
 	@black --check $(TESTS_FOLDER)
 	@echo "Checking type annotations"
-	@mypy "$(TYPING_PARAMS)" $(SOURCE_FOLDER)
-	@mypy "$(TYPING_PARAMS)" $(TESTS_FOLDER)
+	@mypy $(SOURCE_FOLDER)
+	@mypy $(TESTS_FOLDER)
 
 
 .PHONY: tag
