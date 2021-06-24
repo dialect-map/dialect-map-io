@@ -34,7 +34,7 @@ DEVELOPMENT_REQS = [
 # Google Cloud requirements
 GOOGLE_CLOUD_REQS = [
     "google-auth==1.24.0",
-    "google-cloud-pubsub==2.4.2",
+    "google-cloud-pubsub==2.6.0",
 ]
 
 # All extra requirements
