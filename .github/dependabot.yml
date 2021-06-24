@@ -19,6 +19,8 @@ updates:
       # Ignore auto-updates on SemVer major releases
       - dependency-name: "*"
         update-types: ["version-update:semver-major"]
+      - dependency-name: "google-*"
+        update-types: ["version-update:semver-major", "version-update:semver-minor"]
     allow:
       - dependency-type: development
       - dependency-type: production
