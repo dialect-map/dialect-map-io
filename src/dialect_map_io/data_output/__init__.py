@@ -6,5 +6,3 @@ from .local_files import TextFileWriter
 
 from .remote_apis import BaseOutputAPI
 from .remote_apis import RestOutputAPI
-
-from .remote_routes import *
