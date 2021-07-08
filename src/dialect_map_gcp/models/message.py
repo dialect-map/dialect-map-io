@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 from dataclasses import dataclass
-from dataclasses import fields
 from datetime import datetime
 from typing import Dict
 from typing import List
@@ -27,15 +26,6 @@ class DiffMessage:
     value_post: object
     source_file: str
     created_at: datetime
-
-    @classmethod
-    def fields(cls) -> set:
-        """
-        Returns a set with the dataclass field names
-        :return: set with the dataclass field names
-        """
-
-        return {f.name for f in fields(cls)}
 
     @classmethod
     def from_pubsub(cls, message: dict):
@@ -64,6 +54,38 @@ class DiffMessage:
             and self.is_edition is False
         ):
             raise ValueError("Invalid diff message")
+
+    def __augment_record(self, record: dict) -> dict:
+        """
+        Augments the provided data record with message level fields
+        :param record: vanilla data record
+        :return: the augmented data record
+        """
+
+        if self.is_creation:
+            record["created_at"] = self.created_at
+
+        return record
+
+    @property
+    def record(self) -> dict:
+        """
+        Returns the data record within a diff operation message.
+        Some fields are inherited from the diff operation message
+        :return: the data record
+        """
+
+        record = None
+
+        if self.is_creation:
+            record = self.value_post
+        if self.is_deletion:
+            record = self.value_prev
+        if self.is_edition:
+            record = self.container
+
+        assert isinstance(record, dict)
+        return self.__augment_record(record)
 
     @property
     def is_creation(self) -> bool:
