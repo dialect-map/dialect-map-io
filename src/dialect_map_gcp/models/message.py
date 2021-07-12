@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 from dataclasses import dataclass
-from dataclasses import fields
 from datetime import datetime
 from typing import Dict
 from typing import List
@@ -29,15 +28,6 @@ class DiffMessage:
     created_at: datetime
 
     @classmethod
-    def fields(cls) -> set:
-        """
-        Returns a set with the dataclass field names
-        :return: set with the dataclass field names
-        """
-
-        return {f.name for f in fields(cls)}
-
-    @classmethod
     def from_pubsub(cls, message: dict):
         """
         Builds a diff message object from a Pub/Sub parsed message
@@ -57,11 +47,45 @@ class DiffMessage:
     def __post_init__(self):
         """Checks the provided previous and posterior values consistency"""
 
-        if self.value_prev is None and self.value_post is None:
-            raise ValueError("Invalid value change. Both values are NULL")
+        if (
+            True
+            and self.is_creation is False
+            and self.is_deletion is False
+            and self.is_edition is False
+        ):
+            raise ValueError("Invalid diff message")
 
-        if self.value_prev == self.value_post:
-            raise ValueError("Invalid value change. Both values are equal")
+    def __augment_record(self, record: dict) -> dict:
+        """
+        Augments the provided data record with message level fields
+        :param record: vanilla data record
+        :return: the augmented data record
+        """
+
+        if self.is_creation:
+            record["created_at"] = self.created_at
+
+        return record
+
+    @property
+    def record(self) -> dict:
+        """
+        Returns the data record within a diff operation message.
+        Some fields are inherited from the diff operation message
+        :return: the data record
+        """
+
+        record = None
+
+        if self.is_creation:
+            record = self.value_post
+        if self.is_deletion:
+            record = self.value_prev
+        if self.is_edition:
+            record = self.container
+
+        assert isinstance(record, dict)
+        return self.__augment_record(record)
 
     @property
     def is_creation(self) -> bool:
@@ -70,7 +94,11 @@ class DiffMessage:
         :return: whether it is a creation
         """
 
-        return self.value_prev is None and self.value_post is not None
+        return (
+            isinstance(self.container, list)
+            and self.value_prev is None
+            and self.value_post is not None
+        )
 
     @property
     def is_deletion(self) -> bool:
@@ -79,7 +107,11 @@ class DiffMessage:
         :return: whether it is a deletion
         """
 
-        return self.value_prev is not None and self.value_post is None
+        return (
+            isinstance(self.container, list)
+            and self.value_prev is not None
+            and self.value_post is None
+        )
 
     @property
     def is_edition(self) -> bool:
@@ -88,4 +120,8 @@ class DiffMessage:
         :return: whether it is a edition
         """
 
-        return self.value_prev is not None and self.value_post is not None
+        return (
+            isinstance(self.container, dict)
+            and self.value_prev is not None
+            and self.value_post is not None
+        )
