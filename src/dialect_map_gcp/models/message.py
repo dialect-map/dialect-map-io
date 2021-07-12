@@ -57,11 +57,13 @@ class DiffMessage:
     def __post_init__(self):
         """Checks the provided previous and posterior values consistency"""
 
-        if self.value_prev is None and self.value_post is None:
-            raise ValueError("Invalid value change. Both values are NULL")
-
-        if self.value_prev == self.value_post:
-            raise ValueError("Invalid value change. Both values are equal")
+        if (
+            True
+            and self.is_creation is False
+            and self.is_deletion is False
+            and self.is_edition is False
+        ):
+            raise ValueError("Invalid diff message")
 
     @property
     def is_creation(self) -> bool:
@@ -70,7 +72,11 @@ class DiffMessage:
         :return: whether it is a creation
         """
 
-        return self.value_prev is None and self.value_post is not None
+        return (
+            isinstance(self.container, list)
+            and self.value_prev is None
+            and self.value_post is not None
+        )
 
     @property
     def is_deletion(self) -> bool:
@@ -79,7 +85,11 @@ class DiffMessage:
         :return: whether it is a deletion
         """
 
-        return self.value_prev is not None and self.value_post is None
+        return (
+            isinstance(self.container, list)
+            and self.value_prev is not None
+            and self.value_post is None
+        )
 
     @property
     def is_edition(self) -> bool:
@@ -88,4 +98,8 @@ class DiffMessage:
         :return: whether it is a edition
         """
 
-        return self.value_prev is not None and self.value_post is not None
+        return (
+            isinstance(self.container, dict)
+            and self.value_prev is not None
+            and self.value_post is not None
+        )
