@@ -22,7 +22,7 @@ INSTALLATION_REQS = [
 
 # Development requirements
 DEVELOPMENT_REQS = [
-    "black>=21.4b0",
+    "black>=21.6b0",
     "coverage>=5.0.4",
     "mypy==0.910",
     "pre-commit>=2.13.0",
