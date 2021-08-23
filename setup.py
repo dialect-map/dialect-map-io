@@ -17,7 +17,7 @@ VERSION = open("VERSION", "r").read().strip()
 INSTALLATION_REQS = [
     "feedparser==6.0.8",
     "pdfminer.six==20201018",
-    "requests==2.25.1",
+    "requests==2.26.0",
 ]
 
 # Development requirements
