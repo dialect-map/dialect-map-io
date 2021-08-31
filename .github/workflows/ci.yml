@@ -1,5 +1,6 @@
 name: Continuous Integration
 
+
 on:
   push:
     branches:
@@ -11,11 +12,30 @@ on:
       - main
     paths-ignore:
       - "**.md"
+  pull_request_target:
+
 
 jobs:
 
+  ### NOTE:
+  ###
+  ### GitHub dependabot cannot access secrets unless workflows are triggered on
+  ### the `pull_request_target` event or "workflows from fork PRs" are allowed (insecure).
+  ###
+  ### Discussion: https://github.community/t/dependabot-doesnt-see-github-actions-secrets/167104
+  ### Reference: https://github.com/dependabot/dependabot-core/issues/3253#issuecomment-797125425
+  ###
   check:
-    needs: []
+    runs-on: ubuntu-latest
+    if: >
+      (github.event_name == 'pull_request_target' && github.actor == 'dependabot[bot]') ||
+      (github.event_name != 'pull_request_target' && github.actor != 'dependabot[bot]')
+    steps:
+    - name: "Print message"
+      run: echo "Valid conditions for the workflow to start"
+
+  lint:
+    needs: [check]
     runs-on: ubuntu-latest
     steps:
     - name: "Set up GitHub Actions"
@@ -34,7 +54,7 @@ jobs:
         make check
 
   test:
-    needs: [check]
+    needs: [lint]
     runs-on: ubuntu-latest
     strategy:
       matrix:
