@@ -13,34 +13,27 @@ AUTHORS = "NYU DS3 Team"
 VERSION = open("VERSION", "r").read().strip()
 
 
-# Installation requirements
+# Package requirements
 INSTALLATION_REQS = [
     "feedparser==6.0.8",
     "pdfminer.six==20201018",
     "requests==2.26.0",
 ]
 
-# Development requirements
-DEVELOPMENT_REQS = [
-    "black>=21.6b0",
-    "coverage>=5.0.4",
-    "mypy==0.910",
-    "pre-commit>=2.13.0",
-    "pytest>=6.2.2",
-    "pytest-cov>=2.11.1",
-    "types-requests>=0.1,<2.26",
-]
-
-# Google Cloud requirements
 GOOGLE_CLOUD_REQS = [
     "google-auth==1.24.0",
     "google-cloud-pubsub==2.4.2",
 ]
 
-# All extra requirements
-ALL_EXTRA_DEPS = [
-    *DEVELOPMENT_REQS,
-    *GOOGLE_CLOUD_REQS,
+LINTING_REQS = [
+    "black>=21.6b0",
+    "mypy>=0.910",
+    "types-requests>=0.1,<2.26",
+]
+
+TESTING_REQS = [
+    "pytest>=6.2.2",
+    "pytest-cov>=2.11.1",
 ]
 
 
@@ -56,9 +49,14 @@ setup(
     include_package_data=True,
     install_requires=INSTALLATION_REQS,
     extras_require={
-        "all": ALL_EXTRA_DEPS,
-        "dev": DEVELOPMENT_REQS,
         "gcp": GOOGLE_CLOUD_REQS,
+        "lint": LINTING_REQS,
+        "test": TESTING_REQS,
+        "all": [
+            *GOOGLE_CLOUD_REQS,
+            *LINTING_REQS,
+            *TESTING_REQS,
+        ],
     },
     license="MIT",
     classifiers=[
