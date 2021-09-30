@@ -4,9 +4,6 @@ from typing import Generator
 
 from ..parsers import BaseDataParser
 from ..parsers import BaseTextParser
-from ..parsers import JSONDataParser
-from ..parsers import PDFTextParser
-from ..parsers import TXTTextParser
 
 
 class LocalDataFile:
@@ -56,39 +53,3 @@ class LocalTextFile:
 
         for line in self.content.splitlines():
             yield line
-
-
-class LocalJSONFile(LocalDataFile):
-    """Class containing the contents of a JSON file"""
-
-    def __init__(self, file_path: str):
-        """
-        Initializes the object with a JSON parser
-        :param file_path: path to the JSON file
-        """
-
-        super().__init__(file_path, JSONDataParser())
-
-
-class LocalPDFFile(LocalTextFile):
-    """Class containing the contents of a PDF file"""
-
-    def __init__(self, file_path: str):
-        """
-        Initializes the object with a PDF parser
-        :param file_path: path to the PDF file
-        """
-
-        super().__init__(file_path, PDFTextParser())
-
-
-class LocalTXTFile(LocalTextFile):
-    """Class containing the contents of a TXT file"""
-
-    def __init__(self, file_path: str):
-        """
-        Initializes the object with a TXT parser
-        :param file_path: path to the TXT file
-        """
-
-        super().__init__(file_path, TXTTextParser())
