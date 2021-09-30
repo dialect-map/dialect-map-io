@@ -89,6 +89,20 @@ class PubSubReader:
 
         return utc_date
 
+    def _ack_messages(self, ack_ids: List[str]) -> None:
+        """
+        Acknowledges the received message ACK IDs
+        :param ack_ids: list of received ACK IDs
+        """
+
+        for ack_id in ack_ids:
+            logger.info(f"Acknowledging ID: {ack_id}")
+
+        self.pubsub_client.acknowledge(
+            subscription=self.messages_path,
+            ack_ids=ack_ids,
+        )
+
     def close(self):
         """Closes the Pubsub connection"""
 
@@ -130,17 +144,10 @@ class PubSubReader:
         :return: number of messages acknowledged
         """
 
-        if len(messages) == 0:
-            return 0
+        ack_ids = [message.ack_id for message in messages]
+        num_ids = len(ack_ids)
 
-        ack_ids = []
-        for message in messages:
-            logger.info(f"Acknowledging ID: {message.ack_id}")
-            ack_ids.append(message.ack_id)
+        if num_ids > 0:
+            self._ack_messages(ack_ids)
 
-        self.pubsub_client.acknowledge(
-            subscription=self.messages_path,
-            ack_ids=ack_ids,
-        )
-
-        return len(ack_ids)
+        return num_ids
