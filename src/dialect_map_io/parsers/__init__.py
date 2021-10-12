@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+from .metadata import BaseMetadataParser
+
 from .parsers_data import BaseDataParser
 from .parsers_data import JSONDataParser
 
