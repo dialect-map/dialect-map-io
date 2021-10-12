@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from .metadata import BaseMetadataParser
+from .metadata import FeedMetadataParser
 
 from .parsers_data import BaseDataParser
 from .parsers_data import JSONDataParser
