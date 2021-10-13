@@ -3,8 +3,8 @@
 import pytest
 from src.dialect_map_io.parsers import PDFTextParser
 
-from ..__paths import PDF_FOLDER
-from ..__paths import TXT_FOLDER
+from ..__paths import DATA_PDF_FOLDER
+from ..__paths import DATA_TXT_FOLDER
 
 
 @pytest.fixture(scope="module")
