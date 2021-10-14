@@ -48,7 +48,7 @@ def feed_entry() -> ArxivMetadata:
     return feed_objs[0]
 
 
-def test_arxiv_header_parse(feed_header: ArxivFeedHeader):
+def test_feed_header_parse(feed_header: ArxivFeedHeader):
     """
     Tests the correct parsing of the Arxiv feed headers fields
     :param feed_header: feed header object
@@ -69,7 +69,7 @@ def test_arxiv_header_parse(feed_header: ArxivFeedHeader):
     )
 
 
-def test_arxiv_entries_parse(feed_entry: ArxivMetadata):
+def test_feed_entries_parse(feed_entry: ArxivMetadata):
     """
     Tests the correct parsing of the Arxiv feed entries fields
     :param feed_entry: feed entry object
@@ -103,7 +103,7 @@ def test_arxiv_entries_parse(feed_entry: ArxivMetadata):
     )
 
 
-def test_arxiv_entries_authors_parse(feed_entry: ArxivMetadata):
+def test_feed_entries_authors_parse(feed_entry: ArxivMetadata):
     """
     Tests the correct parsing of the Arxiv feed authors field
     :param feed_entry: feed entry object
@@ -114,7 +114,7 @@ def test_arxiv_entries_authors_parse(feed_entry: ArxivMetadata):
     ]
 
 
-def test_arxiv_entries_links_parse(feed_entry: ArxivMetadata):
+def test_feed_entries_links_parse(feed_entry: ArxivMetadata):
     """
     Tests the correct parsing of the Arxiv feed link fields
     :param feed_entry: feed entry object
