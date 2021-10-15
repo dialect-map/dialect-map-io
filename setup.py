@@ -46,7 +46,6 @@ setup(
     url=URL,
     packages=find_packages(where="src"),
     package_dir={"": "src"},
-    include_package_data=True,
     install_requires=INSTALLATION_REQS,
     extras_require={
         "gcp": GOOGLE_CLOUD_REQS,
