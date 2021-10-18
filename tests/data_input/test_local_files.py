@@ -5,7 +5,7 @@ import pytest
 from src.dialect_map_io.data_input import LocalDataFile
 from src.dialect_map_io.parsers import JSONDataParser
 
-from ..__paths import JSON_FOLDER
+from ..__paths import DATA_JSON_FOLDER
 
 
 @pytest.fixture(scope="module")
@@ -15,7 +15,7 @@ def json_array_input() -> LocalDataFile:
     :return: data file input source
     """
 
-    file_path = JSON_FOLDER.joinpath("example_data.json")
+    file_path = DATA_JSON_FOLDER.joinpath("example_data.json")
     file_path = str(file_path)
     data_parser = JSONDataParser()
 
@@ -29,7 +29,7 @@ def json_object_input() -> LocalDataFile:
     :return: data file input source
     """
 
-    file_path = JSON_FOLDER.joinpath("example_error.json")
+    file_path = DATA_JSON_FOLDER.joinpath("example_error.json")
     file_path = str(file_path)
     data_parser = JSONDataParser()
 

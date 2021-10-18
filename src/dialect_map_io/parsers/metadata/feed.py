@@ -3,8 +3,6 @@
 import logging
 import re
 
-from abc import ABC
-from abc import abstractmethod
 from datetime import datetime
 from datetime import timezone
 from feedparser import FeedParserDict
@@ -12,39 +10,16 @@ from feedparser import parse as feed_parse
 from typing import List
 from urllib import parse
 
-from ..models import ArxivFeedHeader
-from ..models import ArxivFeedEntry
-from ..models import ArxivFeedEntryAuthor
-from ..models import ArxivFeedEntryLink
+from .base import BaseMetadataParser
+from ...models import ArxivFeedHeader
+from ...models import ArxivMetadata
+from ...models import ArxivMetadataAuthor
+from ...models import ArxivMetadataLink
 
 logger = logging.getLogger()
 
 
-class BaseFeedParser(ABC):
-    """Interface for the feed string parser classes"""
-
-    @abstractmethod
-    def parse_header(self, feed: str) -> ArxivFeedHeader:
-        """
-        Parses the header fields of a given feed result
-        :param feed: string with the feed result
-        :return: top-level fields data object
-        """
-
-        raise NotImplementedError()
-
-    @abstractmethod
-    def parse_entries(self, feed: str) -> List[ArxivFeedEntry]:
-        """
-        Parses the entry sections of a given feed result
-        :param feed: string with the feed result
-        :return: parsed entries data objects
-        """
-
-        raise NotImplementedError()
-
-
-class ArxivFeedParser(BaseFeedParser):
+class FeedMetadataParser(BaseMetadataParser):
     """
     Class implementing the Atom 1.0 parsing functionality for the ArXiv feed
     Atom reference: https://www.ietf.org/rfc/rfc4287.txt
@@ -52,7 +27,7 @@ class ArxivFeedParser(BaseFeedParser):
     """
 
     def __init__(self):
-        """Initializes the Arxiv feed parser object"""
+        """Initializes the ArXiv feed metadata parser object"""
 
         self.entry_id_prefix = re.compile(r"http://arxiv.org/abs/")
         self.entry_id_suffix = re.compile(r"v\d+")
@@ -82,7 +57,7 @@ class ArxivFeedParser(BaseFeedParser):
         :return: trimmed string
         """
 
-        return re.sub(r"\s\s+", " ", long_string)
+        return re.sub(r"\s\s+", " ", long_string).strip()
 
     @staticmethod
     def _parse_links(link_entries: list) -> List[str]:
@@ -148,11 +123,11 @@ class ArxivFeedParser(BaseFeedParser):
             results_ts=self._parse_date(parsed.feed.updated),
         )
 
-    def parse_entries(self, feed: str) -> List[ArxivFeedEntry]:
+    def parse_body(self, feed: str) -> List[ArxivMetadata]:
         """
-        Parses the entry sections of a given feed result
-        :param feed: string with the feed result
-        :return: parsed entries data objects
+        Parses the body section of a given feed API result
+        :param feed: metadata string for a given paper
+        :return: parsed metadata objects
         """
 
         papers = []
@@ -160,10 +135,10 @@ class ArxivFeedParser(BaseFeedParser):
 
         for entry in parsed.entries:
             category = entry.arxiv_primary_category["term"]
-            authors = [ArxivFeedEntryAuthor(author.name) for author in entry.authors]
-            links = [ArxivFeedEntryLink(l["href"], l["type"]) for l in entry.links]
+            authors = [ArxivMetadataAuthor(author.name) for author in entry.authors]
+            links = [ArxivMetadataLink(l["href"], l["type"]) for l in entry.links]
 
-            paper = ArxivFeedEntry(
+            paper = ArxivMetadata(
                 paper_id=self._extract_id(entry.id),
                 paper_rev=self._extract_rev(entry.id),
                 paper_title=self._parse_string(entry.title),

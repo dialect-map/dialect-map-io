@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from .arxiv import ArxivFeedHeader
-from .arxiv import ArxivFeedEntry
-from .arxiv import ArxivFeedEntryAuthor
-from .arxiv import ArxivFeedEntryLink
+from .arxiv import ArxivMetadata
+from .arxiv import ArxivMetadataAuthor
+from .arxiv import ArxivMetadataLink
+
+from .feed import ArxivFeedHeader

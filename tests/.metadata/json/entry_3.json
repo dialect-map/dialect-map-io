@@ -1,0 +1,28 @@
+{
+  "id": "supr-con/9609003",
+  "submitter": "Hasegawa Yasumasa",
+  "authors": "Yasumasa Hasegawa (Himeji Institute of Technology)",
+  "title": "Density of States and NMR Relaxation Rate in Anisotropic\n  Superconductivity with Intersecting Line Nodes",
+  "comments": "7 pages, 4 PostScript Figures, LaTeX, to appear in J. Phys. Soc. Jpn",
+  "journal-ref": null,
+  "doi": "10.1143/JPSJ.65.3131",
+  "report-no": null,
+  "categories": "supr-con cond-mat.supr-con",
+  "license": null,
+  "abstract": "  We show that the density of states in an anisotropic superconductor with\nintersecting line nodes in the gap function is proportional to $E log (\\alpha\n\\Delta_0 /E)$ for $|E| << \\Delta_0$, where $\\Delta_0$ is the maximum value of\nthe gap function and $\\alpha$ is constant, while it is proportional to $E$ if\nthe line nodes do not intersect. As a result, a logarithmic correction appears\nin the temperature dependence of the NMR relaxation rate and the specific heat,\nwhich can be observed experimentally. By comparing with those for the heavy\nfermion superconductors, we can obtain information about the symmetry of the\ngap function.\n",
+  "versions": [
+    {
+      "version": "v1",
+      "created": "Wed, 18 Sep 1996 07:57:30 GMT"
+    }
+  ],
+  "update_date": "2009-10-30",
+  "authors_parsed": [
+    [
+      "Hasegawa",
+      "Yasumasa",
+      "",
+      "Himeji Institute of Technology"
+    ]
+  ]
+}
