@@ -17,7 +17,6 @@ VERSION = open("VERSION", "r").read().strip()
 INSTALLATION_REQS = [
     "feedparser==6.0.8",
     "pdfminer.six==20201018",
-    "pytz==2021.1",
     "requests==2.26.0",
 ]
 
@@ -29,7 +28,6 @@ GOOGLE_CLOUD_REQS = [
 LINTING_REQS = [
     "black>=21.6b0",
     "mypy>=0.910",
-    "types-pytz~=0.1.0",
     "types-requests>=0.1,<2.26",
 ]
 
