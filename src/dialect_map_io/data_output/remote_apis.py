@@ -57,7 +57,7 @@ class RestOutputAPI(BaseOutputAPI):
         self.api_token = auth_ctl.refresh_token()
 
     @staticmethod
-    def _check_response(response: Response):
+    def _check_response(response: Response) -> None:
         """
         Checks the status of the response for HTTP 4XX and 5XX codes
         :param response: raw API response
