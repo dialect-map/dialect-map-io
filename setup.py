@@ -20,8 +20,8 @@ INSTALLATION_REQS = [
 ]
 
 GOOGLE_CLOUD_REQS = [
-    "google-auth==1.24.0",
-    "google-cloud-pubsub==2.4.2",
+    "google-auth==2.2.1",
+    "google-cloud-pubsub==2.8.0",
 ]
 
 LINTING_REQS = [
