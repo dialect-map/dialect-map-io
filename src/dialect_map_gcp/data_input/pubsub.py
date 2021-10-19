@@ -6,7 +6,6 @@ from datetime import datetime
 from datetime import timezone
 from typing import List
 
-from google.api_core.exceptions import DeadlineExceeded
 from google.cloud.pubsub_v1 import SubscriberClient
 from google.pubsub_v1.types import ReceivedMessage
 
@@ -116,24 +115,14 @@ class PubSubReader:
         :return: list of messages
         """
 
-        ### NOTE:
-        ### To allow a <20 seconds timeout, the pull operation needs to be wrapped
-        ### around a try-except block (until DeadlineExceeded exception is better handled)
-        ###
-        ### Ref: https://github.com/googleapis/google-cloud-python/issues/9390
-        ### Ref: https://github.com/googleapis/python-pubsub/issues/343
-        try:
-            response = self.pubsub_client.pull(
-                subscription=self.messages_path,
-                max_messages=num_messages,
-                timeout=self.timeout_secs,
-            )
-        except DeadlineExceeded:
-            messages = []  # type: ignore
-            logger.info(f"Received {len(messages)} new messages")
-        else:
-            messages = response.received_messages
-            logger.info(f"Received {len(messages)} new messages")
+        response = self.pubsub_client.pull(
+            subscription=self.messages_path,
+            max_messages=num_messages,
+            timeout=self.timeout_secs,
+        )
+
+        messages = response.received_messages
+        logger.info(f"Received {len(messages)} new messages")
 
         return messages
 
