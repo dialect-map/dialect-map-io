@@ -45,7 +45,7 @@ class ArxivInputAPI(BaseInputAPI):
         self.last_call = datetime.now()
 
     @staticmethod
-    def _check_response(response: Response):
+    def _check_response(response: Response) -> None:
         """
         Checks the status of the response for HTTP 4XX and 5XX codes
         :param response: raw API response
@@ -134,7 +134,7 @@ class RestInputAPI(BaseInputAPI):
         self.base_url = base_url.rstrip("/")
 
     @staticmethod
-    def _check_response(response: Response):
+    def _check_response(response: Response) -> None:
         """
         Checks the status of the response for HTTP 4XX and 5XX codes
         :param response: raw API response
