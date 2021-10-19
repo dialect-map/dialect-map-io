@@ -6,6 +6,7 @@ import time
 
 from abc import ABC
 from abc import abstractmethod
+from datetime import datetime
 from requests import Response
 
 logger = logging.getLogger()
@@ -41,6 +42,7 @@ class ArxivInputAPI(BaseInputAPI):
 
         self.base_url = base_url.rstrip("/")
         self.wait_secs = wait_secs
+        self.last_call = datetime.now()
 
     @staticmethod
     def _check_response(response: Response):
@@ -66,6 +68,21 @@ class ArxivInputAPI(BaseInputAPI):
 
         return response.text
 
+    def _sleep_between_calls(self) -> None:
+        """
+        Wait time before the potentially next API call
+        Ref: https://arxiv.org/help/api/user-manual
+        """
+
+        last_call_time = datetime.now()
+        last_call_delta = last_call_time - self.last_call
+        waiting_seconds = self.wait_secs - last_call_delta.total_seconds()
+
+        if waiting_seconds > 0:
+            time.sleep(waiting_seconds)
+
+        self.last_call = last_call_time
+
     def _perform_request(self, api_path: str, api_args: dict) -> Response:
         """
         Performs a HTTP GET request to the given API path
@@ -79,10 +96,7 @@ class ArxivInputAPI(BaseInputAPI):
             params=api_args,
         )
 
-        # Wait time before the potentially next API call
-        # Ref: https://arxiv.org/help/api/user-manual
-        time.sleep(self.wait_secs)
-
+        self._sleep_between_calls()
         self._check_response(response)
         return response
 
