@@ -25,9 +25,9 @@ GOOGLE_CLOUD_REQS = [
 ]
 
 LINTING_REQS = [
-    "black>=21.6b0",
-    "mypy>=0.910",
-    "types-requests>=0.1,<2.26",
+    "black==21.6b0",
+    "mypy==0.910",
+    "types-requests==0.1",
 ]
 
 TESTING_REQS = [
