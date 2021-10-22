@@ -2,7 +2,7 @@ fail_fast: true
 
 repos:
 -   repo: https://github.com/psf/black
-    rev: 21.6b0
+    rev: 21.9b0
     hooks:
     -   id: black
         name: "Black format checker"
