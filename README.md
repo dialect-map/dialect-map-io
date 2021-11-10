@@ -15,12 +15,12 @@ making use of the private [Dialect map API][dialect-map-api-private].
 
 
 ### Dependencies
-Python dependencies are specified within the `setup.py` file.
+Python dependencies are specified within the `setup.cfg` file.
 
 In order to install the development packages, as long as the defined commit hooks:
 ```sh
+pip install "pip>=21.2.0"
 pip install ".[all]"
-pip install pre-commit
 pre-commit install
 ```
 
