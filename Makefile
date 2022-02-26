@@ -12,6 +12,7 @@ TESTS_MARKERS ?= "'not gcp'"
 check:
 	@echo "Checking code format"
 	@black --check $(SOURCE_FOLDER) $(TESTS_FOLDER)
+	@isort --check $(SOURCE_FOLDER) $(TESTS_FOLDER)
 	@mypy --pretty $(SOURCE_FOLDER) $(TESTS_FOLDER)
 
 
