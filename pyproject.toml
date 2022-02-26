@@ -1,4 +1,5 @@
-# Black formatting options
+# File containing all formatting tools options
+
 [tool.black]
 line-length = 100
 target-version = ['py37']
@@ -20,13 +21,17 @@ exclude = '''
 )
 '''
 
-# Mypy validation options
+[tool.isort]
+force_single_line = true
+ignore_whitespace = true
+only_sections = true
+profile = "black"
+
 [tool.mypy]
 cache_dir = "/dev/null"
 allow_redefinition = true
 ignore_missing_imports = true
 
-# Pytest available markers
 [tool.pytest.ini_options]
 markers = [
     "gcp: Google Cloud SDK dependent tests",
