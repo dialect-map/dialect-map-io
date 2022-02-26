@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 
+from datetime import datetime
+
 import pytest
 
-from datetime import datetime
 from src.dialect_map_gcp.models import DiffMessage
 
 

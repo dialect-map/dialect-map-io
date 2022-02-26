@@ -2,8 +2,9 @@
 
 import os
 import logging
-import pytest
 import subprocess
+
+import pytest
 
 from google.cloud.pubsub_v1 import PublisherClient
 from google.cloud.pubsub_v1 import SubscriberClient

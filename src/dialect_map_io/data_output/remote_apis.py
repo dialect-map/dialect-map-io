@@ -1,12 +1,15 @@
 # -*- coding: utf-8 -*-
 
 import logging
-import requests
 
 from abc import ABC
 from abc import abstractmethod
-from requests import Response
 from typing import Callable
+
+from requests import patch as http_patch
+from requests import post as http_post
+from requests import HTTPError
+from requests import Response
 
 from ..auth import BaseAuthenticator
 from ..auth import DummyAuthenticator
@@ -65,7 +68,7 @@ class RestOutputAPI(BaseOutputAPI):
 
         try:
             response.raise_for_status()
-        except requests.HTTPError:
+        except HTTPError:
             logger.error(f"The API response does not have a valid HTTP code")
             logger.error(f"Error: {response.text}")
             raise ConnectionError(response.text)
@@ -129,7 +132,7 @@ class RestOutputAPI(BaseOutputAPI):
 
         self._refresh_token()
 
-        resp = self._perform_request(requests.post, api_path, record)
+        resp = self._perform_request(http_post, api_path, record)
         resp = self._decode_response(resp)
         return resp
 
@@ -142,6 +145,6 @@ class RestOutputAPI(BaseOutputAPI):
 
         self._refresh_token()
 
-        resp = self._perform_request(requests.patch, api_path, {})
+        resp = self._perform_request(http_patch, api_path, {})
         resp = self._decode_response(resp)
         return resp

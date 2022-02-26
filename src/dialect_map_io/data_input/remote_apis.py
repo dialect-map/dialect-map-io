@@ -1,12 +1,14 @@
 # -*- coding: utf-8 -*-
 
 import logging
-import requests
 import time
 
 from abc import ABC
 from abc import abstractmethod
 from datetime import datetime
+
+from requests import get as http_get
+from requests import HTTPError
 from requests import Response
 
 logger = logging.getLogger()
@@ -53,7 +55,7 @@ class ArxivInputAPI(BaseInputAPI):
 
         try:
             response.raise_for_status()
-        except requests.HTTPError:
+        except HTTPError:
             logger.error(f"The API response does not have a valid HTTP code")
             logger.error(f"Error: {response.text}")
             raise ConnectionError(response.text)
@@ -91,7 +93,7 @@ class ArxivInputAPI(BaseInputAPI):
         :return: API response
         """
 
-        response = requests.get(
+        response = http_get(
             url=f"{self.base_url}{api_path}",
             params=api_args,
         )
@@ -142,7 +144,7 @@ class RestInputAPI(BaseInputAPI):
 
         try:
             response.raise_for_status()
-        except requests.HTTPError:
+        except HTTPError:
             logger.error(f"The API response does not have a valid HTTP code")
             logger.error(f"Error: {response.text}")
             raise ConnectionError(response.text)
@@ -172,7 +174,7 @@ class RestInputAPI(BaseInputAPI):
         :return: API response
         """
 
-        response = requests.get(
+        response = http_get(
             url=f"{self.base_url}{api_path}",
             params=api_args,
         )

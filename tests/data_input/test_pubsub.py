@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 
-import pytest
 import time
+
+import pytest
 
 from google.cloud.pubsub_v1 import PublisherClient
 from src.dialect_map_gcp import PubSubReader
