@@ -9,6 +9,7 @@ from datetime import datetime
 
 from requests import get as http_get
 from requests import HTTPError
+from requests import JSONDecodeError
 from requests import Response
 
 logger = logging.getLogger()
@@ -159,7 +160,7 @@ class RestInputAPI(BaseInputAPI):
 
         try:
             json = response.json()
-        except ValueError:
+        except JSONDecodeError:
             logger.error(f"The API response does not contains a valid JSON")
             logger.error(f"Response: {response.text}")
             raise

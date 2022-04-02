@@ -9,6 +9,7 @@ from typing import Callable
 from requests import patch as http_patch
 from requests import post as http_post
 from requests import HTTPError
+from requests import JSONDecodeError
 from requests import Response
 
 from ..auth import BaseAuthenticator
@@ -83,7 +84,7 @@ class RestOutputAPI(BaseOutputAPI):
 
         try:
             json = response.json()
-        except ValueError:
+        except JSONDecodeError:
             logger.error(f"The API response does not contains a valid JSON")
             logger.error(f"Response: {response.text}")
             raise

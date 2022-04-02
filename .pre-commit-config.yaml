@@ -24,7 +24,7 @@ repos:
         args: ["src"]
         language: python
         pass_filenames: false
-        additional_dependencies: ["types-requests == 2.26.0"]
+        additional_dependencies: ["types-requests ~= 2.27.0"]
     -   id: mypy
         name: "Python types analyzer (tests)"
         args: ["tests"]
