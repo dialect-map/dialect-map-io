@@ -24,7 +24,7 @@ def test_json_bytes_parsing(json_parser: JSONDataParser):
     json_bytes = b'{"field_1": "example", "field_2": [1, 2, 3]}'
     json_dict = {"field_1": "example", "field_2": [1, 2, 3]}
 
-    assert json_parser.parse_bytes(json_bytes) == json_dict
+    assert json_parser.parse_string(json_bytes) == json_dict
 
 
 def test_json_string_parsing(json_parser: JSONDataParser):
@@ -36,4 +36,4 @@ def test_json_string_parsing(json_parser: JSONDataParser):
     json_str = '{"field_1": "example", "field_2": [1, 2, 3]}'
     json_dict = {"field_1": "example", "field_2": [1, 2, 3]}
 
-    assert json_parser.parse_str(json_str) == json_dict
+    assert json_parser.parse_string(json_str) == json_dict

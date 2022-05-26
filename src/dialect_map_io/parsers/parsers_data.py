@@ -3,6 +3,7 @@
 from abc import ABC
 from abc import abstractmethod
 from json import JSONDecoder
+from typing import AnyStr
 
 from .__utils import check_extension
 
@@ -28,20 +29,10 @@ class BaseDataParser(ABC):
         raise NotImplementedError()
 
     @abstractmethod
-    def parse_bytes(self, encoded_str: bytes) -> object:
-        """
-        Parses the provided bytes encoded data
-        :param encoded_str: bytes encoded data
-        :return: decoded data
-        """
-
-        raise NotImplementedError()
-
-    @abstractmethod
-    def parse_str(self, encoded_str: str) -> object:
+    def parse_string(self, encoded_data: AnyStr) -> object:
         """
         Parses the provided string encoded data
-        :param encoded_str: string encoded data
+        :param encoded_data: string encoded data
         :return: decoded data
         """
 
@@ -49,13 +40,7 @@ class BaseDataParser(ABC):
 
 
 class JSONDataParser(BaseDataParser):
-    """
-    Class for parsing and extracting JSON data
-
-    For Python 3.8+, combine both 'parse_bytes' and 'parse_str'
-    methods into a single one using @singledispatchmethod
-    Ref: https://docs.python.org/3/library/functools.html
-    """
+    """Class for parsing and extracting JSON data"""
 
     extension = ".json"
 
@@ -82,21 +67,18 @@ class JSONDataParser(BaseDataParser):
 
         return self.decoder.decode(contents)
 
-    def parse_bytes(self, encoded_str: bytes) -> object:
-        """
-        Parses the provided bytes encoded JSON
-        :param encoded_str: bytes encoded JSON
-        :return: decoded data
-        """
-
-        string = encoded_str.decode("UTF-8")
-        return self.decoder.decode(string)
-
-    def parse_str(self, encoded_str: str) -> object:
+    def parse_string(self, encoded_data: AnyStr) -> object:
         """
         Parses the provided string encoded JSON
-        :param encoded_str: string encoded JSON
+        :param encoded_data: string encoded JSON
         :return: decoded data
         """
 
-        return self.decoder.decode(encoded_str)
+        if isinstance(encoded_data, bytes):
+            string = encoded_data.decode("UTF-8")
+        elif isinstance(encoded_data, str):
+            string = encoded_data
+        else:
+            raise TypeError("Encoded data must be either 'bytes' or 'str'")
+
+        return self.decoder.decode(string)
