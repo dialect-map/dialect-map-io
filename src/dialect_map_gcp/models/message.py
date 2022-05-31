@@ -2,6 +2,7 @@
 
 from dataclasses import dataclass
 from datetime import datetime
+from functools import cached_property
 from typing import Dict
 from typing import List
 from typing import Union
@@ -55,7 +56,7 @@ class DiffMessage:
         ):
             raise ValueError("Invalid diff message")
 
-    def __augment_record(self, record: dict) -> dict:
+    def _augment_record(self, record: dict) -> dict:
         """
         Augments the provided data record with message level fields
         :param record: vanilla data record
@@ -67,7 +68,7 @@ class DiffMessage:
 
         return record
 
-    @property
+    @cached_property
     def record(self) -> dict:
         """
         Returns the data record within a diff operation message.
@@ -79,13 +80,13 @@ class DiffMessage:
 
         if self.is_creation:
             record = self.value_post
-        if self.is_deletion:
+        elif self.is_deletion:
             record = self.value_prev
-        if self.is_edition:
+        elif self.is_edition:
             record = self.container
 
         assert isinstance(record, dict)
-        return self.__augment_record(record)
+        return self._augment_record(record)
 
     @property
     def is_creation(self) -> bool:
