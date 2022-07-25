@@ -13,8 +13,12 @@ from requests import HTTPError
 from requests import Response
 
 from .base import BaseAPIHandler
+from ...auth import BaseAuthenticator
+from ...auth import DummyAuthenticator
 from ...encoding import BaseDecoder
 from ...encoding import BaseEncoder
+from ...encoding import JSONPlainDecoder
+from ...encoding import JSONPlainEncoder
 from ...encoding import TXTPlainDecoder
 from ...encoding import TXTPlainEncoder
 
@@ -180,4 +184,76 @@ class ArxivAPIHandler(RestAPIHandler):
         resp = self.get_data("query", {"id_list": paper_id})
 
         assert isinstance(resp, str)
+        return resp
+
+
+class DialectMapAPIHandler(RestAPIHandler):
+    """Class for dealing with the Dialect map APIs"""
+
+    def __init__(self, auth_ctl: BaseAuthenticator = None, **kwargs):
+        """
+        Initializes the Dialect map API handler
+        :param auth_ctl: authenticator controller (optional)
+        :kwargs: keyword arguments to pass to the parent class
+        """
+
+        super().__init__(
+            decoder=JSONPlainDecoder(),
+            encoder=JSONPlainEncoder(),
+            **kwargs,
+        )
+
+        if auth_ctl is None:
+            auth_ctl = DummyAuthenticator()
+
+        self.auth_ctl = auth_ctl
+        self.auth_token = auth_ctl.refresh_token()
+
+    def _update_auth_header(self) -> None:
+        """
+        Updates the headers with the API authentication token
+        Ref: https://datatracker.ietf.org/doc/html/rfc6750
+        """
+
+        if not self.auth_ctl.check_expired():
+            return
+
+        self.auth_token = self.auth_ctl.refresh_token()
+        self.headers["Authorization"] = f"Bearer {self.auth_token}"
+
+    def _perform_request(self, *args, **kwargs) -> Response:
+        """
+        Performs an HTTP request to the given API path
+        :param args: positional arguments to pass to the parent method
+        :param kwargs: keyword arguments to pass to the parent method
+        :return: API response
+        """
+
+        self._update_auth_header()
+
+        return super()._perform_request(*args, **kwargs)
+
+    def create_record(self, api_path: str, record: dict) -> dict:
+        """
+        Creates a record via POST request to the specified API path
+        :param api_path: API path to send the request
+        :param record: the record itself
+        :return: JSON-decoded response
+        """
+
+        resp = self.post_data(api_path, record)
+
+        assert isinstance(resp, dict)
+        return resp
+
+    def archive_record(self, api_path: str) -> dict:
+        """
+        Archives a record via PATCH request to the specified API path
+        :param api_path: API path to send the request
+        :return: JSON-decoded response
+        """
+
+        resp = self.patch_data(api_path)
+
+        assert isinstance(resp, dict)
         return resp
