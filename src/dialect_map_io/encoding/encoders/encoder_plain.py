@@ -24,3 +24,17 @@ class JSONPlainEncoder(BasePlainEncoder):
         """
 
         return self._encoder.encode(data)
+
+
+class TXTPlainEncoder(BasePlainEncoder):
+    """TXT contents encoder class"""
+
+    def encode(self, data: object) -> str:
+        """
+        Encodes a string as a string
+        :param data: string
+        :return: string
+        """
+
+        assert isinstance(data, str)
+        return data
