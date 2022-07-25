@@ -40,3 +40,16 @@ class JSONPlainDecoder(BasePlainDecoder):
             raise
 
         return obj
+
+
+class TXTPlainDecoder(BasePlainDecoder):
+    """TXT contents decoder class"""
+
+    def decode(self, data: AnyStr) -> str:
+        """
+        Decodes a string/bytes blob into a string
+        :param data: string/bytes blob
+        :return: string
+        """
+
+        return self._decode(data)

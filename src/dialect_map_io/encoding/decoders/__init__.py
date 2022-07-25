@@ -7,3 +7,4 @@ from .base import BasePlainDecoder
 from .decoder_binary import PDFBinaryDecoder
 
 from .decoder_plain import JSONPlainDecoder
+from .decoder_plain import TXTPlainDecoder
