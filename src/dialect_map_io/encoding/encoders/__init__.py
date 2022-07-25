@@ -5,3 +5,5 @@ from .base import BaseBinaryEncoder
 from .base import BasePlainEncoder
 
 from .encoder_binary import PDFBinaryEncoder
+
+from .encoder_plain import JSONPlainEncoder
