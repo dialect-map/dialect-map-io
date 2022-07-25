@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 
 import logging
+import time
 
+from datetime import datetime
 from typing import Callable
 
 from requests import get as http_get
@@ -13,6 +15,8 @@ from requests import Response
 from .base import BaseAPIHandler
 from ...encoding import BaseDecoder
 from ...encoding import BaseEncoder
+from ...encoding import TXTPlainDecoder
+from ...encoding import TXTPlainEncoder
 
 
 logger = logging.getLogger()
@@ -114,4 +118,66 @@ class RestAPIHandler(BaseAPIHandler):
         resp = self._perform_request(http_patch, api_path)
         resp = self._decoder.decode(resp.content)
 
+        return resp
+
+
+class ArxivAPIHandler(RestAPIHandler):
+    """Class for dealing with the ArXiv API"""
+
+    def __init__(self, wait_secs: int = 3, **kwargs):
+        """
+        Initializes the ArXiv API handler
+        :param wait_secs: seconds to wait between API calls (optional)
+        :kwargs: keyword arguments to pass to the parent class
+        """
+
+        super().__init__(
+            decoder=TXTPlainDecoder(),
+            encoder=TXTPlainEncoder(),
+            **kwargs,
+        )
+
+        if not 0 <= wait_secs <= 60:
+            raise ValueError("The waiting time must be between 0 and 60 seconds")
+
+        self.wait_secs = wait_secs
+        self.last_call = datetime.now()
+
+    def _sleep_between_calls(self) -> None:
+        """
+        Wait time before the potentially next API call
+        Ref: https://arxiv.org/help/api/user-manual
+        """
+
+        last_call_time = datetime.now()
+        last_call_delta = last_call_time - self.last_call
+        waiting_seconds = self.wait_secs - last_call_delta.total_seconds()
+
+        if waiting_seconds > 0:
+            time.sleep(waiting_seconds)
+
+        self.last_call = last_call_time
+
+    def _perform_request(self, *args, **kwargs) -> Response:
+        """
+        Performs an HTTP request to the given API path
+        :param args: positional arguments to pass to the parent method
+        :param kwargs: keyword arguments to pass to the parent method
+        :return: API response
+        """
+
+        self._sleep_between_calls()
+
+        return super()._perform_request(*args, **kwargs)
+
+    def request_metadata(self, paper_id: str) -> str:
+        """
+        Requests metadata about a certain Paper
+        :param paper_id: paper ID
+        :return: paper metadata
+        """
+
+        resp = self.get_data("query", {"id_list": paper_id})
+
+        assert isinstance(resp, str)
         return resp
