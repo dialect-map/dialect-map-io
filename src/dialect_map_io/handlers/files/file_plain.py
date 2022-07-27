@@ -8,6 +8,8 @@ from typing import Generator
 from .base import BaseFileHandler
 from ...encoding import BasePlainDecoder
 from ...encoding import BasePlainEncoder
+from ...encoding import JSONPlainDecoder
+from ...encoding import JSONPlainEncoder
 
 
 logger = logging.getLogger()
@@ -71,3 +73,13 @@ class PlainFileHandler(BaseFileHandler):
 
         with open(file_path, "w") as file:
             file.write(content)
+
+
+class JSONFileHandler(PlainFileHandler):
+    """Class handling the contents of JSON files"""
+
+    def __init__(self):
+        decoder = JSONPlainDecoder()
+        encoder = JSONPlainEncoder()
+
+        super().__init__(decoder, encoder)
