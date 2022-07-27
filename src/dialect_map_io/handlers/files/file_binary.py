@@ -7,6 +7,8 @@ from pathlib import Path
 from .base import BaseFileHandler
 from ...encoding import BaseBinaryDecoder
 from ...encoding import BaseBinaryEncoder
+from ...encoding import PDFBinaryDecoder
+from ...encoding import PDFBinaryEncoder
 
 
 logger = logging.getLogger()
@@ -52,3 +54,13 @@ class BinaryFileHandler(BaseFileHandler):
 
         with open(file_path, "wb") as file:
             file.write(content)
+
+
+class PDFFileHandler(BinaryFileHandler):
+    """Class handling the contents of PDF files"""
+
+    def __init__(self):
+        decoder = PDFBinaryDecoder()
+        encoder = PDFBinaryEncoder()
+
+        super().__init__(decoder, encoder)
