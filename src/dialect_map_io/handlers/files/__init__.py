@@ -7,3 +7,4 @@ from .file_binary import PDFFileHandler
 
 from .file_plain import PlainFileHandler
 from .file_plain import JSONFileHandler
+from .file_plain import TextFileHandler

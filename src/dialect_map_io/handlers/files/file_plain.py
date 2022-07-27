@@ -10,6 +10,8 @@ from ...encoding import BasePlainDecoder
 from ...encoding import BasePlainEncoder
 from ...encoding import JSONPlainDecoder
 from ...encoding import JSONPlainEncoder
+from ...encoding import TXTPlainDecoder
+from ...encoding import TXTPlainEncoder
 
 
 logger = logging.getLogger()
@@ -81,5 +83,15 @@ class JSONFileHandler(PlainFileHandler):
     def __init__(self):
         decoder = JSONPlainDecoder()
         encoder = JSONPlainEncoder()
+
+        super().__init__(decoder, encoder)
+
+
+class TextFileHandler(PlainFileHandler):
+    """Class handling the contents of text files"""
+
+    def __init__(self):
+        decoder = TXTPlainDecoder()
+        encoder = TXTPlainEncoder()
 
         super().__init__(decoder, encoder)
