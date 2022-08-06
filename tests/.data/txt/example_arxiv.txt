@@ -1177,8 +1177,8 @@ Any zeros and poles on the right hand side of (3.29) can only occur for ρ ratio
 1, i.e. (r′
 r′ j ≤
 −
-≤
 −
+≤
 p
 On the left hand side of (3.29), we have a well–deﬁned Euclidean functional integral for all values Re (s) > 0 provided (r′ j, rj) belongs to the Kac table and no singularities occur as a function of coupling constant. Outside the Kac table, new ultraviolet divergences occur governed by the OPE discussed above.
 14
