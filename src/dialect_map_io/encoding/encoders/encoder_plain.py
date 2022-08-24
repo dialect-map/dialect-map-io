@@ -36,5 +36,4 @@ class TXTPlainEncoder(BasePlainEncoder):
         :return: string
         """
 
-        assert isinstance(data, str)
-        return data
+        return str(data)
