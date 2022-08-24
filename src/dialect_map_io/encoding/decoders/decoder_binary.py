@@ -12,7 +12,7 @@ from pdfminer.pdfpage import PDFPage
 from .base import BaseBinaryDecoder
 
 
-class PDFBinaryDecoder(BaseBinaryDecoder):
+class PDFBinaryDecoder(BaseBinaryDecoder[str]):
     """PDF contents decoder class"""
 
     def __init__(self, encoding: str = "UTF-8"):

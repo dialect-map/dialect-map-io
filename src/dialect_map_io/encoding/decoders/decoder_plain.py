@@ -12,7 +12,7 @@ from .base import BasePlainDecoder
 logger = logging.getLogger()
 
 
-class JSONPlainDecoder(BasePlainDecoder):
+class JSONPlainDecoder(BasePlainDecoder[object]):
     """JSON contents decoder class"""
 
     def __init__(self, **kwargs):
@@ -42,7 +42,7 @@ class JSONPlainDecoder(BasePlainDecoder):
         return obj
 
 
-class TXTPlainDecoder(BasePlainDecoder):
+class TXTPlainDecoder(BasePlainDecoder[str]):
     """TXT contents decoder class"""
 
     def decode(self, data: AnyStr) -> str:
