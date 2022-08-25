@@ -3,7 +3,7 @@
 from .base import BaseBinaryEncoder
 
 
-class PDFBinaryEncoder(BaseBinaryEncoder):
+class PDFBinaryEncoder(BaseBinaryEncoder[object]):
     """PDF contents encoder class"""
 
     def encode(self, data: object) -> bytes:

@@ -4,6 +4,10 @@ from abc import ABC
 from abc import abstractmethod
 from typing import Any
 from typing import AnyStr
+from typing import Generic
+
+from ..base import BaseBinaryContent
+from ..base import BasePlainContent
 
 
 class BaseDecoder(ABC):
@@ -20,11 +24,11 @@ class BaseDecoder(ABC):
         raise NotImplementedError()
 
 
-class BaseBinaryDecoder(BaseDecoder):
+class BaseBinaryDecoder(BaseDecoder, Generic[BaseBinaryContent]):
     """Interface for the binary decoder classes"""
 
     @abstractmethod
-    def decode(self, data: bytes) -> object:
+    def decode(self, data: bytes) -> BaseBinaryContent:
         """
         Decodes a bytes blob into a Python object
         :param data: bytes blob
@@ -34,7 +38,7 @@ class BaseBinaryDecoder(BaseDecoder):
         raise NotImplementedError()
 
 
-class BasePlainDecoder(BaseDecoder):
+class BasePlainDecoder(BaseDecoder, Generic[BasePlainContent]):
     """Interface for the plain decoder classes"""
 
     def _decode(self, data: AnyStr) -> str:
@@ -54,7 +58,7 @@ class BasePlainDecoder(BaseDecoder):
         return string
 
     @abstractmethod
-    def decode(self, data: AnyStr) -> object:
+    def decode(self, data: AnyStr) -> BasePlainContent:
         """
         Decodes a string/bytes blob into a Python object
         :param data: string/bytes blob

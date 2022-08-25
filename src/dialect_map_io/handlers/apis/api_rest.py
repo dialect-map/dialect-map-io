@@ -22,7 +22,6 @@ from ...encoding import JSONPlainEncoder
 from ...encoding import TXTPlainDecoder
 from ...encoding import TXTPlainEncoder
 
-
 logger = logging.getLogger()
 
 

@@ -2,13 +2,14 @@
 
 from abc import ABC
 from abc import abstractmethod
+from typing import Any
 
 
 class BaseFileHandler(ABC):
     """Interface for the file handler classes"""
 
     @abstractmethod
-    def read_file(self, file_path: str) -> object:
+    def read_file(self, file_path: str) -> Any:
         """
         Reads contents from a file at the provided path
         :param file_path: path to the readable file
@@ -18,7 +19,7 @@ class BaseFileHandler(ABC):
         raise NotImplementedError()
 
     @abstractmethod
-    def write_file(self, file_path: str, content: object) -> None:
+    def write_file(self, file_path: str, content: Any) -> None:
         """
         Writes contents to a file at the provided path
         :param file_path: path to the writable file
