@@ -3,6 +3,10 @@
 from abc import ABC
 from abc import abstractmethod
 from typing import Any
+from typing import Generic
+
+from ..base import BaseBinaryContent
+from ..base import BasePlainContent
 
 
 class BaseEncoder(ABC):
@@ -19,11 +23,11 @@ class BaseEncoder(ABC):
         raise NotImplementedError()
 
 
-class BaseBinaryEncoder(BaseEncoder):
+class BaseBinaryEncoder(BaseEncoder, Generic[BaseBinaryContent]):
     """Interface for the binary encoder classes"""
 
     @abstractmethod
-    def encode(self, data: object) -> bytes:
+    def encode(self, data: BaseBinaryContent) -> bytes:
         """
         Encodes a Python object as a bytes blob
         :param data: Python object
@@ -33,11 +37,11 @@ class BaseBinaryEncoder(BaseEncoder):
         raise NotImplementedError()
 
 
-class BasePlainEncoder(BaseEncoder):
+class BasePlainEncoder(BaseEncoder, Generic[BasePlainContent]):
     """Interface for the plain encoder classes"""
 
     @abstractmethod
-    def encode(self, data: object) -> str:
+    def encode(self, data: BasePlainContent) -> str:
         """
         Encodes a Python object as a string blob
         :param data: Python object

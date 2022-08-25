@@ -5,7 +5,7 @@ from json import JSONEncoder
 from .base import BasePlainEncoder
 
 
-class JSONPlainEncoder(BasePlainEncoder):
+class JSONPlainEncoder(BasePlainEncoder[object]):
     """JSON contents encoder class"""
 
     def __init__(self, **kwargs):
@@ -26,7 +26,7 @@ class JSONPlainEncoder(BasePlainEncoder):
         return self._encoder.encode(data)
 
 
-class TXTPlainEncoder(BasePlainEncoder):
+class TXTPlainEncoder(BasePlainEncoder[object]):
     """TXT contents encoder class"""
 
     def encode(self, data: object) -> str:
