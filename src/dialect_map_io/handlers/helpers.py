@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from typing import Type
 from typing import Union
 from pathlib import Path
 from urllib.request import Request
@@ -12,52 +11,55 @@ from .files import *
 BaseHandler = Union[BaseAPIHandler, BaseFileHandler]
 
 
-def _get_handler_cls_for_api(uri: Request) -> Type[BaseAPIHandler]:
+def _init_api_handler_cls(uri: Request, **kwargs) -> BaseAPIHandler:
     """
-    Returns an API handler class depending on the provided URI
-    :param uri: URI to get the API handler class from
-    :return: API handler class
+    Returns an API handler instance depending on the provided URI
+    :param uri: URI to get the API handler instance for
+    :param kwargs: additional keyword arguments to pass
+    :return: API handler instance
     """
 
     if uri.host == "localhost":
-        return RestAPIHandler
+        return RestAPIHandler(base_url=uri.full_url, **kwargs)
     elif uri.host == "export.arxiv.org":
-        return ArxivAPIHandler
+        return ArxivAPIHandler(base_url=uri.full_url)
     elif uri.host.startswith("dialect-map"):
-        return DialectMapAPIHandler
+        return DialectMapAPIHandler(base_url=uri.full_url)
     else:
         raise ValueError("API handler not specified for the provided URI")
 
 
-def _get_handler_cls_for_file(uri: Request) -> Type[BaseFileHandler]:
+def _init_file_handler_cls(uri: Request, **_) -> BaseFileHandler:
     """
-    Returns a file handler class depending on the provided URI
-    :param uri: URI to get the file handler class from
-    :return: file handler class
+    Returns a file handler instance depending on the provided URI
+    :param uri: URI to get the file handler instance for
+    :param _: additional keyword arguments to pass
+    :return: file handler instance
     """
 
     extension = Path(uri.selector).suffix
 
     if extension == ".json":
-        return JSONFileHandler
+        return JSONFileHandler()
     elif extension == ".txt":
-        return TextFileHandler
+        return TextFileHandler()
     elif extension == ".pdf":
-        return PDFFileHandler
+        return PDFFileHandler()
     else:
         raise ValueError("File handler not specified for the provided URI")
 
 
-def get_handler_cls(uri: Request) -> Type[BaseHandler]:
+def init_handler_cls(uri: Request, **kwargs) -> BaseHandler:
     """
-    Returns a handler class depending on the provided URI
-    :param uri: URI to get the handler class from
-    :return: handler class
+    Returns a handler instance depending on the provided URI
+    :param uri: URI to get the handler instance for
+    :param kwargs: additional keyword arguments to pass
+    :return: handler instance
     """
 
-    if uri.type == "file":
-        return _get_handler_cls_for_file(uri)
+    if uri.type in {"file"}:
+        return _init_file_handler_cls(uri, **kwargs)
     elif uri.type in {"http", "https"}:
-        return _get_handler_cls_for_api(uri)
+        return _init_api_handler_cls(uri, **kwargs)
     else:
         raise ValueError("Handler not specified for the provided URI")
