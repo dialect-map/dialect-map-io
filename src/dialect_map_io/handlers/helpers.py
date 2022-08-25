@@ -2,7 +2,7 @@
 
 from typing import Union
 from pathlib import Path
-from urllib.request import Request
+from urllib.request import Request as URI
 
 from .apis import *
 from .files import *
@@ -11,7 +11,7 @@ from .files import *
 BaseHandler = Union[BaseAPIHandler, BaseFileHandler]
 
 
-def _init_api_handler_cls(uri: Request, **kwargs) -> BaseAPIHandler:
+def _init_api_handler_cls(uri: URI, **kwargs) -> BaseAPIHandler:
     """
     Returns an API handler instance depending on the provided URI
     :param uri: URI to get the API handler instance for
@@ -29,7 +29,7 @@ def _init_api_handler_cls(uri: Request, **kwargs) -> BaseAPIHandler:
         raise ValueError("API handler not specified for the provided URI")
 
 
-def _init_file_handler_cls(uri: Request, **_) -> BaseFileHandler:
+def _init_file_handler_cls(uri: URI, **_) -> BaseFileHandler:
     """
     Returns a file handler instance depending on the provided URI
     :param uri: URI to get the file handler instance for
@@ -49,7 +49,7 @@ def _init_file_handler_cls(uri: Request, **_) -> BaseFileHandler:
         raise ValueError("File handler not specified for the provided URI")
 
 
-def init_handler_cls(uri: Request, **kwargs) -> BaseHandler:
+def init_handler_cls(uri: URI, **kwargs) -> BaseHandler:
     """
     Returns a handler instance depending on the provided URI
     :param uri: URI to get the handler instance for
