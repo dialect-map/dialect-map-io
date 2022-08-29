@@ -19,14 +19,15 @@ def _init_api_handler_cls(uri: URI, **kwargs) -> BaseAPIHandler:
     :return: API handler instance
     """
 
-    if uri.host == "localhost":
-        return RestAPIHandler(base_url=uri.full_url, **kwargs)
-    elif uri.host == "export.arxiv.org":
-        return ArxivAPIHandler(base_url=uri.full_url)
-    elif uri.host.startswith("dialect-map"):
-        return DialectMapAPIHandler(base_url=uri.full_url)
-    else:
-        raise ValueError("API handler not specified for the provided URI")
+    match uri.host:
+        case "localhost":
+            return RestAPIHandler(base_url=uri.full_url, **kwargs)
+        case "export.arxiv.org":
+            return ArxivAPIHandler(base_url=uri.full_url)
+        case host if host.startswith("dialect-map"):
+            return DialectMapAPIHandler(base_url=uri.full_url)
+
+    raise ValueError("API handler not specified for the provided URI")
 
 
 def _init_file_handler_cls(uri: URI, **_) -> BaseFileHandler:
@@ -39,14 +40,15 @@ def _init_file_handler_cls(uri: URI, **_) -> BaseFileHandler:
 
     extension = Path(uri.selector).suffix
 
-    if extension == ".json":
-        return JSONFileHandler()
-    elif extension == ".txt":
-        return TextFileHandler()
-    elif extension == ".pdf":
-        return PDFFileHandler()
-    else:
-        raise ValueError("File handler not specified for the provided URI")
+    match extension:
+        case ".json":
+            return JSONFileHandler()
+        case ".txt":
+            return TextFileHandler()
+        case ".pdf":
+            return PDFFileHandler()
+
+    raise ValueError("File handler not specified for the provided URI")
 
 
 def init_handler_cls(uri: URI, **kwargs) -> BaseHandler:
@@ -57,9 +59,10 @@ def init_handler_cls(uri: URI, **kwargs) -> BaseHandler:
     :return: handler instance
     """
 
-    if uri.type in {"file"}:
-        return _init_file_handler_cls(uri, **kwargs)
-    elif uri.type in {"http", "https"}:
-        return _init_api_handler_cls(uri, **kwargs)
-    else:
-        raise ValueError("Handler not specified for the provided URI")
+    match uri.type:
+        case "file":
+            return _init_file_handler_cls(uri, **kwargs)
+        case "http" | "https":
+            return _init_api_handler_cls(uri, **kwargs)
+
+    raise ValueError("Handler not specified for the provided URI")
