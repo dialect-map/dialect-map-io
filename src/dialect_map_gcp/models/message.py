@@ -5,7 +5,6 @@ from datetime import datetime
 from functools import cached_property
 from typing import Dict
 from typing import List
-from typing import Union
 
 
 @dataclass
@@ -21,7 +20,7 @@ class DiffMessage:
     :attr created_at: datetime when the change was produced
     """
 
-    container: Union[Dict, List]
+    container: Dict | List
     field_name: str
     value_prev: object
     value_post: object

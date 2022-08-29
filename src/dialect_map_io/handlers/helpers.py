@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from typing import Union
 from pathlib import Path
 from urllib.request import Request as URI
 
@@ -8,7 +7,7 @@ from .apis import *
 from .files import *
 
 
-BaseHandler = Union[BaseAPIHandler, BaseFileHandler]
+BaseHandler = BaseAPIHandler | BaseFileHandler
 
 
 def _init_api_handler_cls(uri: URI, **kwargs) -> BaseAPIHandler:
