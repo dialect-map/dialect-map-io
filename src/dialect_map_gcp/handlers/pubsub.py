@@ -9,8 +9,6 @@ from typing import List
 from google.cloud.pubsub_v1 import SubscriberClient
 from google.pubsub_v1.types import ReceivedMessage as Message
 
-from dialect_map_io.auth import BaseAuthenticator
-from dialect_map_io.auth import DummyAuthenticator
 from dialect_map_io.encoding import BasePlainDecoder
 from dialect_map_io.encoding import JSONPlainDecoder
 
@@ -30,21 +28,18 @@ class PubSubQueueHandler(BaseQueueHandler):
         self,
         project_id: str,
         subscription: str,
-        timeout_secs: float = 10.0,
-        auth_ctl: BaseAuthenticator = None,
+        timeout_secs: float,
+        pubsub_client: SubscriberClient,
         decoder: BasePlainDecoder = None,
     ):
         """
         Initializes the Pub/Sub handler
         :param project_id: GCP project ID where the subscription is located
         :param subscription: name of the Pub/Sub subscription to read from
-        :param timeout_secs: timeout seconds for the pull operation (optional)
-        :param auth_ctl: authenticator controller (optional)
+        :param timeout_secs: timeout seconds for the pull operation
+        :param pubsub_client: PubSub subscription client
         :param decoder: messages content decoder (optional)
         """
-
-        if auth_ctl is None:
-            auth_ctl = DummyAuthenticator()
 
         if decoder is None:
             decoder = JSONPlainDecoder()
@@ -53,7 +48,7 @@ class PubSubQueueHandler(BaseQueueHandler):
         self.subscription = subscription
         self.timeout_secs = timeout_secs
 
-        self.pubsub_client = SubscriberClient(**{"credentials": auth_ctl.credentials})
+        self.pubsub_client = pubsub_client
         self.messages_path = self.pubsub_client.subscription_path(project_id, subscription)
 
     @staticmethod
