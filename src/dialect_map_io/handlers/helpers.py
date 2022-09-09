@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from pathlib import Path
-from urllib.request import Request as URI
+from urllib.parse import ParseResult
 
 from .apis import *
 from .files import *
@@ -10,34 +10,36 @@ from .files import *
 BaseHandler = BaseAPIHandler | BaseFileHandler
 
 
-def _init_api_handler_cls(uri: URI, **kwargs) -> BaseAPIHandler:
+def _init_api_handler_cls(url: ParseResult, **kwargs) -> BaseAPIHandler:
     """
-    Returns an API handler instance depending on the provided URI
-    :param uri: URI to get the API handler instance for
+    Returns an API handler instance depending on the provided URL
+    :param url: parsed URL to initialize the API handler for
     :param kwargs: additional keyword arguments to pass
     :return: API handler instance
     """
 
-    match uri.host:
+    full_url = url.geturl()
+
+    match url.hostname:
         case "localhost":
-            return RestAPIHandler(base_url=uri.full_url, **kwargs)
+            return RestAPIHandler(base_url=full_url, **kwargs)
         case "export.arxiv.org":
-            return ArxivAPIHandler(base_url=uri.full_url)
-        case host if host.startswith("dialect-map"):
-            return DialectMapAPIHandler(base_url=uri.full_url)
+            return ArxivAPIHandler(base_url=full_url)
+        case host if host and host.startswith("dialect-map"):
+            return DialectMapAPIHandler(base_url=full_url)
 
-    raise ValueError("API handler not specified for the provided URI")
+    raise ValueError("API handler not specified for the provided URL")
 
 
-def _init_file_handler_cls(uri: URI, **_) -> BaseFileHandler:
+def _init_file_handler_cls(url: ParseResult, **_) -> BaseFileHandler:
     """
-    Returns a file handler instance depending on the provided URI
-    :param uri: URI to get the file handler instance for
+    Returns a file handler instance depending on the provided URL
+    :param url: parsed URL to initialize the file handler for
     :param _: additional keyword arguments to pass
     :return: file handler instance
     """
 
-    extension = Path(uri.selector).suffix
+    extension = Path(url.path).suffix
 
     match extension:
         case ".json":
@@ -47,21 +49,21 @@ def _init_file_handler_cls(uri: URI, **_) -> BaseFileHandler:
         case ".pdf":
             return PDFFileHandler()
 
-    raise ValueError("File handler not specified for the provided URI")
+    raise ValueError("File handler not specified for the provided URL")
 
 
-def init_handler_cls(uri: URI, **kwargs) -> BaseHandler:
+def init_handler_cls(url: ParseResult, **kwargs) -> BaseHandler:
     """
-    Returns a handler instance depending on the provided URI
-    :param uri: URI to get the handler instance for
+    Returns a handler instance depending on the provided URL
+    :param url: parsed URL to initialize the handler for
     :param kwargs: additional keyword arguments to pass
     :return: handler instance
     """
 
-    match uri.type:
+    match url.scheme:
         case "file":
-            return _init_file_handler_cls(uri, **kwargs)
+            return _init_file_handler_cls(url, **kwargs)
         case "http" | "https":
-            return _init_api_handler_cls(uri, **kwargs)
+            return _init_api_handler_cls(url, **kwargs)
 
-    raise ValueError("Handler not specified for the provided URI")
+    raise ValueError("Handler not specified for the provided URL")
