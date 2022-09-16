@@ -30,7 +30,7 @@ class JSONPlainDecoder(BasePlainDecoder[object]):
         :return: Python object
         """
 
-        string = self._decode(data)
+        string = self._decode_string(data)
 
         try:
             obj = self._decoder.decode(string)
@@ -52,4 +52,4 @@ class TXTPlainDecoder(BasePlainDecoder[str]):
         :return: string
         """
 
-        return self._decode(data)
+        return self._decode_string(data)
