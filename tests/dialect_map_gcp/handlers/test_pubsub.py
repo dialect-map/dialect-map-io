@@ -4,10 +4,8 @@ import time
 import pytest
 
 from google.cloud.pubsub_v1 import PublisherClient
-from google.cloud.pubsub_v1 import SubscriberClient
 
 from src.dialect_map_gcp import PubSubQueueHandler
-from src.dialect_map_io import DummyAuthenticator
 
 from .conftest import PUBSUB_PROJECT
 from .conftest import PUBSUB_TOPIC
@@ -35,34 +33,10 @@ class TestPubSubHandler:
         :return: initiated handler
         """
 
-        auth = DummyAuthenticator()
-        client = SubscriberClient(**{"credentials": auth.credentials})
-
         return PubSubQueueHandler(
             project_id=PUBSUB_PROJECT,
-            subscription=PUBSUB_SUBS,
             timeout_secs=2,
-            pubsub_client=client,
         )
-
-    def test_read_messages(self, handler: PubSubQueueHandler):
-        """
-        Tests the correct reading of serialized messages from Pub/Sub
-        Messages may include custom attributes, in the form of a dictionary
-        :param handler: Pub/Sub handler
-        """
-
-        msg_data = b'{"field_1": "value_A", "field_2": "value_B"}'
-        msg_meta = {"metadata_1": "value_A", "metadata_2": "value_B"}
-
-        publisher = PublisherClient()
-        topic_path = publisher.topic_path(PUBSUB_PROJECT, PUBSUB_TOPIC)
-        publisher.publish(topic=topic_path, data=msg_data, **msg_meta)
-
-        messages = handler.get_messages(10)
-
-        assert len(messages) == 1
-        assert messages[0] == msg_data
 
     def test_read_valid_messages(self, handler: PubSubQueueHandler):
         """
@@ -74,14 +48,14 @@ class TestPubSubHandler:
         topic_path = publisher.topic_path(PUBSUB_PROJECT, PUBSUB_TOPIC)
         publisher.publish(topic=topic_path, data=b"{}")
 
-        messages = handler.get_messages(10)
+        messages = handler.pull_messages(PUBSUB_SUBS, 10)
         assert len(messages) == 1
 
         # Enough time so that potential non-acknowledged messages
         # become available again upon subscriber.pull()
         time.sleep(self.SECS_BETWEEN_PULLS)
 
-        messages = handler.get_messages(10)
+        messages = handler.pull_messages(PUBSUB_SUBS, 10)
         assert len(messages) == 0
 
     def test_read_invalid_messages(self, handler: PubSubQueueHandler):
@@ -94,10 +68,10 @@ class TestPubSubHandler:
         topic_path = publisher.topic_path(PUBSUB_PROJECT, PUBSUB_TOPIC)
         publisher.publish(topic=topic_path, data=b"()")
 
-        pytest.raises(ValueError, handler.get_messages, 10)
+        pytest.raises(ValueError, handler.pull_messages, (PUBSUB_SUBS, 10))
 
         # Enough time so that non-acknowledged messages
         # become available again upon subscriber.pull()
         time.sleep(self.SECS_BETWEEN_PULLS)
 
-        pytest.raises(ValueError, handler.get_messages, 10)
+        pytest.raises(ValueError, handler.pull_messages, (PUBSUB_SUBS, 10))
