@@ -13,6 +13,23 @@ from ..base import BasePlainContent
 class BaseDecoder(ABC):
     """Interface for the decoder classes"""
 
+    @staticmethod
+    def _decode_string(data: AnyStr) -> str:
+        """
+        Decodes a string/bytes blob into a string
+        :param data: string/bytes blob
+        :return: string
+        """
+
+        if isinstance(data, bytes):
+            string = data.decode("UTF-8")
+        elif isinstance(data, str):
+            string = data
+        else:
+            raise TypeError("Data must be of type 'bytes' or 'str'")
+
+        return string
+
     @abstractmethod
     def decode(self, data: Any) -> Any:
         """
@@ -40,22 +57,6 @@ class BaseBinaryDecoder(BaseDecoder, Generic[BaseBinaryContent]):
 
 class BasePlainDecoder(BaseDecoder, Generic[BasePlainContent]):
     """Interface for the plain decoder classes"""
-
-    def _decode(self, data: AnyStr) -> str:
-        """
-        Decodes a string/bytes blob into a string
-        :param data: string/bytes blob
-        :return: string
-        """
-
-        if isinstance(data, bytes):
-            string = data.decode("UTF-8")
-        elif isinstance(data, str):
-            string = data
-        else:
-            raise TypeError("Data must be of type 'bytes' or 'str'")
-
-        return string
 
     @abstractmethod
     def decode(self, data: AnyStr) -> BasePlainContent:
