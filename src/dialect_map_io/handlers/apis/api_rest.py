@@ -15,12 +15,12 @@ from requests import Response
 from .base import BaseAPIHandler
 from ...auth import BaseAuthenticator
 from ...auth import DummyAuthenticator
-from ...encoding import BaseDecoder
-from ...encoding import BaseEncoder
-from ...encoding import JSONPlainDecoder
-from ...encoding import JSONPlainEncoder
-from ...encoding import TXTPlainDecoder
-from ...encoding import TXTPlainEncoder
+from ...encoding import BaseBinaryDecoder
+from ...encoding import BaseBinaryEncoder
+from ...encoding import JSONBinaryDecoder
+from ...encoding import JSONBinaryEncoder
+from ...encoding import TextBinaryDecoder
+from ...encoding import TextBinaryEncoder
 
 logger = logging.getLogger()
 
@@ -28,7 +28,7 @@ logger = logging.getLogger()
 class RestAPIHandler(BaseAPIHandler):
     """Class for dealing with REST APIs"""
 
-    def __init__(self, base_url: str, decoder: BaseDecoder, encoder: BaseEncoder):
+    def __init__(self, base_url: str, decoder: BaseBinaryDecoder, encoder: BaseBinaryEncoder):
         """
         Initializes the API handler
         :param base_url: API complete URL
@@ -61,14 +61,14 @@ class RestAPIHandler(BaseAPIHandler):
         func: Callable,
         api_path: str,
         api_args: dict = None,
-        api_data: dict = None,
+        api_data: dict | list | bytes | None = None,
     ) -> Response:
         """
         Performs an HTTP request to the given API path
         :param func: function to perform the HTTP request
         :param api_path: API path to send the request to
-        :param api_args: API args to tune the request with
-        :param api_data: API data to fill the request with
+        :param api_args: API args to tune the request with (optional)
+        :param api_data: API data to fill the request with (optional)
         :return: API response
         """
 
@@ -135,8 +135,8 @@ class ArxivAPIHandler(RestAPIHandler):
         """
 
         super().__init__(
-            decoder=TXTPlainDecoder(),
-            encoder=TXTPlainEncoder(),
+            decoder=TextBinaryDecoder(),
+            encoder=TextBinaryEncoder(),
             **kwargs,
         )
 
@@ -197,8 +197,8 @@ class DialectMapAPIHandler(RestAPIHandler):
         """
 
         super().__init__(
-            decoder=JSONPlainDecoder(),
-            encoder=JSONPlainEncoder(),
+            decoder=JSONBinaryDecoder(),
+            encoder=JSONBinaryEncoder(),
             **kwargs,
         )
 
