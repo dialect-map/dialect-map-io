@@ -4,15 +4,17 @@ import logging
 
 from json import JSONDecoder
 from json import JSONDecodeError
+from typing import AnyStr
 
+from .base import BaseBinaryDecoder
 from .base import BasePlainDecoder
 
 
 logger = logging.getLogger()
 
 
-class JSONPlainDecoder(BasePlainDecoder):
-    """JSON plain contents decoder class"""
+class CustomJSONDecoder:
+    """Custom JSON decoder class"""
 
     def __init__(self, **kwargs):
         """
@@ -22,10 +24,10 @@ class JSONPlainDecoder(BasePlainDecoder):
 
         self._decoder = JSONDecoder(**kwargs)
 
-    def decode(self, data: str) -> object:
+    def _decode(self, data: str) -> object:
         """
-        Decodes a string blob into a Python object
-        :param data: string blob
+        Decodes a JSON string into a Python object
+        :param data: JSON data
         :return: Python object
         """
 
@@ -37,3 +39,32 @@ class JSONPlainDecoder(BasePlainDecoder):
             raise
 
         return obj
+
+
+class JSONBinaryDecoder(BaseBinaryDecoder, CustomJSONDecoder):
+    """JSON binary contents decoder class"""
+
+    def decode(self, data: bytes) -> object:
+        """
+        Decodes a JSON bytes into a Python object
+        :param data: JSON as bytes
+        :return: Python object
+        """
+
+        decoded_string = self._decode_string(data)
+        decoded_json = super()._decode(decoded_string)
+
+        return decoded_json
+
+
+class JSONPlainDecoder(BasePlainDecoder, CustomJSONDecoder):
+    """JSON plain contents decoder class"""
+
+    def decode(self, data: str) -> object:
+        """
+        Decodes a JSON string into a Python object
+        :param data: JSON as string
+        :return: Python object
+        """
+
+        return super()._decode(data)
