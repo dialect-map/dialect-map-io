@@ -3,18 +3,13 @@
 from abc import ABC
 from abc import abstractmethod
 from typing import Any
-from typing import AnyStr
-from typing import Generic
-
-from ..base import BaseBinaryContent
-from ..base import BasePlainContent
 
 
 class BaseDecoder(ABC):
     """Interface for the decoder classes"""
 
     @abstractmethod
-    def decode(self, data: Any) -> Any:
+    def decode(self, data: Any) -> object:
         """
         Decodes a string/bytes blob into a Python object
         :param data: string/bytes blob
@@ -24,24 +19,11 @@ class BaseDecoder(ABC):
         raise NotImplementedError()
 
 
-class BaseBinaryDecoder(BaseDecoder, Generic[BaseBinaryContent]):
+class BaseBinaryDecoder(BaseDecoder):
     """Interface for the binary decoder classes"""
 
-    @abstractmethod
-    def decode(self, data: bytes) -> BaseBinaryContent:
-        """
-        Decodes a bytes blob into a Python object
-        :param data: bytes blob
-        :return: Python object
-        """
-
-        raise NotImplementedError()
-
-
-class BasePlainDecoder(BaseDecoder, Generic[BasePlainContent]):
-    """Interface for the plain decoder classes"""
-
-    def _decode(self, data: AnyStr) -> str:
+    @staticmethod
+    def _decode_string(data: object) -> str:
         """
         Decodes a string/bytes blob into a string
         :param data: string/bytes blob
@@ -58,10 +40,24 @@ class BasePlainDecoder(BaseDecoder, Generic[BasePlainContent]):
         return string
 
     @abstractmethod
-    def decode(self, data: AnyStr) -> BasePlainContent:
+    def decode(self, data: bytes) -> object:
         """
-        Decodes a string/bytes blob into a Python object
-        :param data: string/bytes blob
+        Decodes a bytes blob into a Python object
+        :param data: bytes blob
+        :return: Python object
+        """
+
+        raise NotImplementedError()
+
+
+class BasePlainDecoder(BaseDecoder):
+    """Interface for the plain decoder classes"""
+
+    @abstractmethod
+    def decode(self, data: str) -> object:
+        """
+        Decodes a string blob into a Python object
+        :param data: string blob
         :return: Python object
         """
 

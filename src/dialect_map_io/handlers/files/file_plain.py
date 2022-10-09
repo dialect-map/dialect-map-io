@@ -4,21 +4,19 @@ import logging
 
 from pathlib import Path
 from typing import Generator
-from typing import Generic
 
 from .base import BaseFileHandler
-from ...encoding import BasePlainContent
 from ...encoding import BasePlainDecoder
 from ...encoding import BasePlainEncoder
 from ...encoding import JSONPlainDecoder
 from ...encoding import JSONPlainEncoder
-from ...encoding import TXTPlainDecoder
-from ...encoding import TXTPlainEncoder
+from ...encoding import TextPlainDecoder
+from ...encoding import TextPlainEncoder
 
 logger = logging.getLogger()
 
 
-class PlainFileHandler(BaseFileHandler, Generic[BasePlainContent]):
+class PlainFileHandler(BaseFileHandler):
     """Class handling the contents of plain files"""
 
     def __init__(self, decoder: BasePlainDecoder, encoder: BasePlainEncoder):
@@ -49,7 +47,7 @@ class PlainFileHandler(BaseFileHandler, Generic[BasePlainContent]):
 
         raise ValueError("File content is not iterable")
 
-    def read_file(self, file_path: str) -> BasePlainContent:
+    def read_file(self, file_path: str) -> object:
         """
         Reads contents from a file at the provided path
         :param file_path: path to the readable file
@@ -61,7 +59,7 @@ class PlainFileHandler(BaseFileHandler, Generic[BasePlainContent]):
 
         return self.decoder.decode(contents)
 
-    def write_file(self, file_path: str, content: BasePlainContent) -> None:
+    def write_file(self, file_path: str, content: object) -> None:
         """
         Writes contents to a file at the provided path
         :param file_path: path to the writable file
@@ -78,7 +76,7 @@ class PlainFileHandler(BaseFileHandler, Generic[BasePlainContent]):
             file.write(content)
 
 
-class JSONFileHandler(PlainFileHandler[object]):
+class JSONFileHandler(PlainFileHandler):
     """Class handling the contents of JSON files"""
 
     def __init__(self):
@@ -88,11 +86,11 @@ class JSONFileHandler(PlainFileHandler[object]):
         super().__init__(decoder, encoder)
 
 
-class TextFileHandler(PlainFileHandler[str]):
+class TextFileHandler(PlainFileHandler):
     """Class handling the contents of text files"""
 
     def __init__(self):
-        decoder = TXTPlainDecoder()
-        encoder = TXTPlainEncoder()
+        decoder = TextPlainDecoder()
+        encoder = TextPlainEncoder()
 
         super().__init__(decoder, encoder)
