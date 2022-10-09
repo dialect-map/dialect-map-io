@@ -3,10 +3,8 @@
 import logging
 
 from pathlib import Path
-from typing import Generic
 
 from .base import BaseFileHandler
-from ...encoding import BaseBinaryContent
 from ...encoding import BaseBinaryDecoder
 from ...encoding import BaseBinaryEncoder
 from ...encoding import PDFBinaryDecoder
@@ -15,7 +13,7 @@ from ...encoding import PDFBinaryEncoder
 logger = logging.getLogger()
 
 
-class BinaryFileHandler(BaseFileHandler, Generic[BaseBinaryContent]):
+class BinaryFileHandler(BaseFileHandler):
     """Class handling the contents of binary files"""
 
     def __init__(self, decoder: BaseBinaryDecoder, encoder: BaseBinaryEncoder):
@@ -28,7 +26,7 @@ class BinaryFileHandler(BaseFileHandler, Generic[BaseBinaryContent]):
         self.decoder = decoder
         self.encoder = encoder
 
-    def read_file(self, file_path: str) -> BaseBinaryContent:
+    def read_file(self, file_path: str) -> object:
         """
         Reads contents from a file at the provided path
         :param file_path: path to the readable file
@@ -40,7 +38,7 @@ class BinaryFileHandler(BaseFileHandler, Generic[BaseBinaryContent]):
 
         return self.decoder.decode(contents)
 
-    def write_file(self, file_path: str, content: BaseBinaryContent) -> None:
+    def write_file(self, file_path: str, content: object) -> None:
         """
         Writes contents to a file at the provided path
         :param file_path: path to the writable file
@@ -57,7 +55,7 @@ class BinaryFileHandler(BaseFileHandler, Generic[BaseBinaryContent]):
             file.write(content)
 
 
-class PDFFileHandler(BinaryFileHandler[str]):
+class PDFFileHandler(BinaryFileHandler):
     """Class handling the contents of PDF files"""
 
     def __init__(self):
