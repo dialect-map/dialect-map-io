@@ -60,7 +60,7 @@ class RestAPIHandler(BaseAPIHandler):
         self,
         func: Callable,
         api_path: str,
-        api_args: dict = None,
+        api_args: dict | None = None,
         api_data: dict | list | bytes | None = None,
     ) -> Response:
         """
@@ -189,7 +189,7 @@ class ArxivAPIHandler(RestAPIHandler):
 class DialectMapAPIHandler(RestAPIHandler):
     """Class for dealing with the Dialect map APIs"""
 
-    def __init__(self, auth_ctl: BaseAuthenticator = None, **kwargs):
+    def __init__(self, auth_ctl: BaseAuthenticator | None = None, **kwargs):
         """
         Initializes the Dialect map API handler
         :param auth_ctl: authenticator controller (optional)

@@ -30,6 +30,7 @@ profile = "black"
 [tool.mypy]
 cache_dir = "/dev/null"
 allow_redefinition = true
+explicit_package_bases = true
 ignore_missing_imports = true
 
 [tool.pytest.ini_options]
