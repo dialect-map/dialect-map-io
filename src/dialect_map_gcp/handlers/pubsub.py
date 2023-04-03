@@ -80,7 +80,7 @@ class PubSubQueueHandler(BaseQueueHandler):
         """
 
         str_date = message.message.publish_time.rfc3339()
-        off_date = datetime.fromisoformat(str_date.replace("Z", "+00:00"))
+        off_date = datetime.fromisoformat(str_date)
         utc_date = datetime.fromtimestamp(off_date.timestamp(), timezone.utc)
 
         return utc_date

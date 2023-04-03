@@ -5,6 +5,7 @@ from datetime import datetime
 from functools import cached_property
 from typing import Dict
 from typing import List
+from typing import Self
 
 
 @dataclass
@@ -28,7 +29,7 @@ class DiffMessage:
     created_at: datetime
 
     @classmethod
-    def from_pubsub(cls, message: dict):
+    def from_pubsub(cls, message: dict) -> Self:
         """
         Builds a diff message object from a Pub/Sub parsed message
         :param message: Pub/Sub parsed message
