@@ -24,4 +24,4 @@ repos:
         args: ["src", "tests"]
         language: python
         pass_filenames: false
-        additional_dependencies: ["types-requests ~= 2.27.0"]
+        additional_dependencies: ["types-requests ~= 2.31.0"]
