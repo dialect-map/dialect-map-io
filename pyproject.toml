@@ -1,5 +1,63 @@
-# File containing all formatting tools options
+[project]
+name = "dialect-map-io"
+description = "Package containing the I/O functionality for the Dialect map jobs"
+requires-python = ">=3.11"
+dynamic = ["version", "readme"]
+license = { file = "LICENSE" }
+authors = [{ name = "NYU DS3 Team", email = "ds3@nyu.edu" }]
+maintainers = [{ name = "Sinclert Perez", email = "sinclert@hotmail.com" }]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+]
+dependencies = [
+    "pdfminer.six==20201018",
+    "requests==2.31.0",
+]
 
+[project.optional-dependencies]
+gcp = [
+    "google-auth==2.2.1",
+    "google-cloud-pubsub==2.10.0",
+]
+lint = [
+    "black==23.3.0",
+    "isort==5.11.3",
+    "mypy==1.3.0",
+    "types-requests~=2.31.0",
+]
+test = [
+    "pytest==7.2.0",
+    "pytest-cov==4.0.0",
+]
+all = [
+    "dialect-map-io[gcp]",
+    "dialect-map-io[lint]",
+    "dialect-map-io[test]",
+    "pre-commit==3.3.2",
+]
+
+[project.urls]
+Homepage = "https://github.com/dialect-map/dialect-map"
+Source = "https://github.com/dialect-map/dialect-map-io"
+Changelog = "https://github.com/dialect-map/dialect-map-io/blob/main/CHANGELOG.md"
+
+
+# Section with setuptools configuration options
+[tool.setuptools.dynamic]
+readme = { file = "README.md" }
+version = { file = "VERSION" }
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+
+# Section with black configuration options
 [tool.black]
 line-length = 100
 target-version = ['py311']
@@ -21,18 +79,24 @@ exclude = '''
 )
 '''
 
+
+# Section with isort configuration options
 [tool.isort]
 force_single_line = true
 ignore_whitespace = true
 only_sections = true
 profile = "black"
 
+
+# Section with mypy configuration options
 [tool.mypy]
 cache_dir = "/dev/null"
 allow_redefinition = true
 explicit_package_bases = true
 ignore_missing_imports = true
 
+
+# Section with pytest configuration options
 [tool.pytest.ini_options]
 markers = [
     "gcp: Google Cloud SDK dependent tests",
