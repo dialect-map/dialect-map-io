@@ -24,3 +24,8 @@ updates:
     allow:
       - dependency-type: development
       - dependency-type: production
+    groups:
+      requests-dependencies:
+        patterns:
+          - "requests"
+          - "types-requests"
