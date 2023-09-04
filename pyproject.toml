@@ -39,7 +39,7 @@ all = [
     "dialect-map-io[gcp]",
     "dialect-map-io[lint]",
     "dialect-map-io[test]",
-    "pre-commit==3.3.2",
+    "pre-commit==3.4.0",
 ]
 
 [project.urls]
