@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from datetime import datetime
+from datetime import timezone
 
 import pytest
 
@@ -16,7 +17,7 @@ def test_diff_message_default_init_error():
         "value_prev": None,
         "value_post": None,
         "source_file": "file.json",
-        "created_at": datetime.utcnow(),
+        "created_at": datetime.now(timezone.utc),
     }
 
     assert pytest.raises(ValueError, DiffMessage, **init_args)
@@ -25,7 +26,7 @@ def test_diff_message_default_init_error():
 def test_diff_message_pubsub_init_success():
     """Checks the creation of a Diff Message object from a Pub/Sub message"""
 
-    created = datetime.utcnow()
+    created = datetime.now(timezone.utc)
     message = {
         "container": {},
         "fieldName": "example",
