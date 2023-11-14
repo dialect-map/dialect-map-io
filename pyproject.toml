@@ -27,7 +27,7 @@ gcp = [
     "google-cloud-pubsub==2.10.0",
 ]
 lint = [
-    "black==23.9.1",
+    "black==23.11.0",
     "isort==5.11.3",
     "mypy==1.6.1",
     "types-requests~=2.31.0",
