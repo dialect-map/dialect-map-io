@@ -19,7 +19,7 @@ class JSONBinaryEncoder(BaseBinaryEncoder):
 
     def encode(self, data: object) -> bytes:
         """
-        Encodes a Python object as a string
+        Encodes a Python object as bytes
         :param data: Python object
         :return: encoded bytes
         """

@@ -25,7 +25,7 @@ class BaseBinaryEncoder(BaseEncoder):
     @staticmethod
     def _encode_string(data: object) -> bytes:
         """
-        Encodes a string/bytes blob into as bytes
+        Encodes a string/bytes blob as bytes
         :param data: string/bytes blob
         :return: bytes
         """
