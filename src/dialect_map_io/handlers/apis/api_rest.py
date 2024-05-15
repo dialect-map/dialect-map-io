@@ -3,7 +3,6 @@
 import logging
 import time
 
-from datetime import datetime
 from typing import Callable
 
 from requests import get as http_get
@@ -144,7 +143,7 @@ class ArxivAPIHandler(RestAPIHandler):
             raise ValueError("The waiting time must be between 0 and 60 seconds")
 
         self.wait_secs = wait_secs
-        self.last_call = datetime.now()
+        self.last_call = time.monotonic()
 
     def _sleep_between_calls(self) -> None:
         """
@@ -152,9 +151,9 @@ class ArxivAPIHandler(RestAPIHandler):
         Ref: https://arxiv.org/help/api/user-manual
         """
 
-        last_call_time = datetime.now()
+        last_call_time = time.monotonic()
         last_call_delta = last_call_time - self.last_call
-        waiting_seconds = self.wait_secs - last_call_delta.total_seconds()
+        waiting_seconds = self.wait_secs - last_call_delta
 
         if waiting_seconds > 0:
             time.sleep(waiting_seconds)
