@@ -18,7 +18,7 @@ classifiers = [
 ]
 dependencies = [
     "pdfminer.six==20201018",
-    "requests==2.31.0",
+    "requests==2.32.3",
 ]
 
 [project.optional-dependencies]
@@ -30,7 +30,7 @@ lint = [
     "black==24.4.2",
     "isort==5.13.2",
     "mypy==1.10.0",
-    "types-requests~=2.31.0",
+    "types-requests~=2.32.0",
 ]
 test = [
     "pytest==7.2.0",
